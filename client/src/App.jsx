@@ -24,6 +24,9 @@ function App() {
             <Route path="/register" element={<UserReg />} />
             <Route path="/UserReg" element={<userReg />} />
             <Route path="/DishCard" element={<DishCard />} />
+
+
+            <Route path="/chef-profile" element={<Header_chef />} />
           </Routes>
           <Footer />
         </ContextProvider>

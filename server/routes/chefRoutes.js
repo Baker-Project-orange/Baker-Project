@@ -4,5 +4,5 @@ const chefController = require("../Controller/chefController");
 
 router.post("registerChef", chefController.registerChef);
 router.post("registerChef", chefController.loginChef);
-router.get('/', chefController.getAllChefs);
+
 module.exports = router;

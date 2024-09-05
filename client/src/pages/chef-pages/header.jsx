@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Croissant, Menu, X, Home, ShoppingBag, User, PhoneCall } from 'lucide-react';
 import Catalog_chef from './Catalog_chef';
@@ -8,9 +7,30 @@ import Contactus_chef from './chef-contact';
 import Recipe_dish_creation from './recpie-dish';
 import Recipe_dish_management from './recpie-dish-management';
 
+import axios from "axios"
+
 const Header_chef = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [chef_id, set_chef_id] = useState("66d775724924397e1179e5eb");
+  const [chef, set_chef] = useState();
   const [active_tab, set_active_tab] = useState(sessionStorage.getItem("tab") || "home");
+
+  // useEffect(() => {
+
+  //   const response = axios.get("http://localhost:3001/chef/get-chef", {
+  //     params: { chef_id } // Pass `chef_id` as a query parameter
+  //   })
+  //     .then((res) => {
+
+  //         set_chef(res.data);
+
+  //     })
+  //     .catch(err => console.log(err));
+  //     sessionStorage.setItem('chef', JSON.stringify(chef));
+
+  //   // console.log(chef);
+
+  // }, [chef]);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -67,26 +87,23 @@ const Header_chef = () => {
             <h1 className="text-2xl font-bold text-white lg:block hidden">BAKER</h1>
             <span className="text-xs text-white block text-center mt-2 lg:block hidden">EST. 1892</span>
           </div>
-          <nav className="flex sm:flex-col w-[50%] sm:space-x-0 sm:space-y-4">
-            <button onClick={() => handleTabChange("home")} className="text-white  hover:text-rose-200 transition duration-300 text-left w-full  flex items-center justify-center sm:justify-start">
-              <Home size={24} />
-              <span className="ml-2 lg:inline hidden">Home</span>
-            </button>
-            <button onClick={() => handleTabChange("catalog")} className="text-white  hover:text-rose-200 transition duration-300 text-left w-full  flex items-center justify-center sm:justify-start">
-              <ShoppingBag size={24} />
-              <span className="ml-2 lg:inline hidden">Catalog</span>
-            </button>
-            <button onClick={() => handleTabChange("profile")} className="text-white  hover:text-rose-200 transition duration-300 text-left w-full  flex items-center justify-center sm:justify-start">
-              <User size={24} />
-              <span className="ml-2 lg:inline hidden">Profile</span>
-            </button>
-            <button onClick={() => handleTabChange("contact")} className="text-white  hover:text-rose-200 transition duration-300 text-left w-full  flex items-center justify-center sm:justify-start">
-              <PhoneCall size={24} />
-              <span className="ml-2 lg:inline hidden">Contact</span>
-            </button>
+          <nav className="flex sm:flex-col w-full">
+  <button onClick={() => handleTabChange("home")} className="text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start md: mb-9"> {/* إضافة مسافة بين الأزرار */}
+    <Home size={24} />
+    <span className="ml-2">Home</span>
+  </button>
+  <button onClick={() => handleTabChange("catalog")} className="text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start md: mb-9"> {/* إضافة مسافة بين الأزرار */}
+    <ShoppingBag size={24} />
+    <span className="ml-2">Catalog</span>
+  </button>
 
-          </nav>
-          
+
+</nav>
+
+
+          {/* <button className="sm:hidden text-white self-center" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button> */}
         </div>
       </header>
 
