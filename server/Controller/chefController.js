@@ -54,3 +54,17 @@ exports.loginChef = async (req, res) => {
     res.status(501).json({ message: "Internal server error", error: e });
   }
 };
+
+// getchefs
+exports.getAllChefs = async (req, res) => {
+  try {
+    const chefs = await Chef.find(); // Fetch all chefs from the database
+    if (!chefs || chefs.length === 0) {
+      return res.status(404).json({ message: "No chefs found" });
+    }
+    res.status(200).json(chefs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};

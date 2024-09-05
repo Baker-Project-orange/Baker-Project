@@ -106,3 +106,14 @@ exports.getRecipesByCategory = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// numb of recpies
+exports.getTotalRecipes = async (req, res) => {
+  try {
+    const totalRecipes = await Recipie.countDocuments();
+    res.status(200).json({ totalRecipes });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching total recipes", error });
+  }
+};
+
