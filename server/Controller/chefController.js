@@ -6,11 +6,16 @@ const { default: mongoose } = require("mongoose");
 
 exports.registerChef = async (req, res) => {
   const chefData = req.body;
+  chefData.license = req.url;
+  console.log(chefData);
   try {
+   
     const chef = new Chef({ ...chefData, _id: new mongoose.Types.ObjectId() });
     chef.password = bcrypt.hashSync(chef.password, 10);
+
     await chef.save();
     const token = generateToken(chef._id.toString());
+    console.log(chef);
     const cookieOptions = {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
@@ -18,7 +23,7 @@ exports.registerChef = async (req, res) => {
       secure: true,
     };
     res.cookie("token", token, cookieOptions);
-    res
+    return res
       .status(201)
       .json({ message: "User registerd successfully ", chef: chef });
   } catch (e) {

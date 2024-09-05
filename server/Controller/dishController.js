@@ -11,6 +11,11 @@ exports.deleteDish = async (req, res) => {
   }
 };
 
+exports.makeDish=(req,res)=>{
+const dishData=req.body;
+
+}
+
 // Get all dishes
 exports.getAllDishes = async (req, res) => {
   try {
