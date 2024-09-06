@@ -11,6 +11,8 @@ const chefRoutes = require("./routes/chefRoutes");
 const contactRoutes = require("./routes/contactRoutes");
 const reportRoutes = require("./routes/reportRoutes");
 const recipiesRoutes = require("./routes/recipieRoutes");
+const orderRoutes = require("./routes/orderRoutes");
+
 
 const paymentRoutes = require("./routes/paypalconfig")
 const orderRoutes = require('./routes/orderRoutes');
@@ -37,12 +39,13 @@ app.use("/api/dishes", dishRoutes);
 app.use("/api/messages", contactRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/recipes", recipiesRoutes);
-app.use('/api', paymentRoutes);
 
+app.use('/api', paymentRoutes);
 
 // Use the chef routes
 app.use('/api/chefs', chefRoutes);
 app.use('/api/orders', orderRoutes);
+
 
 // Server connection
 app.listen(port, () => {

@@ -10,6 +10,9 @@ import UserReg from "./components/UserReg"; // Update the path as per your file 
 import CheckoutComponent from "./components/checkout";
 import { ContextProvider } from "./components/contextProvider";
 import { ThemeProvider } from "@material-tailwind/react";
+import AboutUs from "./pages/aboutUs";
+import ContactUs from "./pages/contactUs";
+import RecipeDetailPage from "./pages/recipeDetailPage";
 function App() {
   return (
     <>
@@ -24,9 +27,11 @@ function App() {
             <Route path="/register" element={<UserReg />} />
             <Route path="/UserReg" element={<userReg />} />
             <Route path="/DishCard" element={<DishCard />} />
-
-
+            <Route path="/AboutUs" element={<AboutUs />} />
+            <Route path="/contactUs" element={<ContactUs />} />
+            <Route path="/recipe/:recipeId" element={<RecipeDetailPage />} />
             <Route path="/chef-profile" element={<Header_chef />} />
+
           </Routes>
           <Footer />
         </ContextProvider>
