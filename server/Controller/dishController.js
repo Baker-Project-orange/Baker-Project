@@ -22,6 +22,20 @@ exports.getAllDishes = async (req, res) => {
   }
 };
 
+// nubmofdithes
+exports.getTotalDishes = async (req, res)=>{
+try {
+  const totalDishes = await Dish.countDocuments();
+  res.status(200).json({totalDishes});
+
+} catch (error){
+  res.status(500).json({ message: "Error fetching total dishes", error });
+}
+
+}
+
+
+
 // Get a dish by ID
 exports.getDishById = async (req, res) => {
   try {
@@ -33,6 +47,24 @@ exports.getDishById = async (req, res) => {
       return res.status(404).json({ message: "Dish not found" });
     }
     res.status(200).json(dish);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// dish.controller.js aprove
+exports.approveDish = async (req, res) => {
+  try {
+    const { isApproved } = req.body;
+    const dish = await Dish.findByIdAndUpdate(
+      req.params.id,
+      { isApproved },
+      { new: true, runValidators: true }
+    );
+    if (!dish) {
+      return res.status(404).json({ message: 'Dish not found' });
+    }
+    res.json(dish);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
