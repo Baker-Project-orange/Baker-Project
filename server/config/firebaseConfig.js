@@ -1,5 +1,4 @@
 const firebase = require("firebase/app");
-const storage = require("firebase/storage");
 
 const firebaseConfig = {
   apiKey: "AIzaSyDS20Rr6h-tw_ADsBWOcml3TtWyirYFGZU",
@@ -13,5 +12,4 @@ const firebaseConfig = {
 
 const app = firebase.initializeApp(firebaseConfig);
 
-const recipieStorage = storage(app);
 module.exports = app;

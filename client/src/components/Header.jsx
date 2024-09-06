@@ -1,10 +1,16 @@
-import React from "react";
-import { Link } from "react-router-dom"; // Import Link for navigation
-
+import { Signup } from "./LoginSignupComponents/SignupChef";
+import { Context } from "./contextProvider";
+import { useContext } from "react";
+import { Button } from "@material-tailwind/react";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 function Header() {
+  const navigate = useNavigate();
+  const [isLoggedIn, setLoggedIn] = useContext(Context).isLoggedIn;
+  const [isChef, setChef] = useContext(Context).isChef;
   return (
-    <div className="relative min-h-screen bg-[#c98d83]">
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+    <div className="relative min-h-screen bg-[#c98d83] text-black">
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden  leading-[0]">
         <header className="text-white p-6 text-center">
           <nav>
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto my-80 p-4">
@@ -94,35 +100,61 @@ function Header() {
                   <li className="relative group">
                     {/* Register with Dropdown */}
                     <button className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
-                      Register
+                      {!isLoggedIn ? "Register" : "Profile"}
                     </button>
                     {/* Dropdown List */}
-                    <ul className="absolute hidden group-hover:block bg-white shadow-lg rounded-lg mt-2 min-w-[160px]">
-                      <li>
-                        <Link
-                          to="/register"
-                          className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                        >
-                          User
-                        </Link>
-                      </li>
-                      <li>
-                      <Link
-                          to="/AdminRegister"
-                          className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                        >
-                          Admin
-                        </Link>
-                      </li>
-                      <li>
-                        <a
-                          href="#"
-                          className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                        >
-                          Profile
-                        </a>
-                      </li>
-                    </ul>
+                    {!isLoggedIn ? (
+                      <ul className="absolute hidden group-hover:block bg-white shadow-lg rounded-lg mt-2 min-w-[160px]">
+                        <li>
+                          <Signup />
+                        </li>
+                        <li>
+                          <a
+                            href="#"
+                            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                          >
+                            Admin
+                          </a>
+                        </li>
+                        <li>
+                          <a
+                            href="#"
+                            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                          >
+                            Profile
+                          </a>
+                        </li>
+                      </ul>
+                    ) : (
+                      <ul className="absolute hidden group-hover:block bg-white shadow-lg rounded-lg mt-2 min-w-[160px]">
+                        <li>
+                          <Button
+                            onClick={() => {
+                              navigate("/ChefProfile");
+                            }}
+                            variant="text"
+                            className="text-black w-full"
+                            color="white"
+                          >
+                            Profile
+                          </Button>
+                        </li>
+                        <li>
+                          <Button
+                            onClick={() => {
+                              sessionStorage.removeItem("chefLogin");
+                              setChef(false);
+                              setLoggedIn(false);
+                            }}
+                            variant="text"
+                            className="text-black w-full"
+                            color="white"
+                          >
+                            Logout
+                          </Button>
+                        </li>
+                      </ul>
+                    )}
                   </li>
                 </ul>
               </div>

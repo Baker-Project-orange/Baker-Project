@@ -5,15 +5,9 @@ const Chef = require("../Models/Chef");
 
 exports.makeRecipie = async (req, res) => {
   const recipieData = req.body;
-  const urls = req.urls || []; // افترض أن urls يأتي من مكان ما في الطلب
-  recipieData.overviewPicture = urls[0];
+  recipieData.overviewPicture = req.url;
   const chefID = req.user;
   recipieData.recipieAuthor = chefID;
-
-  // لتحديث الروابط في الخطوات
-  for (let i = 0; i < recipieData.steps.length; i++) {
-    recipieData.steps[i].stepMedia = urls[i + 1] || "";
-  }
 
   try {
     const recipie = new Recipie({

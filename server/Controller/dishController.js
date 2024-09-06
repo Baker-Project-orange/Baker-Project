@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const Dish = require("../Models/Dish");
 
 exports.deleteDish = async (req, res) => {
@@ -5,6 +6,19 @@ exports.deleteDish = async (req, res) => {
   const dishID = req.body;
   try {
     await Dish.findByIdAndUpdate(dishID, { isDeleted: true });
+  } catch (e) {
+    console.log(e);
+    res.status(501).json({ message: "Internal server error", error: e });
+  }
+};
+
+exports.makeDish = async (req, res) => {
+  const dishData = req.body;
+  dishData.recipieID = new mongoose.Types.ObjectId(dishData.recipieID);
+  try {
+    const dish = new Dish({ _id: new mongoose.Types.ObjectId(), ...dishData });
+    await dish.save();
+    res.status(201).json({ message: "dish made successfully", dish: dish });
   } catch (e) {
     console.log(e);
     res.status(501).json({ message: "Internal server error", error: e });

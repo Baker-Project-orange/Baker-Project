@@ -20,6 +20,7 @@ const orderRoutes = require('./routes/orderRoutes');
 const port = process.env.PORT || 3000;
 const app = express();
 const corsConfig = {
+  origin: "http://localhost:5173",
   credentials: true,
 };
 
