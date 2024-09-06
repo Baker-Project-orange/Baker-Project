@@ -14,6 +14,9 @@ const recipiesRoutes = require("./routes/recipieRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 
 
+const paymentRoutes = require("./routes/paypalconfig")
+const orderRoutes = require('./routes/orderRoutes');
+
 // Server variables
 const port = process.env.PORT || 3000;
 const app = express();
@@ -26,7 +29,7 @@ app.use(cors(corsConfig));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-//API Routes:
+//API Routes
 //Users Routes
 app.use("/api/users", userRoutes);
 app.use("/api/chefs", chefRoutes);
@@ -36,10 +39,17 @@ app.use("/api/dishes", dishRoutes);
 app.use("/api/messages", contactRoutes);
 app.use("/api/reports", reportRoutes);
 app.use("/api/recipes", recipiesRoutes);
-app.use("/api", orderRoutes);
+
+app.use('/api', paymentRoutes);
+
+// Use the chef routes
+app.use('/api/chefs', chefRoutes);
+app.use('/api/orders', orderRoutes);
 
 
 // Server connection
 app.listen(port, () => {
   console.log(`Server is running on port http://localhost:${port}`);
 });
+
+

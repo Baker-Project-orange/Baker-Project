@@ -7,7 +7,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Header_chef from "./pages/chef-pages/header";
 import UserReg from "./components/UserReg"; // Update the path as per your file structure
-
+import CheckoutComponent from "./components/checkout";
 import { ContextProvider } from "./components/contextProvider";
 import { ThemeProvider } from "@material-tailwind/react";
 import AboutUs from "./pages/aboutUs";
@@ -22,7 +22,7 @@ function App() {
 
           <Routes>
             <Route path="/RecipeDishList" element={<RecipeDishList />} />
-
+            <Route path="/payment" element={<CheckoutComponent/>}/>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<UserReg />} />
             <Route path="/UserReg" element={<userReg />} />
@@ -30,6 +30,8 @@ function App() {
             <Route path="/AboutUs" element={<AboutUs />} />
             <Route path="/contactUs" element={<ContactUs />} />
             <Route path="/recipe/:recipeId" element={<RecipeDetailPage />} />
+            <Route path="/chef-profile" element={<Header_chef />} />
+
           </Routes>
           <Footer />
         </ContextProvider>

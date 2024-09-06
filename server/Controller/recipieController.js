@@ -3,38 +3,6 @@ const Recipie = require("../Models/Recipies");
 const Dish = require("../Models/Dish");
 const Chef = require("../Models/Chef");
 
-
-//Controller to make the recipie
-// exports.makeRecipie = async (req, res) => {
-//   //recipie data prepration
-//   const recipieData = req.body;
-//   recipieData.overviewPicture = req.urls[0];
-//   const chefID = req.user;
-//   recipieData.recipieAuthor = chefID;
-
-//   //to enter the image urls for all the steps
-//   for (let i = 0; i <= recipieData.steps.length; i++) {
-//     recipieData.steps[i].stepMedia = urls[i + 1];
-//   }
-
-//   try {
-//     //Recipie document creation
-//     const recipie = new Recipie({
-//       ...recipieData,
-//       _id: new mongoose.Types.ObjectId(),
-//     });
-//     await recipie.save();
-   
-//       res
-//         .status(201)
-//         .json({ message: "Recipie created successfully", recipie: recipie });
-   
-//   } catch (e) {
-//     console.log(e);
-//     res.status(501).json({ message: "Internal server error", error: e });
-//   }
-// };
-
 exports.makeRecipie = async (req, res) => {
   const recipieData = req.body;
   const urls = req.urls || []; // افترض أن urls يأتي من مكان ما في الطلب
@@ -100,14 +68,7 @@ exports.updateRecipie = async (req, res) => {
   }
 };
 
-// exports.getAllRecipes = async (req, res) => {
-//   try {
-//     const recipes = await Recipie.find({ isDeleted: false });
-//     res.json(recipes);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
+
 
 exports.getAllRecipes = async (req, res) => {
   try {
@@ -121,18 +82,7 @@ exports.getAllRecipes = async (req, res) => {
   }
 };
   
-  // Get a recipe by ID
-// exports.getRecipeById = async (req, res) => {
-//   try {
-//     const recipe = await Recipie.findById(req.params.id);
-//     if (!recipe) {
-//       return res.status(404).json({ message: "Recipe not found" });
-//     }
-//     res.json(recipe);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
+
 
 exports.getRecipeById = async (req, res) => {
   try {
@@ -161,14 +111,15 @@ exports.getRecipesByCategory = async (req, res) => {
   }
 };
 
-// exports.getRecipesByCategory = async (req, res) => {
-//   try {
-//     const recipes = await Recipie.find({
-//       category: req.params.category,
-//       isDeleted: false,
-//     }).populate("recipeAuthor", "name businessName businessAddress");
-//     res.json(recipes);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
+
+// numb of recpies
+exports.getTotalRecipes = async (req, res) => {
+  try {
+    const totalRecipes = await Recipie.countDocuments();
+    res.status(200).json({ totalRecipes });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching total recipes", error });
+  }
+};
+
+

@@ -16,7 +16,7 @@ function PayPalButton({ amount }) {
   const onApprove = (data, actions) => {
     return actions.order.capture().then(function (details) {
       // Send the payment details to your server
-      fetch('http://localhost:8080/api/complete-payment', {
+      fetch('http://localhost:3000/api/complete-payment', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

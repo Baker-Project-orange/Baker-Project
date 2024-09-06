@@ -1,15 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Cake, Coffee, Clipboard, Mail, Phone, User, Info, Save, Edit } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import axios from "axios";
 
 const ChefProfilePage = () => {
-    const chefName = "Sofia Bianchi";
+    const chefname = "Sofia Bianchi";
+
+    const [chef_id, set_chef_id] = useState("66d775724924397e1179e5eb");
+    // const [chef, set_chef] = useState(null); // Start with null
     const [chefInfo, setChefInfo] = useState({
-        name: chefName,
-        email: "sofia.bianchi@example.com",
-        phone: "+1 (555) 123-4567",
-        bio: "Crafting artisanal breads and pastries with passion and precision."
+        name: '',
+        email: '',
+        buissnessName: '',
+        buissnessLogo: ''
     });
+
+    useEffect(() => {
+
+        const fetchChefData = async () => {
+            try {
+                const response = await axios.get("http://localhost:3000/chef/get-chef", {
+                    params: { chef_id }
+                });
+
+                setChefInfo({
+                    name: response.data.name || '',
+                    email: response.data.email || '',
+                    buissnessName: response.data.buissnessName || '',
+                    buissnessLogo: response.data.buissnessLogo || ''
+                });
+
+            } catch (error) {
+                console.error('Error fetching chef data:', error);
+            }
+        };
+
+        fetchChefData();
+    }, [chef_id]); 
+
     const [isEditing, setIsEditing] = useState(false);
 
     const handleInputChange = (e) => {
@@ -23,18 +51,34 @@ const ChefProfilePage = () => {
     const handleUpdate = () => {
         if (isEditing) {
             console.log("Updating chef information:", chefInfo);
-            // Implement the update logic here
+
         }
         setIsEditing(!isEditing);
+
+        try {
+            const response = axios.patch(
+                "http://localhost:3000/chef/update-chef", 
+                chefInfo, 
+                {
+                    params: { chef_id , chefInfo } 
+                }
+            )
+            .catch(err => {console.log(err)});
+            console.log('Chef updated successfully:', response.data);
+
+
+        } catch (error) {
+            console.error('Error fetching chef data:', error);
+        }
     };
 
     return (
         <div className="min-h-screen bg-[#f8e5e1] rounded-lg overflow-hidden">
             {/* Hero Section */}
-            <section className="min-h-[92vh] bg-cover bg-center flex items-center overflow-hidden py-8 sm:py-16" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555507036-ab1f4038808a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80')" }}>
+            <section className="min-h-[60vh] bg-cover bg-center flex items-center overflow-hidden py-8 sm:py-16" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1555507036-ab1f4038808a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80')" }}>
                 <div className="container mx-auto px-4 flex flex-col lg:flex-row items-center justify-center">
                     <div className="bg-white bg-opacity-80 p-8 rounded-lg max-w-lg mb-8 lg:mb-0 lg:mr-8 animate-fade-in-up">
-                        <h2 className="text-3xl sm:text-5xl font-bold mb-4 text-[#c98d83]">Chef {chefName}</h2>
+                        <h2 className="text-3xl sm:text-5xl font-bold mb-4 text-[#c98d83]">Chef {chefInfo.name}</h2>
                         <p className="text-lg sm:text-xl mb-8 text-[#c98d83]">
                             Experience the magic of freshly baked goods, handcrafted daily with passion and precision.
                         </p>
@@ -87,14 +131,14 @@ const ChefProfilePage = () => {
                                 </div>
                             </div>
                             <div className="mb-4">
-                                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                                <label htmlFor="buissnessName" className="block text-sm font-medium text-gray-700 mb-1">Buissness Name</label>
                                 <div className="flex items-center border-2 border-[#c98d83] rounded-md px-3 py-2">
                                     <Phone className="text-[#c98d83] mr-2" size={20} />
                                     <input
                                         type="tel"
-                                        id="phone"
-                                        name="phone"
-                                        value={chefInfo.phone}
+                                        id="buissnessName"
+                                        name="buissnessName"
+                                        value={chefInfo.buissnessName}
                                         onChange={handleInputChange}
                                         className="w-full focus:outline-none border-none bg-transparent"
                                         readOnly={!isEditing}
@@ -102,14 +146,14 @@ const ChefProfilePage = () => {
                                 </div>
                             </div>
                             <div className="mb-4">
-                                <label htmlFor="bio" className="block text-sm font-medium text-gray-700 mb-1">Bio</label>
+                                <label htmlFor="buissnessLogo" className="block text-sm font-medium text-gray-700 mb-1">Buissness Logo</label>
                                 <div className="flex items-start border-2 border-[#c98d83] rounded-md px-3 py-2">
                                     <Info className="text-[#c98d83] mr-2 mt-1" size={20} />
                                     <textarea
-                                        id="bio"
-                                        name="bio"
+                                        id="buissnessLogo"
+                                        name="buissnessLogo"
                                         rows="3"
-                                        value={chefInfo.bio}
+                                        value={chefInfo.buissnessLogo}
                                         onChange={handleInputChange}
                                         className="w-full focus:outline-none border-none bg-transparent"
                                         readOnly={!isEditing}
@@ -132,7 +176,7 @@ const ChefProfilePage = () => {
             {/* Chef's Recipes Section */}
             <section className="py-16">
                 <div className="container mx-auto px-4">
-                    <h2 className="text-4xl font-bold mb-8 text-center text-[#c98d83]">{chefName}'s Recipes</h2>
+                    <h2 className="text-4xl font-bold mb-8 text-center text-[#c98d83]">{chefInfo.name}'s Recipes</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                         {/* Recipe cards */}
                         <div className="bg-white p-6 rounded-lg shadow-md">
@@ -211,7 +255,7 @@ const ChefProfilePage = () => {
             {/* Chef's Dishes Section */}
             <section className="bg-[#f0d8d3] py-16">
                 <div className="container mx-auto px-4">
-                    <h2 className="text-4xl font-bold mb-8 text-center text-[#c98d83]">{chefName}'s Dishes</h2>
+                    <h2 className="text-4xl font-bold mb-8 text-center text-[#c98d83]">{chefInfo.name}'s Dishes</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                         {/* Dish cards */}
                         <div className="bg-white p-6 rounded-lg shadow-md">
