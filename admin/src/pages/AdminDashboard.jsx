@@ -13,6 +13,9 @@ import DishesReviewManagement from "./dishesReviewManagement";
 import UserManagement from "./userManagment";
 import ContactMessages from "./ContactMessages";
 import Reports from "./Reports";
+import ChefManagement from "./ChefManagement";
+import RecipesComponent from "./RecipesComponent";
+import OrderManagement from "./OrderManagement";
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("home");
 
@@ -48,12 +51,27 @@ const AdminDashboard = () => {
             icon={ShoppingCart}
             label="Marketplace"
             tabName="marketplace"
-          /> */}
+            /> */}
                     <TabButton
             icon={ShoppingCart}
             label="reports"
             tabName="reports"
           />
+                              <TabButton
+            icon={ShoppingCart}
+            label="RecipesComponent"
+            tabName="RecipesComponent"
+          />
+                                        <TabButton
+            icon={ShoppingCart}
+            label="OrderManagement"
+            tabName="OrderManagement"
+          />
+            <TabButton
+    icon={MessageSquare}
+    label="chefManagement"
+    tabName="chefManagement"
+  />
         </nav>
       </aside>
       <main className="flex-1 p-8 overflow-y-auto">
@@ -62,6 +80,9 @@ const AdminDashboard = () => {
         {activeTab === "users" && <UserManagement />}
         {activeTab === "messages" && <ContactMessages />}
         {activeTab === "reports" && <Reports />}
+        {activeTab === "chefManagement" && <ChefManagement />}
+        {activeTab === "RecipesComponent" && <RecipesComponent/>}
+        {activeTab === "OrderManagement" && <OrderManagement/>}
         {/* {activeTab === "marketplace" && (
           <div>Marketplace Management (To be implemented)</div>
         )} */}

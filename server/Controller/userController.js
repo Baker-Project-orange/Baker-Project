@@ -14,6 +14,19 @@ exports.getUserById = async (req, res) => {
   }
 };
 
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    const user = await User.find()
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching user", error });
+  }
+};
+
+
 // Update user by ID
 
 exports.userToggleActive = async (req, res) => {
@@ -139,5 +152,16 @@ exports.loginUser = async (req, res) => {
   } catch (error) {
     console.error("Error logging in user:", error);
     res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+// num of users
+exports.getTotalUsers = async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    res.status(200).json({ totalUsers });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching total users", error });
   }
 };

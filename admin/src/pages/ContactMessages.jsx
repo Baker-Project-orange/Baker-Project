@@ -9,7 +9,7 @@ const ContactMessages = () => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/messages/messages");
+        const response = await axios.get("http://localhost:3000/api/messages/messages");
         setMessages(response.data);
         setLoading(false);
       } catch (err) {
@@ -41,9 +41,9 @@ const ContactMessages = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Date
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 Actions
-              </th>
+              </th> */}
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -53,9 +53,9 @@ const ContactMessages = () => {
                 <td className="px-6 py-4 whitespace-nowrap">{message.subject}</td>
                 <td className="px-6 py-4 whitespace-nowrap">{message.date}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <button className="text-blue-600 hover:text-blue-900">
+                  {/* <button className="text-blue-600 hover:text-blue-900">
                     Respond
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))}

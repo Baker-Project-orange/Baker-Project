@@ -7,5 +7,6 @@ const recipieController = require("../Controller/recipieController");
 router.get("/getrecipes", recipieController.getAllRecipes);
 router.get("/:id", recipieController.getRecipeById);
 router.get("/category/:category", recipieController.getRecipesByCategory);
+router.get("/total", recipieController.getTotalRecipes);
 
 module.exports = router;
