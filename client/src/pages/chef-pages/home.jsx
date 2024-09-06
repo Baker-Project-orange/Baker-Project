@@ -16,7 +16,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 const ChefProfilePage = () => {
-  const chefname = "Sofia Bianchi";
 
   const [chefInfo, setChefInfo] = useState({
     name: "",
@@ -28,7 +27,7 @@ const ChefProfilePage = () => {
   useEffect(() => {
     const fetchChefData = async () => {
       try {
-        const response = await axiosInstance.get("/chef/get-chef");
+        const response = await axiosInstance.get("/api/chefs/get-chef");
 
         setChefInfo({
           name: response.data.name || "",

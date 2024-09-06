@@ -9,5 +9,6 @@ const auth = require("../middlewares/auth");
 // Route to get all dishes
 router.get("/getDishes", dishController.getAllDishes);
 router.post("/makeDishes", auth, fileUpload, dishController.makeDish);
-
+router.put('/dishes/approve/:id', dishController.approveDish);
+router.get("/total", dishController.getTotalDishes);
 module.exports = router;

@@ -1,32 +1,27 @@
 const { default: mongoose } = require("mongoose");
 const Recipie = require("../Models/Recipies");
+const Dish = require("../Models/Dish");
+const Chef = require("../Models/Chef");
 
-
-//Controller to make the recipie
 exports.makeRecipie = async (req, res) => {
-  //recipie data prepration
   const recipieData = req.body;
   recipieData.overviewPicture = req.url;
   const chefID = req.user;
   recipieData.recipieAuthor = chefID;
 
   try {
-    //Recipie document creation
     const recipie = new Recipie({
       ...recipieData,
       _id: new mongoose.Types.ObjectId(),
     });
     await recipie.save();
-   
-      res
-        .status(201)
-        .json({ message: "Recipie created successfully", recipie: recipie });
-   
+    res.status(201).json({ message: "Recipie created successfully", recipie });
   } catch (e) {
     console.log(e);
     res.status(501).json({ message: "Internal server error", error: e });
   }
 };
+
 
 exports.getChefRecipies = async (req, res) => {
   const chefID = req.user;
@@ -67,20 +62,28 @@ exports.updateRecipie = async (req, res) => {
   }
 };
 
+
+
 exports.getAllRecipes = async (req, res) => {
   try {
-    const recipes = await Recipie.find({ isDeleted: false });
+    const recipes = await Recipie.find({ isDeleted: false }).populate(
+      "recipeAuthor",
+      "name businessName businessAddress"
+    );
     res.json(recipes);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
   
-  // Get a recipe by ID
+
+
 exports.getRecipeById = async (req, res) => {
   try {
-    const recipe = await Recipie.findById(req.params.id);
+    const recipe = await Recipie.findById(req.params.id).populate(
+      "recipeAuthor",
+      "name businessName businessAddress"
+    );
     if (!recipe) {
       return res.status(404).json({ message: "Recipe not found" });
     }
@@ -101,3 +104,16 @@ exports.getRecipesByCategory = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+// numb of recpies
+exports.getTotalRecipes = async (req, res) => {
+  try {
+    const totalRecipes = await Recipie.countDocuments();
+    res.status(200).json({ totalRecipes });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching total recipes", error });
+  }
+};
+
+

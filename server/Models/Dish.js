@@ -1,7 +1,7 @@
 const { Schema, model, default: mongoose } = require("mongoose");
 
 const dishSchema = new Schema({
-  recipieID: { type: mongoose.Types.ObjectId, ref: "Recipie" },
+  recipieID: { type: mongoose.Types.ObjectId, ref: "Recipe" },
   dishDescription: String,
   dishPictures: String,
   price: Number,
@@ -12,5 +12,4 @@ const dishSchema = new Schema({
 });
 
 const Dish = model("Dish", dishSchema);
-
 module.exports = Dish;
