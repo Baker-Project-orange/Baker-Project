@@ -15,7 +15,7 @@ const dishesReviewManagement = () => {
   const fetchDishes = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('http://localhost:3001/api/dishes/getDishes');
+      const response = await axios.get('http://localhost:3000/api/dishes/getDishes');
       if (Array.isArray(response.data)) {
         setDishes(response.data);
       } else {
@@ -28,14 +28,26 @@ const dishesReviewManagement = () => {
     }
   };
 
-  const handleApprove = async (dishId) => {
-    try {
-      await axios.post(`http://localhost:3001/api/dishes/approve/${dishId}`);
-      fetchDishes();
-    } catch (error) {
-      setError('Failed to approve dish');
-    }
-  };
+  // const handleApprove = async (dishId) => {
+  //   try {
+  //     await axios.post(`http://localhost:3000/api/dishes/getDishes/approve/${dishId}`);
+  //     fetchDishes();
+  //   } catch (error) {
+  //     setError('Failed to approve dish');
+  //   }
+  // };
+  // dishesReviewManagement.js
+// dishesReviewManagement.js
+const handleApprove = async (dish) => {
+  try {
+    await axios.put(`http://localhost:3000/api/dishes/dishes/approve/${dish}`, {
+      isApproved: !dish.isApproved,
+    });
+    fetchDishes();
+  } catch (error) {
+    setError('Failed to approve/unapprove dish');
+  }
+};
 
   // const handleDelete = async (dishId) => {
   //   try {
@@ -80,54 +92,47 @@ const dishesReviewManagement = () => {
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {dishes.length > 0 ? (
-              dishes.map((dish) => (
-                <tr key={dish._id}>
-                  {/* <td className="px-6 py-4 whitespace-nowrap">{dish.recipieID?.dishName || 'Unknown Recipe'}</td> */}
-                  <td className="px-6 py-4">{dish.dishDescription || 'No description'}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">${dish.price?.toFixed(2) || 'N/A'}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{dish.dishRatingAvg?.toFixed(1) || 'N/A'}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{dish.category || 'Uncategorized'}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {dish.dishPictures && dish.dishPictures.length > 0 ? (
-                      <button
-                        onClick={() => setSelectedImage(dish.dishPictures[0].URL)}
-                        className="text-blue-600 hover:text-blue-800 transition-colors duration-200"
-                      >
-                        <ImageIcon className="w-5 h-5 inline-block mr-1" />
-                        View
-                      </button>
-                    ) : (
-                      'No pictures'
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => handleApprove(dish._id)}
-                      className="text-green-600 hover:text-green-800 mr-2 transition-colors duration-200"
-                    >
-                      <CheckCircle className="w-5 h-5 inline-block mr-1" />
-                      Approve
-                    </button>
-                    {/* <button
-                      onClick={() => handleDelete(dish._id)}
-                      className="text-red-600 hover:text-red-800 transition-colors duration-200"
-                    >
-                      <XCircle className="w-5 h-5 inline-block mr-1" />
-                      Delete
-                    </button> */}
-                  </td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
-                  No dishes available
-                </td>
-              </tr>
-            )}
-          </tbody>
+          // dishesReviewManagement.js
+<tbody className="bg-white divide-y divide-gray-200">
+  {dishes.length > 0 ? (
+    dishes.map((dish) => (
+      <tr key={dish._id}>
+        <td className="px-6 py-4">{dish.dishDescription || 'No description'}</td>
+        <td className="px-6 py-4 whitespace-nowrap">${dish.price?.toFixed(2) || 'N/A'}</td>
+        <td className="px-6 py-4 whitespace-nowrap">{dish.dishRatingAvg?.toFixed(1) || 'N/A'}</td>
+        <td className="px-6 py-4 whitespace-nowrap">{dish.category || 'Uncategorized'}</td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          {dish.dishPictures && dish.dishPictures.length > 0 ? (
+            <button
+              onClick={() => setSelectedImage(dish.dishPictures[0].URL)}
+              className="text-blue-600 hover:text-blue-800 transition-colors duration-200"
+            >
+              <ImageIcon className="w-5 h-5 inline-block mr-1" />
+              View
+            </button>
+          ) : (
+            'No pictures'
+          )}
+        </td>
+        <td className="px-6 py-4 whitespace-nowrap">
+          <button
+            onClick={() => handleApprove(dish._id)}
+            className="text-green-600 hover:text-green-800 mr-2 transition-colors duration-200"
+          >
+            <CheckCircle className="w-5 h-5 inline-block mr-1" />
+            Approve
+          </button>
+        </td>
+      </tr>
+    ))
+  ) : (
+    <tr>
+      <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
+        No dishes available
+      </td>
+    </tr>
+  )}
+</tbody>
         </table>
       </div>
       {selectedImage && (

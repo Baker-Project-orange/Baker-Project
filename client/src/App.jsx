@@ -12,36 +12,37 @@ import Register from './pages/Register'
 import UserReg from "./components/UserReg"; // Update the path as per your file structure
 import Login from './components/Login';
 import AdminLogin from './pages/AdminLogin';
-
 import AdminRegister from './pages/AdminRegister';
-
+import CheckoutComponent from "./components/checkout";
 import { ContextProvider } from "./components/contextProvider";
 import { ThemeProvider } from "@material-tailwind/react";
+import AboutUs from "./pages/aboutUs";
+import ContactUs from "./pages/contactUs";
+import RecipeDetailPage from "./pages/recipeDetailPage";
 function App() {
   return (
     <>
       <ThemeProvider>
         <ContextProvider>
           <Header />
-          {/* <Header_user /> */}
 
           <Routes>
-            {/* <Route path="/RecipeDishList" element={<RecipeDishList />} /> */}
+            <Route path="/" element={<Home />} />
             <Route path="/Register" element={<Register />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/AdminLogin" element={<AdminLogin />} />
-
             <Route path="/AdminRegister" element={<AdminRegister />} />
-
-            <Route path="/" element={<Home />} />
+            <Route path="/RecipeDishList" element={<RecipeDishList />} />
+            <Route path="/payment" element={<CheckoutComponent/>}/>
             <Route path="/register" element={<UserReg />} />
-            {/* <Route path="/UserReg" element={<userReg />} /> */}
-            <Route path="/DishCard" element={<DishCard />} />
-            {/* <Route path="/user-profile" element={<User_profile />} /> */}
+            <Route path="/DishCard" element={<DishCard />} />  
+            <Route path="/user-profile" element={<Header_user />} />          
+            <Route path="/AboutUs" element={<AboutUs />} />
+            <Route path="/contactUs" element={<ContactUs />} />
+            <Route path="/recipe/:recipeId" element={<RecipeDetailPage />} />
+            <Route path="/chef-profile" element={<Header_chef />} />
 
-            <Route path="/user-profile" element={<Header_user />} />
 
-            {/* <Route path="/chef-profile" element={<Header_chef />} /> */}
           </Routes>
           <Footer />
         </ContextProvider>

@@ -1,94 +1,72 @@
-app.post('/pay', (req, res) => {
-    const create_payment_json = {
-      "intent": "sale",
-      "payer": {
-          "payment_method": "paypal"
-      },
-      "redirect_urls": {
-          "return_url": "http://localhost:3001/success",
-          "cancel_url": "http://localhost:3001/cancel"
-      },
-      "transactions": [{
-          "item_list": {
-              "items": [{
-                  "name": "item",
-                  "sku": "item",
-                  "price": "1.00",
-                  "currency": "USD",
-                  "quantity": 1
-              }]
-          },
-          "amount": {
-              "currency": "USD",
-              "total": "1.00"
-          },
-          "description": "This is the payment description."
-      }]
-    };
-  
-    paypal.payment.create(create_payment_json, function (error, payment) {
-      if (error) {
-          throw error;
-      } else {
-          for(let i = 0;i < payment.links.length;i++){
-            if(payment.links[i].rel === 'approval_url'){
-              res.redirect(payment.links[i].href);
-            }
-          }
-      }
-    });
-  });
-  const Transaction = require("../Models/Transactions");
-  app.get('/success', async (req, res) => {
-    const payerId = req.query.PayerID;
-    const paymentId = req.query.paymentId;
-  
-    const execute_payment_json = {
-      "payer_id": payerId,
-      "transactions": [{
-          "amount": {
-              "currency": "USD",
-              "total": "5.00"
-          }
-      }]
-    };
-  
-    try {
-      const payment = await new Promise((resolve, reject) => {
-        paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(payment);
-          }
-        });
-      });
-  
-      // Save transaction to database
-      const transaction = new Transaction({
-        paypalPaymentId: payment.id,
-        payerId: payment.payer.payer_info.payer_id,
-        amount: payment.transactions[0].amount.total,
-        currency: payment.transactions[0].amount.currency,
-        status: payment.state
-      });
-  
-      await transaction.save();
-  
-      res.send('Payment successful and transaction saved to database');
-    } catch (error) {
-      console.error(error);
-      res.status(500).send('An error occurred');
+const express = require('express');
+const router = express.Router();
+const paypal = require('@paypal/checkout-server-sdk');
+const mongoose = require('mongoose');
+
+// PayPal environment setup
+let environment = new paypal.core.SandboxEnvironment(
+  process.env.PAYPAL_CLIENT_ID || 'AaNKdFSya2nFjcnY-ovYES--3uDl6E6fS9Fz4SpNsX0iAvMg_m0PIoQT2SJsw_NUXN4QAikbdDXJqRZE',
+  process.env.PAYPAL_CLIENT_SECRET || 'EFgZ0bb68kjSKRdw84l6CjB3rIQrx465L3ByYloHYIRAxtpTdCB5wX3V4TVz6vBqokg-qO5OGIYXYpNz'
+);
+let client = new paypal.core.PayPalHttpClient(environment);
+
+// Mongoose transaction model
+const Transaction = mongoose.model('Transaction', {
+  paypalOrderId: String,
+  paypalPayerId: String,
+  paypalPaymentId: String,
+  amount: Number,
+  status: String,
+  createdAt: { type: Date, default: Date.now }
+});
+
+// Utility function to retrieve PayPal order details
+async function getOrderDetails(orderID) {
+  const request = new paypal.orders.OrdersGetRequest(orderID);
+  try {
+    const order = await client.execute(request);
+    return order.result;
+  } catch (error) {
+    throw new Error(`PayPal order retrieval failed: ${error.message}`);
+  }
+}
+
+// API route to handle payment completion
+router.post('/complete-payment', async (req, res) => {
+  const { orderID } = req.body;
+
+  if (!orderID) {
+    return res.status(400).json({ success: false, error: 'Order ID is required' });
+  }
+
+  try {
+    // Fetch the order details from PayPal
+    const order = await getOrderDetails(orderID);
+
+    // Ensure the order is in the correct state
+    if (order.status !== 'COMPLETED') {
+      return res.status(400).json({ success: false, error: 'Order not completed' });
     }
-  });
-  
-    paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
-      if (error) {
-          console.log(error.response);
-          throw error;
-      } else {
-          console.log(JSON.stringify(payment));
-          res.send('Success');
-      }
+
+    // Extract relevant information
+    const amount = order.purchase_units[0].amount.value;
+    const payerID = order.payer.payer_id;
+
+    // Save the transaction to the database
+    const transaction = new Transaction({
+      paypalOrderId: orderID,
+      paypalPayerId: payerID,
+      amount: parseFloat(amount),
+      status: order.status,
     });
-  
+    await transaction.save();
+
+    // Send a success response with the transaction ID
+    res.json({ success: true, transactionId: transaction._id });
+  } catch (error) {
+    console.error('Payment verification failed:', error.message);
+    res.status(500).json({ success: false, error: 'Payment verification failed' });
+  }
+});
+
+module.exports = router;
