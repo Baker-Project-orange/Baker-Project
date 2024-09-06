@@ -1,19 +1,14 @@
 const { default: mongoose } = require("mongoose");
 const Recipie = require("../Models/Recipies");
-const Dish = require("../Models/Dish");
+
 
 //Controller to make the recipie
 exports.makeRecipie = async (req, res) => {
   //recipie data prepration
   const recipieData = req.body;
-  recipieData.overviewPicture = req.urls[0];
+  recipieData.overviewPicture = req.url;
   const chefID = req.user;
   recipieData.recipieAuthor = chefID;
-
-  //to enter the image urls for all the steps
-  for (let i = 0; i <= recipieData.steps.length; i++) {
-    recipieData.steps[i].stepMedia = urls[i + 1];
-  }
 
   try {
     //Recipie document creation

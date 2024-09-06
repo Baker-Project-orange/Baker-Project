@@ -10,13 +10,13 @@ import {
 import axiosInstance from "../../utils/axios";
 import { useState } from "react";
 import chefHat from "../../assets/chefHat.png";
-import useSignupHooks from "../../hooks/LoginSignupHooks/SignupHooks";
+import useLoginHooks from "../../hooks/LoginSignupHooks/LoginHooks";
 export const Login = () => {
   const [email, setEmail] = useContext(Context).email;
   const [password, setPassword] = useContext(Context).password;
   const [isLogin, setLogin] = useContext(Context).isLogin;
   const [open, setOpen] = useContext(Context).isOpen;
-  const { handleSignup } = useSignupHooks();
+  const { handleLogin } = useLoginHooks();
 
   return (
     <>
@@ -59,7 +59,7 @@ export const Login = () => {
               </p>
             </div>
 
-            <Button onClick={handleSignup} color="white">
+            <Button onClick={handleLogin} color="white">
               Login
             </Button>
           </form>

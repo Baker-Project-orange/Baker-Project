@@ -9,7 +9,6 @@ exports.registerChef = async (req, res) => {
   chefData.license = req.url;
   console.log(chefData);
   try {
-   
     const chef = new Chef({ ...chefData, _id: new mongoose.Types.ObjectId() });
     chef.password = bcrypt.hashSync(chef.password, 10);
 
@@ -57,5 +56,50 @@ exports.loginChef = async (req, res) => {
   } catch (e) {
     console.log(e);
     res.status(501).json({ message: "Internal server error", error: e });
+  }
+};
+
+exports.get_chef = async (req, res) => {
+  const chefID = req.user;
+  // console.log(chef_id);
+
+  try {
+    const chefData = await Chef.findById(chefID);
+    if (chefData) {
+      // console.log('User found:', chefData);
+      res.json(chefData);
+    } else {
+      console.log("User not found");
+      res.status(404).send("User not found");
+    }
+  } catch (err) {
+    console.error("Error retrieving user:", err);
+    res.status(500).send("Error retrieving user");
+  }
+};
+
+exports.update_chef = async (req, res) => {
+  const chef_id=req.user;
+  const chefInfo = req.body;
+
+  
+
+  try {
+    const updatedChef = await Chef.findByIdAndUpdate(
+      chef_id,
+      { $set: chefInfo }, 
+      { new: true, runValidators: true }
+    );
+
+    if (updatedChef) {
+      console.log("Chef updated successfully");
+      res.json(updatedChef);
+    } else {
+      console.log("Chef not found");
+      res.status(404).send("Chef not found");
+    }
+  } catch (err) {
+    console.error("Error updating chef:", err);
+    res.status(500).send("Error updating chef");
   }
 };

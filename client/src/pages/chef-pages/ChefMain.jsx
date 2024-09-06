@@ -1,5 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Croissant, Home, ShoppingBag, User, PhoneCall } from "lucide-react";
+import {
+  Croissant,
+  Menu,
+  X,
+  Home,
+  ShoppingBag,
+  ReceiptTextIcon,
+  ChefHat,
+  User,
+  PhoneCall,
+} from "lucide-react";
 import Catalog_chef from "./Catalog_chef";
 import ChefProfilePage from "./home";
 import Chef_profile from "./profile";
@@ -7,11 +17,32 @@ import Contactus_chef from "./chef-contact";
 import Recipe_dish_creation from "./recpie-dish";
 import Recipe_dish_management from "./recpie-dish-management";
 
+import axios from "axios";
+
 const Chef_Manager = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [chef_id, set_chef_id] = useState("66d775724924397e1179e5eb");
+  const [chef, set_chef] = useState();
   const [active_tab, set_active_tab] = useState(
     sessionStorage.getItem("tab") || "home"
   );
+
+  // useEffect(() => {
+
+  //   const response = axios.get("http://localhost:3001/chef/get-chef", {
+  //     params: { chef_id } // Pass `chef_id` as a query parameter
+  //   })
+  //     .then((res) => {
+
+  //         set_chef(res.data);
+
+  //     })
+  //     .catch(err => console.log(err));
+  //     sessionStorage.setItem('chef', JSON.stringify(chef));
+
+  //   // console.log(chef);
+
+  // }, [chef]);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -60,7 +91,7 @@ const Chef_Manager = () => {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row h-screen">
+    <div className="flex flex-col sm:flex-row h-screen ">
       <header className="bg-[#c98d83] shadow-md w-full sm:w-16 lg:w-64 h-auto sm:h-[85vh] fixed sm:left-4 sm:top-1/2 sm:-translate-y-1/2 rounded-lg overflow-hidden z-20">
         <div className="h-full flex  items-center max-sm:justify-center sm:flex-col mt-4  p-4">
           <div className="flex sm:flex-col items-center justify-center mb-6">
@@ -72,36 +103,39 @@ const Chef_Manager = () => {
               EST. 1892
             </span>
           </div>
-          <nav className="flex sm:flex-col w-[50%] sm:space-x-0 sm:space-y-4">
+          <nav className="flex sm:flex-col w-full">
             <button
               onClick={() => handleTabChange("home")}
-              className="text-white  hover:text-rose-200 transition duration-300 text-left w-full  flex items-center justify-center sm:justify-start"
+              className="text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start md: mb-9"
             >
-              <Home size={24} />
-              <span className="ml-2 lg:inline hidden">Home</span>
+              {" "}
+              {/* إضافة مسافة بين الأزرار */}
+              <ChefHat size={24} />
+              <span className="ml-2">Profile</span>
             </button>
             <button
               onClick={() => handleTabChange("catalog")}
-              className="text-white  hover:text-rose-200 transition duration-300 text-left w-full  flex items-center justify-center sm:justify-start"
+              className="text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start md: mb-9"
             >
+              {" "}
+              {/* إضافة مسافة بين الأزرار */}
               <ShoppingBag size={24} />
-              <span className="ml-2 lg:inline hidden">Catalog</span>
+              <span className="ml-2">Catalog</span>
             </button>
             <button
-              onClick={() => handleTabChange("profile")}
-              className="text-white  hover:text-rose-200 transition duration-300 text-left w-full  flex items-center justify-center sm:justify-start"
+              onClick={() => handleTabChange("dish-recipes-creation")}
+              className="text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start md: mb-9"
             >
-              <User size={24} />
-              <span className="ml-2 lg:inline hidden">Profile</span>
-            </button>
-            <button
-              onClick={() => handleTabChange("contact")}
-              className="text-white  hover:text-rose-200 transition duration-300 text-left w-full  flex items-center justify-center sm:justify-start"
-            >
-              <PhoneCall size={24} />
-              <span className="ml-2 lg:inline hidden">Contact</span>
+              {" "}
+              {/* إضافة مسافة بين الأزرار */}
+              <ReceiptTextIcon size={24} />
+              <span className="ml-2">Create Recipe</span>
             </button>
           </nav>
+
+          {/* <button className="sm:hidden text-white self-center" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button> */}
         </div>
       </header>
 

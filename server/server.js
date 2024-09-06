@@ -25,10 +25,13 @@ app.use(cors(corsConfig));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-//API Routes:
+//API Routes
 //Users Routes
 app.use("/api/users", userRoutes);
 app.use("/api/chefs", chefRoutes);
+
+//Chefs routers
+app.use("/chef",chefRoutes);
 
 //Other Routes
 app.use("/api/dishes", dishRoutes);

@@ -3,7 +3,7 @@ import { Context } from "./contextProvider";
 import { useContext } from "react";
 import { Button } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-function Header() {
+function Chef_Manager() {
   const navigate = useNavigate();
   const [isLoggedIn, setLoggedIn] = useContext(Context).isLoggedIn;
   const [isChef, setChef] = useContext(Context).isChef;
@@ -176,4 +176,4 @@ function Header() {
     </div>
   );
 }
-export default Header;
+export default Chef_Manager;

@@ -7,20 +7,23 @@ const {
 const app = require("../config/firebaseConfig");
 const dayjs = require("dayjs");
 exports.filesUpload = async (req, res, next) => {
-  const files = req.body.files;
+  const steps = req.body.steps;
   req.urls = [];
   try {
-    if (files !== undefined) {
-      for (let i = 0; i < files.length; i++) {
+    if (steps !== undefined) {
+      for (let i = 0; i < steps.length; i++) {
         const storage = getStorage(app);
-        const imagesRef = ref(
-          storage,
-          `/images/${req.user}-${dayjs.unix()}-${i}.jpg`
-        );
+        const file = steps[i].stepMedia;
+        if (file !== undefined) {
+          const imagesRef = ref(
+            storage,
+            `/images/${req.user}-${dayjs.unix()}-${i}.jpg`
+          );
 
-        await uploadBytes(imagesRef, files[i]);
-        const url = getDownloadURL(imagesRef);
-        req.urls.push(url);
+          await uploadBytes(imagesRef, file);
+          const url = await getDownloadURL(imagesRef);
+          req.body.steps[i].stepMedia = url;
+        }
       }
       next();
     } else {
@@ -42,6 +45,7 @@ exports.fileUpload = async (req, res, next) => {
       await uploadBytes(imagesRef, file);
       const url = await getDownloadURL(imagesRef);
       req.url = url;
+
       next();
     } else {
       next();

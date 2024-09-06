@@ -14,7 +14,17 @@ export const ContextProvider = ({ children }) => {
   const [isLogin, setLogin] = useState(false);
   const [isLoggedIn, setLoggedIn] = useState(chefLogin.isLoggedIn || false);
   const [open, setOpen] = useState(false);
-
+  const [dishName, setDish] = useState("");
+  const [recipeOverview, setRecipe] = useState("");
+  const [ingrediants, setIngrediants] = useState([]);
+  const [steps, setSteps] = useState([]);
+  const [duration, setDuration] = useState("");
+  const [overviewPicture, setOverviewPicture] = useState("");
+  const [category, setCategory] = useState("");
+  const [dishDescription, setDescription] = useState("");
+  const [dishPictures, setDishPictures] = useState([]);
+  const [price, setPrice] = useState("");
+  const [includesDish, setIncludesDish] = useState(false);
   return (
     <Context.Provider
       value={{
@@ -28,6 +38,17 @@ export const ContextProvider = ({ children }) => {
         isLogin: [isLogin, setLogin],
         isLoggedIn: [isLoggedIn, setLoggedIn],
         isOpen: [open, setOpen],
+        dishName: [dishName, setDish],
+        recipeOverview: [recipeOverview, setRecipe],
+        ingrediants: [ingrediants, setIngrediants],
+        steps: [steps, setSteps],
+        duration: [duration, setDuration],
+        overviewPicture: [overviewPicture, setOverviewPicture],
+        category: [category, setCategory],
+        dishPictures: [dishPictures, setDishPictures],
+        dishDescription: [dishDescription, setDescription],
+        price: [price, setPrice],
+        includesDish:[includesDish, setIncludesDish]
       }}
     >
       {children}
