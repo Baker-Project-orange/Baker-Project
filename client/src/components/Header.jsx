@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"; // Import Link for navigation
 function Header() {
   return (
     <div className="relative min-h-screen bg-[#c98d83]">
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden  leading-[0]">
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
         <header className="text-white p-6 text-center">
           <nav>
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto my-80 p-4">
@@ -42,31 +42,31 @@ function Header() {
                 className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1"
                 id="navbar-cta"
               >
-                <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0  dark:border-gray-700">
+                <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 dark:border-gray-700">
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="/"
                       className="block py-2 px-3 md:p-0 text-white bg-blue-700 rounded md:bg-transparent md:hover:text-amber-900 md:dark:text-blue-500"
                       aria-current="page"
                     >
                       Home
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                     >
                       Products
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                     >
                       Recipes
-                    </a>
+                    </Link>
                   </li>
                   <span className="self-center text-3xl font-semibold whitespace-nowrap dark:text-white">
                     <img
@@ -76,20 +76,20 @@ function Header() {
                     />
                   </span>
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                     >
                       Reach Out
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a
-                      href="#"
+                    <Link
+                      to="#"
                       className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                     >
                       Who We Are
-                    </a>
+                    </Link>
                   </li>
                   <li className="relative group">
                     {/* Register with Dropdown */}
@@ -107,12 +107,12 @@ function Header() {
                         </Link>
                       </li>
                       <li>
-                        <a
-                          href="#"
+                      <Link
+                          to="/AdminRegister"
                           className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
                         >
                           Admin
-                        </a>
+                        </Link>
                       </li>
                       <li>
                         <a
@@ -145,4 +145,5 @@ function Header() {
     </div>
   );
 }
+
 export default Header;
