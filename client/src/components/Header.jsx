@@ -7,7 +7,7 @@ function Header() {
       <div className="absolute bottom-0 left-0 w-full overflow-hidden  leading-[0]">
         <header className="text-white p-6 text-center">
           <nav>
-            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
+            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto my-80 p-4">
               <a
                 href="https://flowbite.com/"
                 className="flex items-center space-x-3 rtl:space-x-reverse"
