@@ -10,7 +10,7 @@ const stepsSchema = new mongoose.Schema({
 const recipeSchema = new mongoose.Schema({
   dishName: String,
   recipeRatings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Rating" }],
-  ingredients: [{ name: String }],
+  ingredients: [String],
   recipeOverview: String,
   steps: [stepsSchema],
   difficultyRating: [{ ratingNumber: Number }],

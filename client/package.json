@@ -13,16 +13,14 @@
     "@material-tailwind/react": "^2.1.10",
     "@paypal/react-paypal-js": "^8.6.0",
     "axios": "^1.7.7",
+    "form-data": "^4.0.0",
     "framer-motion": "^11.4.0",
     "lucide-react": "^0.438.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1",
-
-    "react-toastify": "^10.0.5",
-
     "react-share": "^5.1.0",
-
+    "react-toastify": "^10.0.5",
     "react-transition-group": "^4.4.5",
     "react-use-cart": "^1.14.0",
     "sweetalert2": "^11.13.2",

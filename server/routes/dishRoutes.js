@@ -5,10 +5,14 @@ const router = express.Router();
 const dishController = require("../Controller/dishController");
 const { fileUpload } = require("../middlewares/fileUpload");
 const auth = require("../middlewares/auth");
+const { processImages } = require("../middlewares/imageProccessor");
 
 // Route to get all dishes
 router.get("/getDishes", dishController.getAllDishes);
-router.post("/makeDishes", auth, fileUpload, dishController.makeDish);
-router.put('/dishes/approve/:id', dishController.approveDish);
+router.get("/getChefDishes", auth, dishController.getChefDishes);
+router.get("/getDishByRecipeID", auth, dishController.getDishByRecipeID);
+router.post("/makeDishes", auth, processImages, dishController.makeDish);
+router.put("/dishes/approve/:id", dishController.approveDish);
 router.get("/total", dishController.getTotalDishes);
+router.get("/getDishByID", dishController.getDishById);
 module.exports = router;

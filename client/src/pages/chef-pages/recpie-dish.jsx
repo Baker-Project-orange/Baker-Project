@@ -19,7 +19,7 @@ const Recipe_dish_creation = () => {
 
   const [includesDish, setIncludesDish] = useContext(Context).includesDish;
 
-  const { handleCreateRecipe } = useRecipeHooks();
+  const handleCreateRecipe = useRecipeHooks();
 
   return (
     <div className="min-h-screen bg-[#f8e5e1] py-12 px-4 sm:px-6 lg:px-8">
@@ -119,7 +119,9 @@ const Recipe_dish_creation = () => {
                 type="file"
                 id="overviewPicture"
                 name="overviewPicture"
-                onChange={(e) => setOverviewPicture(e.target.files[0])}
+                onChange={(e) =>
+                  setOverviewPicture(e.target.files[0])
+                }
                 className="mt-1 block w-full text-sm text-gray-500
                 file:mr-4 file:py-2 file:px-4
                 file:rounded-full file:border-0
@@ -207,28 +209,6 @@ const Recipe_dish_creation = () => {
                 ></textarea>
               </div>
 
-              <div>
-                <label
-                  htmlFor="dishPictures"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Dish Pictures
-                </label>
-                <input
-                  type="file"
-                  id="dishPictures"
-                  name="dishPictures"
-                  onChange={(e) => setDishPictures(e.target.value)}
-                  className="mt-1 block w-full text-sm text-gray-500
-                  file:mr-4 file:py-2 file:px-4
-                  file:rounded-full file:border-0
-                  file:text-sm file:font-semibold
-                  file:bg-[#c98d83] file:text-white
-                  hover:file:bg-[#b17c73]"
-                  accept="image/*"
-                  required={includesDish}
-                />
-              </div>
 
               <div>
                 <label

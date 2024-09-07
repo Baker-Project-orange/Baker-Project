@@ -25,6 +25,9 @@ export const ContextProvider = ({ children }) => {
   const [dishPictures, setDishPictures] = useState([]);
   const [price, setPrice] = useState("");
   const [includesDish, setIncludesDish] = useState(false);
+  const [recipeID, setRecipeID] = useState(
+    sessionStorage.getItem("recipeID") || ""
+  );
   return (
     <Context.Provider
       value={{
@@ -48,7 +51,8 @@ export const ContextProvider = ({ children }) => {
         dishPictures: [dishPictures, setDishPictures],
         dishDescription: [dishDescription, setDescription],
         price: [price, setPrice],
-        includesDish:[includesDish, setIncludesDish]
+        includesDish: [includesDish, setIncludesDish],
+        recipeID: [recipeID, setRecipeID],
       }}
     >
       {children}
