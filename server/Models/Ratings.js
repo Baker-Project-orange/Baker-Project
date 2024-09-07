@@ -4,15 +4,17 @@ const { Schema, model, default: mongoose } = require("mongoose");
 
 const repliesSchema = new Schema({
   replyMessage: String,
-  replyAuthor: { type: mongoose.Types.ObjectId, ref: "User" },
+  replyAuthor: String,
   replyDate: Date,
 });
 
 const ratingSchema = new Schema({
   ratingComment: String,
   ratingDate: Date,
-  ratingAuthor: { type: mongoose.Types.ObjectId, ref: "User" },
-  replies: { repliesSchema },
+  ratingAuthor: String,
+  recipeRating: String,
+  userRating: String,
+  replies: [ repliesSchema ],
 });
 
 const Rating = model("Rating", ratingSchema);

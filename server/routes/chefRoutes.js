@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const chefController = require("../Controller/chefController");
+const { fileUpload } = require("../middlewares/fileUpload");
+const auth = require("../middlewares/auth");
+router.post("/registerChef", fileUpload, chefController.registerChef);
+router.post("/loginChef", chefController.loginChef);
 
-router.post("registerChef", chefController.registerChef);
-router.post("registerChef", chefController.loginChef);
-
-router.get("/get-chef",chefController.get_chef);
-router.patch("/update-chef",chefController.update_chef);
+router.get("/get-chef", auth, chefController.get_chef);
+router.patch("/update-chef",auth, chefController.update_chef);
 
 module.exports = router;

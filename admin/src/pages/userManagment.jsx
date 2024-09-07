@@ -11,7 +11,7 @@ const UserManagement = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/api/users/users");
+        const response = await axios.get("http://localhost:3000/api/users/");
         setUsers(response.data);
         setLoading(false);
       } catch (err) {
@@ -31,7 +31,7 @@ const UserManagement = () => {
 
   const toggleUserStatus = async (userId, currentStatus) => {
     try {
-      await axios.put(`http://localhost:3001/api/users/users/${userId}/toggle-active`);
+      await axios.put(`http://localhost:3000/api/users/users/${userId}/toggle-active`);
       // Update the user list to reflect changes
       setUsers(users.map(user =>
         user._id === userId ? { ...user, isActivated: !currentStatus } : user

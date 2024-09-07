@@ -1,41 +1,90 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Filter, Clock, DollarSign, Plus } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { Search, Filter, Clock, Loader } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
 
 const RecipeDishList = () => {
   const [items, setItems] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("All");
   const [filterType, setFilterType] = useState("All");
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasNextPage, setHasNextPage] = useState(true);
+  const observer = useRef();
+  const navigate = useNavigate();
+
+  const lastItemRef = useCallback(
+    (node) => {
+      if (isLoading) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver(
+        (entries) => {
+          if (entries[0].isIntersecting && hasNextPage) {
+            setPage((prevPage) => prevPage + 1);
+          }
+        },
+        {
+          root: null,
+          rootMargin: "100px",
+          threshold: 1.0,
+        }
+      );
+      if (node) observer.current.observe(node);
+    },
+    [isLoading, hasNextPage]
+  );
 
   useEffect(() => {
-    // Fetch items from the backend
+    setItems([]);
+    setPage(1);
+  }, [filterCategory, filterType]);
+
+  useEffect(() => {
     fetchItems();
-  }, []);
+  }, [page, filterCategory, filterType]);
 
   const fetchItems = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:3001/api/recipes/getrecipes"
+      setIsLoading(true);
+      const response = await axios.get(
+        `http://localhost:3000/api/recipes/getrecipes?page=${page}&limit=6&category=${filterCategory}&type=${filterType}`
       );
-      const data = await response.json();
-      setItems(data);
+
+      console.log("Fetched data:", response.data);
+
+      const newItems = response.data || [];
+      const hasNext = newItems.length === 6; // Assuming 6 items per page
+
+      setItems((prevItems) => {
+        if (page === 1) {
+          return newItems;
+        } else {
+          return [...prevItems, ...newItems];
+        }
+      });
+
+      setHasNextPage(hasNext);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching items:", error);
+      setIsLoading(false);
     }
   };
 
-  const filteredItems = items.filter(
-    (item) =>
-      item.dishName.toLowerCase().includes(searchTerm.toLowerCase()) &&
-      (filterCategory === "All" || item.category === filterCategory) &&
-      (filterType === "All" ||
-        (filterType === "recipe" ? !item.isDish : item.isDish))
-  );
+  const filteredItems = items.filter((item) => {
+    const dishName = item.dishName || "";
+    return dishName.toLowerCase().includes(searchTerm.toLowerCase());
+  });
 
   const categories = ["All", ...new Set(items.map((item) => item.category))];
   const types = ["All", "recipe", "dish"];
+
+  const handleRecipeClick = (recipeId) => {
+    localStorage.setItem("selectedRecipeId", recipeId);
+    navigate(`/recipe/${recipeId}`);
+  };
 
   return (
     <div className="min-h-screen bg-[#f8e5e1] py-12 px-4 sm:px-6 lg:px-8">
@@ -95,72 +144,75 @@ const RecipeDishList = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map((item, index) => (
-            <motion.div
-              key={item._id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-            >
-              <img
-                src={item.overviewPicture}
-                alt={item.dishName}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4">
-                <div className="flex justify-between items-start mb-2">
-                  <h2 className="text-xl font-semibold text-[#c98d83]">
-                    {item.dishName}
-                  </h2>
-                  <div className="flex space-x-2">
-                    <Link to={`/recipe/${item._id}`}>
-                      <button className="text-sm font-medium text-white bg-[#c98d83] px-2 py-1 rounded-full hover:bg-[#b67c73] transition-colors duration-300">
+        <AnimatePresence>
+          <motion.div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredItems.map((item, index) => (
+              <motion.div
+                key={item._id}
+                ref={index === filteredItems.length - 1 ? lastItemRef : null}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -50 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              >
+                <img
+                  src={item.overviewPicture || "placeholder-image-url.jpg"}
+                  alt={item.dishName}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4">
+                  <div className="flex justify-between items-start mb-2">
+                    <h2 className="text-xl font-semibold text-[#c98d83]">
+                      {item.dishName}
+                    </h2>
+                    <div className="flex space-x-2">
+                      <button
+                        onClick={() => handleRecipeClick(item._id)}
+                        className="text-sm font-medium text-white bg-[#c98d83] px-2 py-1 rounded-full hover:bg-[#b67c73] transition-colors duration-300"
+                      >
                         Recipe
                       </button>
-                    </Link>
-                    {item.isDish && (
-                      <Link to={`/dish/${item._id}`}>
-                        <button className="text-sm font-medium text-white bg-[#b67c73] px-2 py-1 rounded-full hover:bg-[#a56b62] transition-colors duration-300">
-                          Dish
-                        </button>
-                      </Link>
-                    )}
+                      {item.isDish && (
+                        <Link to={`/dish/${item._id}`}>
+                          <button className="text-sm font-medium text-white bg-[#b67c73] px-2 py-1 rounded-full hover:bg-[#a56b62] transition-colors duration-300">
+                            Dish
+                          </button>
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                  <div className="text-gray-600 mb-4 h-12 overflow-hidden">
+                    {item.dishDescription}
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium text-gray-500">
+                      {item.category || "Uncategorized"}
+                    </span>
+                    <div className="flex items-center text-[#c98d83]">
+                      <Clock size={16} className="mr-1" />
+                      <span>{item.duration || "N/A"}</span>
+                    </div>
                   </div>
                 </div>
-                <p className="text-gray-600 mb-4 h-12 overflow-hidden">
-                  {item.dishDescription}
-                </p>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-500">
-                    {item.category}
-                  </span>
-                  <div className="flex items-center text-[#c98d83]">
-                    <Clock size={16} className="mr-1" />
-                    <span>{item.duration}</span>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </AnimatePresence>
 
-        {/* <div className="mt-12 border-2 border-[#c98d83] rounded-lg p-8 flex justify-center items-center">
-          <Link
-            to="/recipe-dish-create"
-            className="hover:text-rose-200 transition duration-300"
-          >
-            <button className="bg-[#c98d83] text-white px-6 py-3 rounded-full hover:bg-[#b67c73] transition-colors duration-300 flex items-center justify-center text-lg font-semibold">
-              <Plus size={24} className="mr-2" />
-              Add New Recipe or Dish
-            </button>
-          </Link>
-        </div> */}
+        {isLoading && (
+          <div className="mt-8 flex justify-center">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            >
+              <Loader size={40} className="text-[#c98d83]" />
+            </motion.div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
-
 
 export default RecipeDishList;

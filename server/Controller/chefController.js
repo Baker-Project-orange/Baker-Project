@@ -6,11 +6,15 @@ const { default: mongoose } = require("mongoose");
 
 exports.registerChef = async (req, res) => {
   const chefData = req.body;
+  chefData.license = req.url;
+  console.log(chefData);
   try {
     const chef = new Chef({ ...chefData, _id: new mongoose.Types.ObjectId() });
     chef.password = bcrypt.hashSync(chef.password, 10);
+
     await chef.save();
     const token = generateToken(chef._id.toString());
+    console.log(chef);
     const cookieOptions = {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24,
@@ -18,7 +22,7 @@ exports.registerChef = async (req, res) => {
       secure: true,
     };
     res.cookie("token", token, cookieOptions);
-    res
+    return res
       .status(201)
       .json({ message: "User registerd successfully ", chef: chef });
   } catch (e) {
@@ -55,53 +59,63 @@ exports.loginChef = async (req, res) => {
   }
 };
 
-
-
 exports.get_chef = async (req, res) => {
-  const { chef_id } = req.query; 
+  const chefID = req.user;
   // console.log(chef_id);
 
   try {
-      const chefData = await Chef.findById(chef_id);
-      if (chefData) {
-          // console.log('User found:', chefData);
-          res.json(chefData);
-      } else {
-          console.log('User not found');
-          res.status(404).send('User not found');
-      }
+    const chefData = await Chef.findById(chefID);
+    if (chefData) {
+      // console.log('User found:', chefData);
+      res.json(chefData);
+    } else {
+      console.log("User not found");
+      res.status(404).send("User not found");
+    }
   } catch (err) {
-      console.error('Error retrieving user:', err);
-      res.status(500).send('Error retrieving user');
+    console.error("Error retrieving user:", err);
+    res.status(500).send("Error retrieving user");
   }
 };
 
 exports.update_chef = async (req, res) => {
+  const chef_id=req.user;
+  const chefInfo = req.body;
 
-  const { chef_id } = req.query;
-  const chefInfo = req.body;   
-
-  // console.log(chef_id);
-  // console.log(chefInfo);
+  
 
   try {
-      const updatedChef = await Chef.findByIdAndUpdate(
-          chef_id,
-          { $set: chefInfo }, // Use $set to update only the fields provided
-          { new: true, runValidators: true } // new: true returns the updated document, runValidators ensures validation
-      );
+    const updatedChef = await Chef.findByIdAndUpdate(
+      chef_id,
+      { $set: chefInfo }, 
+      { new: true, runValidators: true }
+    );
 
-      if (updatedChef) {
-          console.log("Chef updated successfully");
-          res.json(updatedChef);
-      } else {
-          console.log('Chef not found');
-          res.status(404).send('Chef not found');
-      }
+    if (updatedChef) {
+      console.log("Chef updated successfully");
+      res.json(updatedChef);
+    } else {
+      console.log("Chef not found");
+      res.status(404).send("Chef not found");
+    }
   } catch (err) {
-      console.error('Error updating chef:', err);
-      res.status(500).send('Error updating chef');
+    console.error("Error updating chef:", err);
+    res.status(500).send("Error updating chef");
   }
 };
 
 
+
+// getchefs
+exports.getAllChefs = async (req, res) => {
+  try {
+    const chefs = await Chef.find(); // Fetch all chefs from the database
+    if (!chefs || chefs.length === 0) {
+      return res.status(404).json({ message: "No chefs found" });
+    }
+    res.status(200).json(chefs);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};

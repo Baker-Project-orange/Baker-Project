@@ -4,15 +4,12 @@ const chefSchema = new Schema({
   name: String,
   email: String,
   password: String,
-  businessName: String,
-  businessAddress: String,
   notifications: [{ type: mongoose.Types.ObjectId, ref: "Notification" }],
   unreadNotification: { type: Boolean, default: false },
-  isActive: { type: Boolean, default: false },
-  businessLogo: String,
+  isActive: { type: Boolean, default: true },
   license: String,
-  openingTime: Date,
-  closingTime: Date,
+  openingTime: String,
+  closingTime: String,
 });
 
 const Chef = model("Chef", chefSchema);
