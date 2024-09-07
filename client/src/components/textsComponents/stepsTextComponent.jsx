@@ -1,5 +1,5 @@
 import { Input, Button, Chip } from "@material-tailwind/react";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Context } from "../contextProvider";
 
 const StepsTextAdd = () => {
@@ -9,11 +9,20 @@ const StepsTextAdd = () => {
   const [note, setNote] = useState("");
   const [title, setTitle] = useState("");
 
+  useEffect(() => {
+    if (picture) {
+      console.log("Picture state updated:", picture);
+    }
+    if (steps) {
+      console.log(steps[steps.length - 1]);
+    }
+  }, [picture, steps]);
+
   const handleAddText = () => {
     const step = {
       stepTitle: title,
       stepDescription: text,
-      stepMedia: picture ? URL.createObjectURL(picture) : "",
+      stepMedia: picture ,
       note: note || "",
     };
     setSteps([...steps, step]);
@@ -58,7 +67,11 @@ const StepsTextAdd = () => {
         </label>
         <input
           type="file"
-          onChange={(e) => setPicture(e.target.files[0])}
+          onChange={(e) => {
+            setPicture(e.target.files[0]);
+
+            console.log(picture);
+          }}
           className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#c98d83] file:text-white hover:file:bg-[#b17c73]"
           accept="image/*"
         />

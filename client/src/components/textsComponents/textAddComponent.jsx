@@ -1,10 +1,14 @@
 import { Input, Button, Chip } from "@material-tailwind/react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Context } from "../contextProvider";
 
 const TextAdd = (props) => {
   const [ingrediants, setIngrediants] = useContext(Context).ingrediants;
   const [text, setText] = useState("");
+
+  useEffect(() => {
+    console.log(ingrediants);
+  }, [ingrediants]);
 
   const handleAddText = () => {
     setIngrediants([...ingrediants, text]);

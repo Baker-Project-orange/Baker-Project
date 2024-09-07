@@ -38,13 +38,14 @@ export const Signup = () => {
         Chef
       </Button>
       <Dialog
+      
         className=" w-[30rem] bg-[#D5877A] flex flex-col justify-center "
         open={open}
         handler={handleOpen}
       >
         <DialogBody className="">
           {!isLogin ? (
-            <div className="flex flex-col justify-center items-center w-full ">
+            <div className="flex flex-col justify-center items-center w-full overflow-y-auto ">
               <div className="text-white text-[3rem] w-full flex flex-col items-center justify-center">
                 <div className="flex gap-5 justify-center items-center w-full mb-10 mt-10">
                   <img

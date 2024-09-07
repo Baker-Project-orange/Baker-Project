@@ -14,7 +14,9 @@ exports.deleteDish = async (req, res) => {
 
 exports.makeDish = async (req, res) => {
   const dishData = req.body;
+  const chefID = req.user;
   dishData.recipieID = new mongoose.Types.ObjectId(dishData.recipieID);
+  dishData.authorID = new mongoose.Types.ObjectId(chefID);
   try {
     const dish = new Dish({ _id: new mongoose.Types.ObjectId(), ...dishData });
     await dish.save();
@@ -36,33 +38,64 @@ exports.getAllDishes = async (req, res) => {
   }
 };
 
+//get Chef Dishes
+exports.getChefDishes = async (req, res) => {
+  const chefID = req.user;
+  try {
+    const dishes = await Dish.find({ authorID: chefID }).populate([
+      "authorID",
+      "recipeID",
+    ]);
+    if (!dishes) {
+      res.status(204).json({ message: "No dishes found", dishes: [] });
+    } else {
+      res
+        .status(200)
+        .json({ message: "Dishes found successfully ", dishes: dishes });
+    }
+  } catch (e) {
+    res.status(501).json({ message: "Internal server error", error: e });
+  }
+};
+
 // nubmofdithes
-exports.getTotalDishes = async (req, res)=>{
-try {
-  const totalDishes = await Dish.countDocuments();
-  res.status(200).json({totalDishes});
-
-} catch (error){
-  res.status(500).json({ message: "Error fetching total dishes", error });
-}
-
-}
-
-
+exports.getTotalDishes = async (req, res) => {
+  try {
+    const totalDishes = await Dish.countDocuments();
+    res.status(200).json({ totalDishes });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching total dishes", error });
+  }
+};
 
 // Get a dish by ID
 exports.getDishById = async (req, res) => {
+  console.log(req.query.id);
   try {
     const dish = await Dish.findOne({
       _id: req.query.id,
-      isdeleted: false,
-    }).populate("recipie", "dishName");
+      isDeleted: false,
+    }).populate("recipieID", "dishName");
+    console.log(dish);
     if (!dish) {
       return res.status(404).json({ message: "Dish not found" });
     }
     res.status(200).json(dish);
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+exports.getDishByRecipeID = async (req, res) => {
+  const { recipeID } = req.query;
+  try {
+    const dish = await Dish.findOne({
+      recipieID: recipeID,
+    }).populate(["recipieID", "authorID"]);
+    res.status(200).json({ message: "Dish returned succesfully", dish: dish });
+  } catch (e) {
+    console.log(e);
+    res.status(501).json({ message: "Internal server error", error: e });
   }
 };
 
@@ -76,7 +109,7 @@ exports.approveDish = async (req, res) => {
       { new: true, runValidators: true }
     );
     if (!dish) {
-      return res.status(404).json({ message: 'Dish not found' });
+      return res.status(404).json({ message: "Dish not found" });
     }
     res.json(dish);
   } catch (error) {

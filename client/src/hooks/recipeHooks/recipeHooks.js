@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Context } from "../../components/contextProvider";
 import axiosInstance from "../../utils/axios";
+
 const useRecipeHooks = () => {
   const [dishName, setDish] = useContext(Context).dishName;
   const [recipeOverview, setRecipe] = useContext(Context).recipeOverview;
@@ -17,29 +18,47 @@ const useRecipeHooks = () => {
 
   const handleCreateRecipe = async (e) => {
     e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("dishName", dishName);
+    formData.append("recipeOverview", recipeOverview);
+    formData.append("duration", duration);
+    formData.append("isDish", includesDish);
+    formData.append("category", category);
+    formData.append("ingredients", JSON.stringify(ingrediants));
+    formData.append("steps", JSON.stringify(steps));
+
+    steps.forEach((step, index) => {
+      if (step.stepMedia) {
+        formData.append("files", step.stepMedia);
+      }
+    });
+    formData.append("files", overviewPicture);
+    console.log(formData.getAll("category"));
     try {
-      const response = await axiosInstance.post("/api/recipes/makeRecipie", {
-        dishName: dishName,
-        recipeOverview: recipeOverview,
-        duration: duration,
-        file: overviewPicture,
-        isDish: includesDish,
-        category: category,
-        ingrediants: ingrediants,
-        steps: steps,
-      });
+      const response = await axiosInstance.post(
+        "/api/recipes/makeRecipie",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
 
       if (includesDish) {
+        const dishFormData = new FormData();
+        dishFormData.append("recipieID", response.data.recipie._id);
+        dishFormData.append("dishDescription", dishDescription);
+        dishFormData.append("price", price);
+
         const dishResponse = await axiosInstance.post(
           "/api/dishes/makeDishes",
+          dishFormData,
           {
-            recipieID: response.data.recipie._id,
-            dishDescription: dishDescription,
-            price: price,
-            file: dishPictures,
-            category: category,
-            ingrediants: ingrediants,
-            steps: steps,
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
           }
         );
         console.log(dishResponse.data);

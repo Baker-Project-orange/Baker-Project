@@ -5,9 +5,9 @@ const Chef = require("../Models/Chef");
 
 exports.makeRecipie = async (req, res) => {
   const recipieData = req.body;
-  recipieData.overviewPicture = req.url;
   const chefID = req.user;
-  recipieData.recipieAuthor = chefID;
+  recipieData.recipeAuthor = chefID;
+  console.log(req.files);
 
   try {
     const recipie = new Recipie({
@@ -22,17 +22,21 @@ exports.makeRecipie = async (req, res) => {
   }
 };
 
-
 exports.getChefRecipies = async (req, res) => {
   const chefID = req.user;
+
   try {
-    const recipies = Recipie.find({ _id: chefID });
+    const recipies = await Recipie.find({ recipeAuthor: chefID });
     if (recipies.length === 0) {
-      res.status(204).json({ message: "No Recipies were found for this chef" });
+      res.status(201).json({
+        message: "No Recipies were found for this chef",
+        recipies: [],
+      });
     } else {
+      console.log(recipies);
       res
         .status(200)
-        .json({ message: "Recipies fetched successfully", recipies });
+        .json({ message: "Recipies fetched successfully", recipies: recipies });
     }
   } catch (e) {
     console.log(e);
@@ -62,8 +66,6 @@ exports.updateRecipie = async (req, res) => {
   }
 };
 
-
-
 exports.getAllRecipes = async (req, res) => {
   try {
     const recipes = await Recipie.find({ isDeleted: false }).populate(
@@ -75,10 +77,24 @@ exports.getAllRecipes = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-  
+exports.getChefRecipeById = async (req, res) => {
+  console.log(req);
+  const recipeID = req.query;
 
-
+  try {
+    const recipe = await Recipie.findById(
+      new mongoose.Types.ObjectId(recipeID)
+    ).populate("recipeAuthor");
+    res
+      .status(200)
+      .json({ message: "Fetched recipe successully", recipe: recipe });
+  } catch (e) {
+    console.log(e);
+    res.status(501).json({ message: "Internal server error", error: e });
+  }
+};
 exports.getRecipeById = async (req, res) => {
+  console.log(req.params.id);
   try {
     const recipe = await Recipie.findById(req.params.id).populate(
       "recipeAuthor",
@@ -92,7 +108,7 @@ exports.getRecipeById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-  
+
 exports.getRecipesByCategory = async (req, res) => {
   try {
     const recipes = await Recipie.find({
@@ -105,7 +121,6 @@ exports.getRecipesByCategory = async (req, res) => {
   }
 };
 
-
 // numb of recpies
 exports.getTotalRecipes = async (req, res) => {
   try {
@@ -115,5 +130,3 @@ exports.getTotalRecipes = async (req, res) => {
     res.status(500).json({ message: "Error fetching total recipes", error });
   }
 };
-
-
