@@ -3,30 +3,33 @@ const { model } = require("mongoose");
 const Order = require("../Models/Orders");
 
 // controller/orderController.js
-
 exports.getAllOrders = async (req, res) => {
   try {
-    const orders = await Order.find().populate("orderMaker", "username");
+    
+    // const orders = await Order.find({chefId:"66d775724924397e1179e5ed"})
+    const orders = await Order.find()
+      .populate("orderMaker", "username")
+      .populate({
+        path: 'orderItems.dish'
+      });
 
-    console.log(orders);
+    // Transform the data to ensure orderItems is returned as a data object
+    const final_orders = orders.map(order => ({
+      ...order.toObject(), 
+      orderItems: order.orderItems.map(item => ({
+        ...item.toObject(), 
+        dish: item.dish ? item.dish.toObject() : null 
+      }))
+    }));
 
-    // const user_id = req.user;
-
-    // console.log(user_id);
-
-
-    const final_order = {
-
-    }
-
-
-    res.json(orders);
+    res.json(final_orders);
   } catch (error) {
     res
       .status(500)
       .json({ message: "Error fetching orders", error: error.message });
   }
 };
+
 
 exports.createOrder = async (req, res) => {
   try {
@@ -70,3 +73,36 @@ exports.updateOrder = async (req, res) => {
       .json({ message: "Error updating order", error: error.message });
   }
 };
+
+
+exports.updateOrderStatus = async (req, res) => {
+  const orderId = req.params.id; // Extract order ID from request parameters
+  const { status } = req.body; // Extract status from request body
+
+  try {
+    // Validate status value if necessary
+    const validStatuses = ['Pending', 'In Progress', 'Completed', 'Cancelled'];
+    if (!validStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Invalid status value' });
+    }
+
+    // Find the order by ID and update the status
+    const updatedOrder = await Order.findByIdAndUpdate(
+      orderId,            // The ID of the order to update
+      { status },         // The fields to update
+      { new: true }       // Return the updated document
+    );
+
+    // Check if the order was found and updated
+    if (!updatedOrder) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    // Return the updated order
+    res.json(updatedOrder);
+  } catch (error) {
+    console.error('Error updating order status:', error);
+    res.status(500).json({ message: 'Error updating order status', error: error.message });
+  }
+};
+
