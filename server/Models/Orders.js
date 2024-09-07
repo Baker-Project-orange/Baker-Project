@@ -14,7 +14,7 @@
 const { Schema, model, default: mongoose } = require("mongoose");
 
 const orderItemSchema = new Schema({
-  dish: { type: mongoose.Types.ObjectId, ref: "Dish" },
+  dishName: String,
   quantity: Number,
   price: Number,
   chefAmount: Number,
@@ -23,6 +23,7 @@ const orderItemSchema = new Schema({
 
 const orderSchema = new Schema({
   orderMaker: { type: mongoose.Types.ObjectId, ref: "User" },
+  orderMakerName: String,
   orderItems: [orderItemSchema],
   totalPrice: Number,
   totalChefAmount: Number,
