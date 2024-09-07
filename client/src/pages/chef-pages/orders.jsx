@@ -22,13 +22,19 @@ const Orders = () => {
   };
 
   useEffect(() => {
-    const results = orders.filter(order =>
-      (order.orderItems && order.orderItems.some(item => 
-        (item.dishName && item.dishName.toLowerCase().includes(searchTerm.toLowerCase()))
-      )) ||
-      (order.orderMaker && order.orderMaker.toLowerCase().includes(searchTerm.toLowerCase())) &&
-      (filterStatus === 'All' || order.status === filterStatus)
-    );
+    const results = orders.filter(order => {
+      const matchesSearch = 
+        searchTerm === '' ||
+        order.orderItems.some(item => 
+          (item.dishName || '').toLowerCase().includes(searchTerm.toLowerCase())
+        ) ||
+        (order.orderMaker || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (order._id || '').toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesStatus = filterStatus === 'All' || order.status === filterStatus;
+
+      return matchesSearch && matchesStatus;
+    });
     setFilteredOrders(results);
   }, [searchTerm, filterStatus, orders]);
 
@@ -37,7 +43,7 @@ const Orders = () => {
       _id: order._id || 'N/A',
       orderItems: (order.orderItems || []).map(item => ({
         _id: item._id || '',
-        dishName: item.dish ? item.dish.dishName : item.dishName,
+        dishName: item.dish ? item.dish.dishName : (item.dishName || 'Unknown Dish'),
         quantity: item.quantity || 1,
         price: item.price || 0
       })),
@@ -50,7 +56,7 @@ const Orders = () => {
     };
   };
 
-  const statuses = ['All', 'Pending', 'In Progress', 'Completed'];
+  const statuses = ['All', 'Pending', 'Completed'];
 
   const getTotalPrice = (orderItems) => {
     return orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -70,7 +76,6 @@ const Orders = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'Pending': return 'bg-yellow-100 text-yellow-800';
-      case 'In Progress': return 'bg-blue-100 text-blue-800';
       case 'Completed': return 'bg-green-100 text-green-800';
       default: return 'bg-gray-100 text-gray-800';
     }
@@ -82,10 +87,10 @@ const Orders = () => {
         <h1 className="text-4xl font-bold text-center text-[#8b4513] mb-8">Orders Dashboard</h1>
 
         <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between bg-white p-6 rounded-lg shadow-md">
-          <div className="relative mb-4 md:mb-0 md:w-1/3">
+          <div className="relative mb-4 md:mb-0 md:w-1/2">
             <input
               type="text"
-              placeholder="Search orders..."
+              placeholder="Search by dish, order ID, or customer name..."
               className="w-full pl-10 pr-4 py-2 border border-[#c98d83] rounded-full focus:outline-none focus:ring-2 focus:ring-[#c98d83] focus:border-transparent"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -93,9 +98,9 @@ const Orders = () => {
             <Search className="absolute left-3 top-2 text-[#c98d83]" size={20} />
           </div>
 
-          <div className="relative">
+          <div className="relative w-full md:w-auto">
             <select
-              className="appearance-none bg-white border border-[#c98d83] rounded-full px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-[#c98d83] focus:border-transparent"
+              className="w-full md:w-auto appearance-none bg-white border border-[#c98d83] rounded-full px-4 py-2 pr-8 focus:outline-none focus:ring-2 focus:ring-[#c98d83] focus:border-transparent"
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
             >
@@ -118,12 +123,12 @@ const Orders = () => {
                   </span>
                 </div>
               </div>
-              <div className="p-4 bg-white flex-grow ">
+              <div className="p-4 bg-white flex-grow">
                 <div className="space-y-2">
                   {order.orderItems.map((item, index) => (
                     <div key={item._id || index} className="text-[#5d4037] flex-col justify-between">
                       <div className="flex justify-between items-center">
-                        <span className="font-medium">{item.dishName || 'Unknown Dish'}</span>
+                        <span className="font-medium">{item.dishName}</span>
                         <span>x{item.quantity}</span>
                       </div>
                       <div className="flex justify-between items-center text-sm text-[#8d6e63]">

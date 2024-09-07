@@ -24,7 +24,7 @@ function App() {
     <>
       <ThemeProvider>
         <ContextProvider>
-          {/* <Header /> */}
+          <Header />
 
           <Routes>
             <Route path="/" element={<Home />} />
