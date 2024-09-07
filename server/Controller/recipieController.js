@@ -117,3 +117,117 @@ exports.getTotalRecipes = async (req, res) => {
 };
 
 
+
+
+exports.add_comment = async (req, res) => {
+  try {
+    const { newComment, recipe_id, chef_id, user_id } = req.body;
+    // console.log("Received comment:", newComment);
+    // console.log(newComment, recipe_id, chef_id, user_id);
+
+    const user = await User.findById(user_id);
+    const chef = await Chef.findById(chef_id);
+
+    // console.log(user.name);
+    // console.log(chef.name);
+
+    const newRating = new Rating({
+      ratingComment: newComment,
+      ratingDate: Date.now(),
+      ratingAuthor: chef.name,
+      recipeRating: recipe_id,
+      userRating: user.name,
+    });
+
+    const savedRating = await newRating.save();
+
+
+    await Recipie.updateOne(
+      { _id: recipe_id },
+      { $push: { recipeRatings: savedRating._id } }
+    );
+
+    console.log("After insert");
+
+    res.status(201).json({ message: "Comment added successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+exports.add_replie = async (req, res) => {
+  try {
+    const comment_id = req.params.id;
+    const { newReply, chef_id } = req.body;
+
+    // console.log("Inside reply controller");
+    // console.log(comment_id);
+    // console.log(newReply, chef_id);
+
+    // Find the rating document by ID
+    const rating = await Rating.findById(comment_id);
+
+    if (!rating) {
+      return res.status(404).json({ message: "Rating not found" });
+    }
+
+    const chef = await Chef.findById(chef_id);
+
+    // Create a new reply
+    const reply = {
+      replyMessage: newReply,
+      replyAuthor: chef.name,
+      replyDate: Date.now(),
+    };
+
+    // Push the new reply into the replies array
+    rating.replies.push(reply);
+
+    // Save the updated rating document
+    await rating.save();
+
+    console.log("After insert");
+
+    res.status(201).json({ message: "Reply added successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+
+
+exports.get_recipe_comments = async (req, res) => {
+  // console.log("inside get comments controller ");
+  try {
+    const recipeId = req.params.id;
+    const { chef_id } = req.query;
+    
+
+    console.log(chef_id)
+
+    // const user = await User.findById(user_id);
+    const chef = await Chef.findById(chef_id);
+
+    // Find ratings that match the recipeId and chef_id
+    const ratings = await Rating.find({ recipeRating: recipeId, ratingAuthor: chef.name })
+      .populate("replies.replyMessage");
+
+    // console.log("fffffffff");
+
+    // console.log(ratings);
+
+
+    if (ratings.length === 0) {
+      return res.status(404).json({ message: "No comments found for this recipe" });
+    }
+
+    res.json(ratings);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+

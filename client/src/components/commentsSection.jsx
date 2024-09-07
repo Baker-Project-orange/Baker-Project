@@ -1,186 +1,147 @@
-import React, { useState, useEffect } from "react";
-import { UserCircle, Edit2, Trash2, MessageCircle } from "lucide-react";
 
-const Comment = ({
-  comment,
-  currentUser,
-  onEdit,
-  onDelete,
-  onReply,
-  isChef,
-}) => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [editedContent, setEditedContent] = useState(comment.content);
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { MessageSquare, Reply, Send } from 'lucide-react';
 
-  const handleEdit = () => {
-    onEdit(comment.id, editedContent);
-    setIsEditing(false);
-  };
-
-  return (
-    <div className="bg-white p-4 rounded-lg shadow-md mb-4">
-      <div className="flex items-center mb-2">
-        <UserCircle className="w-8 h-8 text-gray-500 mr-2" />
-        <span className="font-semibold">{comment.user.name}</span>
-      </div>
-      {isEditing ? (
-        <div>
-          <textarea
-            value={editedContent}
-            onChange={(e) => setEditedContent(e.target.value)}
-            className="w-full p-2 border rounded-md mb-2"
-          />
-          <button
-            onClick={handleEdit}
-            className="bg-blue-500 text-white px-3 py-1 rounded-md mr-2"
-          >
-            Save
-          </button>
-          <button
-            onClick={() => setIsEditing(false)}
-            className="bg-gray-300 text-gray-700 px-3 py-1 rounded-md"
-          >
-            Cancel
-          </button>
-        </div>
-      ) : (
-        <p className="text-gray-700 mb-2">{comment.content}</p>
-      )}
-      <div className="flex items-center text-sm text-gray-500">
-        <span className="mr-4">
-          {new Date(comment.createdAt).toLocaleString()}
-        </span>
-        {currentUser && currentUser.id === comment.user.id && (
-          <>
-            <button
-              onClick={() => setIsEditing(true)}
-              className="mr-2 flex items-center"
-            >
-              <Edit2 className="w-4 h-4 mr-1" /> Edit
-            </button>
-            <button
-              onClick={() => onDelete(comment.id)}
-              className="mr-2 flex items-center"
-            >
-              <Trash2 className="w-4 h-4 mr-1" /> Delete
-            </button>
-          </>
-        )}
-        {isChef && (
-          <button
-            onClick={() => onReply(comment.id)}
-            className="flex items-center"
-          >
-            <MessageCircle className="w-4 h-4 mr-1" /> Reply
-          </button>
-        )}
-      </div>
-    </div>
-  );
-};
-
-const CommentsSection = ({ recipeId, currentUser, isChef }) => {
+const CommentsSection = () => {
   const [comments, setComments] = useState([]);
-  const [newComment, setNewComment] = useState("");
+  const [newComment, setNewComment] = useState('');
+  const [replyingToCommentId, setReplyingToCommentId] = useState(null);
+  const [newReply, setNewReply] = useState('');
+
+  const [user_id, set_user_id] = useState("66d7650f59e2ec4008259c89");
+  const [chef_id, set_chef_id] = useState("66d775724924397e1179e5eb");
+  const [recipe_id, set_recipe_id] = useState("66d7e3a4e175ed517bc023d7");
+
+  const [is_chef, set_is_chef] = useState(false);
 
   useEffect(() => {
-    // Fetch comments for the recipe
-    // This is a placeholder, replace with actual API call
     const fetchComments = async () => {
-      // const response = await fetch(`/api/comments/${recipeId}`);
-      // const data = await response.json();
-      // setComments(data);
-      setComments([
-        {
-          id: 1,
-          content: "Great recipe!",
-          user: { id: 1, name: "John Doe" },
-          createdAt: new Date(),
-        },
-        {
-          id: 2,
-          content: "I loved it!",
-          user: { id: 2, name: "Jane Smith" },
-          createdAt: new Date(),
-        },
-      ]);
+      try {
+        const response = await axios.get(`http://localhost:3000/api/recipes/comments/${recipe_id}`, {
+          params: { chef_id }
+        });
+        setComments(response.data);
+      } catch (error) {
+        console.error('Error fetching comments:', error);
+      }
     };
 
     fetchComments();
-  }, [recipeId]);
+  }, [recipe_id, chef_id]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Add new comment
-    // This is a placeholder, replace with actual API call
-    const newCommentObj = {
-      id: comments.length + 1,
-      content: newComment,
-      user: { id: currentUser.id, name: currentUser.name },
-      createdAt: new Date(),
-    };
-    setComments([...comments, newCommentObj]);
-    setNewComment("");
+  const handleCommentSubmit = async () => {
+    if (newComment.trim() !== '') {
+      try {
+        const response = await axios.post("http://localhost:3000/api/recipes/comments", {
+          newComment,
+          recipe_id,
+          chef_id,
+          user_id
+        });
+        setComments(prevComments => [response.data, ...prevComments]);
+        setNewComment('');
+      } catch (error) {
+        console.error("Error adding comment:", error);
+      }
+    }
   };
 
-  const handleEdit = async (commentId, newContent) => {
-    // Edit comment
-    // This is a placeholder, replace with actual API call
-    const updatedComments = comments.map((comment) =>
-      comment.id === commentId ? { ...comment, content: newContent } : comment
-    );
-    setComments(updatedComments);
-  };
-
-  const handleDelete = async (commentId) => {
-    // Delete comment
-    // This is a placeholder, replace with actual API call
-    const updatedComments = comments.filter(
-      (comment) => comment.id !== commentId
-    );
-    setComments(updatedComments);
-  };
-
-  const handleReply = async (commentId) => {
-    // Implement reply functionality
-    console.log("Reply to comment:", commentId);
+  const handleReplySubmit = async (commentId) => {
+    if (newReply.trim() !== '') {
+      try {
+        const response = await axios.post(`http://localhost:3000/api/recipes/comments/${commentId}/replies`, {
+          newReply,
+          chef_id
+        });
+        setComments(prevComments =>
+          prevComments.map(comment =>
+            comment._id === commentId
+              ? { ...comment, replies: [...(comment.replies || []), response.data] }
+              : comment
+          )
+        );
+        setNewReply('');
+        setReplyingToCommentId(null);
+      } catch (error) {
+        console.error("Error adding reply:", error);
+      }
+    }
   };
 
   return (
-    <div className="mt-8">
-      <h2 className="text-2xl font-semibold mb-4">Comments</h2>
-      {currentUser && (
-        <form onSubmit={handleSubmit} className="mb-6">
-          <textarea
+    <div className="mt-6 bg-white rounded-lg shadow-md p-4">
+      <h2 className="text-xl font-semibold mb-3 text-[#c98d83] flex items-center">
+        <MessageSquare className="mr-2" size={20} /> Comments
+      </h2>
+      <div className="space-y-3">
+        <div className="flex items-center space-x-2 mb-3">
+          <input
+            type="text"
+            placeholder="Add a new comment..."
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Add a comment..."
-            className="w-full p-2 border rounded-md mb-2"
-            required
+            className="flex-1 rounded-md border border-[#c98d83] px-3 py-1 text-sm focus:outline-none focus:ring focus:ring-[#c98d83] focus:ring-opacity-50"
           />
           <button
-            type="submit"
-            className="bg-[#c98d83] text-white px-4 py-2 rounded-md hover:bg-[#b67c73] transition-colors duration-300"
+            onClick={handleCommentSubmit}
+            className="bg-[#c98d83] text-white px-3 py-1 rounded-md hover:bg-[#b67c73] transition-colors text-sm flex items-center"
           >
-            Post Comment
+            <Send size={16} className="mr-1" /> Submit
           </button>
-        </form>
-      )}
-      <div>
-        {comments.map((comment) => (
-          <Comment
-            key={comment.id}
-            comment={comment}
-            currentUser={currentUser}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onReply={handleReply}
-            isChef={isChef}
-          />
+        </div>
+        {comments.map(comment => (
+          <div key={comment._id} className="bg-[#f8e5e1] rounded-lg p-2">
+            <div className="flex items-center mb-1">
+              <span className="font-semibold text-sm">{comment.userRating}</span>
+              <span className="text-gray-500 text-xs ml-2">commented:</span>
+            </div>
+            <p className="text-sm ml-6">{comment.ratingComment}</p>
+            <div className="mt-2 space-y-2 ml-6">
+              {comment.replies && comment.replies.map(reply => (
+                <div key={reply._id} className="bg-white rounded-lg p-2 w-[97%]">
+                  <div className="flex items-center mb-1">
+                    <span className="font-semibold text-xs"><span className='text-[#c28378] font-bold'> Chef </span> {reply.replyAuthor}</span>
+                    <span className="text-gray-500 text-xs ml-2">replied:</span>
+                  </div>
+                  <p className="text-xs ml-4">{reply.replyMessage}</p>
+                </div>
+              ))}
+              {replyingToCommentId === comment._id ? (
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="text"
+                    placeholder="Add a reply..."
+                    value={newReply}
+                    onChange={(e) => setNewReply(e.target.value)}
+                    className="flex-1 rounded-md border border-[#c98d83] px-2 py-1 focus:outline-none focus:ring focus:ring-[#c98d83] focus:ring-opacity-50 text-xs"
+                  />
+                  <button
+                    onClick={() => handleReplySubmit(comment._id)}
+                    className="bg-[#c98d83] text-white px-2 py-1 rounded-md hover:bg-[#b67c73] transition-colors text-xs flex items-center"
+                  >
+                    <Send size={12} className="mr-1" /> Send
+                  </button>
+                </div>
+              ) : (
+                is_chef && (
+                  <button
+                    onClick={() => setReplyingToCommentId(comment._id)}
+                    className="bg-[#c98d83] text-white px-2 py-1 rounded-md hover:bg-[#b67c73] transition-colors mt-1 text-xs flex items-center"
+                  >
+                    <Reply size={12} className="mr-1" /> Reply
+                  </button>
+                )
+              )}
+            </div>
+          </div>
+
         ))}
       </div>
     </div>
   );
 };
 
+
 export default CommentsSection;
+

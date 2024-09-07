@@ -321,7 +321,7 @@ const Recipe_dish_management = () => {
             )}
           </div>
         </div>
-        <div className='social_media bg-[#c98d83] p-4'>
+        {/* <div className='social_media bg-[#c98d83] p-4'>
           <div className="flex justify-center items-center space-x-6">
             <a href="#" className="text-white hover:text-gray-200 transition-colors">
               <FacebookShareButton url=''>
@@ -338,7 +338,7 @@ const Recipe_dish_management = () => {
               <Linkedin size={24} />
             </a>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
