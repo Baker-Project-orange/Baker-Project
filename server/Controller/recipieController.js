@@ -1,7 +1,10 @@
 const { default: mongoose } = require("mongoose");
 const Recipie = require("../Models/Recipies");
+const Rating = require('../Models/Ratings');
 const Dish = require("../Models/Dish");
 const Chef = require("../Models/Chef");
+const User = require("../Models/User");
+const Report = require("../Models/Reports");
 
 exports.makeRecipie = async (req, res) => {
   const recipieData = req.body;
@@ -75,7 +78,7 @@ exports.getAllRecipes = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-  
+
 
 
 exports.getRecipeById = async (req, res) => {
@@ -92,7 +95,7 @@ exports.getRecipeById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-  
+
 exports.getRecipesByCategory = async (req, res) => {
   try {
     const recipes = await Recipie.find({
@@ -123,10 +126,13 @@ exports.add_comment = async (req, res) => {
   try {
     const { newComment, recipe_id, chef_id, user_id } = req.body;
     // console.log("Received comment:", newComment);
-    // console.log(newComment, recipe_id, chef_id, user_id);
+    console.log(newComment, recipe_id, chef_id, user_id);
 
-    const user = await User.findById(user_id);
-    const chef = await Chef.findById(chef_id);
+    const user = await User.findById(user_id)
+      .catch(err => { console.log(err) });
+
+    const chef = await Chef.findById(chef_id)
+      .catch(err => { console.log(err) });
 
     // console.log(user.name);
     // console.log(chef.name);
@@ -161,9 +167,9 @@ exports.add_replie = async (req, res) => {
     const comment_id = req.params.id;
     const { newReply, chef_id } = req.body;
 
-    // console.log("Inside reply controller");
-    // console.log(comment_id);
-    // console.log(newReply, chef_id);
+    console.log("Inside reply controller");
+    console.log(comment_id);
+    console.log(newReply, chef_id);
 
     // Find the rating document by ID
     const rating = await Rating.findById(comment_id);
@@ -187,7 +193,7 @@ exports.add_replie = async (req, res) => {
     // Save the updated rating document
     await rating.save();
 
-    console.log("After insert");
+    console.log("After insert reply");
 
     res.status(201).json({ message: "Reply added successfully" });
   } catch (error) {
@@ -204,7 +210,7 @@ exports.get_recipe_comments = async (req, res) => {
   try {
     const recipeId = req.params.id;
     const { chef_id } = req.query;
-    
+
 
     console.log(chef_id)
 
@@ -225,6 +231,39 @@ exports.get_recipe_comments = async (req, res) => {
     }
 
     res.json(ratings);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+exports.comment_report = async (req, res) => {
+  // console.log("inside get comments controller ");
+  try {
+    const commentId = req.params.id;
+    const { reportReason, user_id } = req.body;
+
+    // console.log(commentId)
+    // console.log(reportReason);
+    // console.log(user_id);
+
+
+    const user = await User.findById(user_id)
+      .catch(err => { console.log(err) });
+
+      // console.log(user.name);
+
+
+    const new_report = new Report({
+      reportMaker: user.name,
+      reportDetails: reportReason,
+      isResolved: false,
+      actionDetails: "----"
+    });
+
+    const saved_report = await new_report.save();
+
+    res.json();
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

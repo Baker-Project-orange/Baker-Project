@@ -21,6 +21,8 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
+  console.log();
+
   useEffect(() => {
     const results = orders.filter(order =>
       (order.orderItems && order.orderItems.some(item => 
