@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+
 import {
   Croissant,
   Menu,
@@ -13,6 +14,7 @@ import {
   ReceiptText,
   BadgePlus,
   LogOut
+
 } from "lucide-react";
 import Catalog_chef from "./Catalog_chef";
 import ChefProfilePage from "./home";
@@ -20,11 +22,13 @@ import Chef_profile from "./profile";
 import Contactus_chef from "./chef-contact";
 import Recipe_dish_creation from "./recpie-dish";
 import Recipe_dish_management from "./recpie-dish-management";
+
 import Orders from "./orders";
 
 const Chef_Manager = () => {
 
   const navigate = useNavigate();
+
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [chef_id, set_chef_id] = useState("66d775724924397e1179e5eb");
@@ -60,9 +64,11 @@ const Chef_Manager = () => {
     setIsMenuOpen(false);
   };
 
+
   function backHomeHandle() {
     navigate("/");
   }
+
 
   const renderContent = () => {
     switch (active_tab) {
@@ -78,12 +84,15 @@ const Chef_Manager = () => {
         return <Recipe_dish_creation />;
       case "management":
         return <Recipe_dish_management />;
+
       case "chefOrder":
         return <Orders />;
+
       default:
         return <ChefProfilePage />;
     }
   };
+
 
   const NavButton = ({ onClick, icon: Icon, text }) => (
     <button
@@ -131,10 +140,13 @@ const Chef_Manager = () => {
       </header>
 
       <main className="bg-[#c98d83] shadow-md w-full sm:w-[calc(100%-80px)] md:w-[1200px] h-[calc(100vh-64px)] sm:h-[85vh] sm:ml-20 md:ml-[270px] mt-20 sm:mt-0 sm:fixed sm:left-4 sm:top-1/2 sm:-translate-y-1/2 rounded-lg overflow-hidden z-10">
+
         <div className="h-full overflow-auto p-6">{renderContent()}</div>
       </main>
     </div>
   );
 };
 
+
 export default Chef_Manager;
+

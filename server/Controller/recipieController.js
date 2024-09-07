@@ -118,6 +118,7 @@ exports.getTotalRecipes = async (req, res) => {
 
 
 
+
 exports.add_comment = async (req, res) => {
   try {
     const { newComment, recipe_id, chef_id, user_id } = req.body;
@@ -228,10 +229,5 @@ exports.get_recipe_comments = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-
-
-
-
 
 

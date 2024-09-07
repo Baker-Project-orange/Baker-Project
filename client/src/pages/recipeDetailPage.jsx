@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Clock, ChefHat, BookOpen, Share2, Facebook, Linkedin, MessageCircle } from "lucide-react";
@@ -6,11 +7,13 @@ import FavoriteButton from "../components/favoriteButton";
 import CommentsSection from "../components/commentsSection";
 import { EmailShareButton, FacebookShareButton, LinkedinShareButton, WhatsappShareButton } from "react-share";
 
+
 const RecipeDetailPage = () => {
   const { recipeId } = useParams();
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const [showShareIcons, setShowShareIcons] = useState(false);
   const navigate = useNavigate();
 
@@ -20,6 +23,7 @@ const RecipeDetailPage = () => {
   const isChef = true; 
 
   
+
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -74,6 +78,7 @@ const RecipeDetailPage = () => {
     );
   }
 
+
   const shareUrl = window.location.href;
 
   return (
@@ -87,6 +92,7 @@ const RecipeDetailPage = () => {
               className="w-full h-96 object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-60"></div>
+
             <div className="absolute top-4 right-4 flex space-x-2">
               <FavoriteButton recipeId={recipe._id} initialIsFavorite={false} />
               <div className="relative">
@@ -116,6 +122,7 @@ const RecipeDetailPage = () => {
                   </div>
                 )}
               </div>
+
             </div>
           </div>
           <div className="p-8 -mt-24 relative">
@@ -182,3 +189,4 @@ const RecipeDetailPage = () => {
 };
 
 export default RecipeDetailPage;
+

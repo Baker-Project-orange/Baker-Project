@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { MessageSquare, Reply, Send } from 'lucide-react';
@@ -134,10 +135,13 @@ const CommentsSection = () => {
               )}
             </div>
           </div>
+
         ))}
       </div>
     </div>
   );
 };
 
+
 export default CommentsSection;
+

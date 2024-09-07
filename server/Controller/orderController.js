@@ -7,6 +7,7 @@ const Order = require("../Models/Orders");
 exports.getAllOrders = async (req, res) => {
   try {
     const orders = await Order.find().populate("orderMaker", "username");
+
     console.log(orders);
 
     // const user_id = req.user;
@@ -17,6 +18,7 @@ exports.getAllOrders = async (req, res) => {
     const final_order = {
 
     }
+
 
     res.json(orders);
   } catch (error) {
