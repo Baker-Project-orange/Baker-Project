@@ -15,6 +15,8 @@ const adminRoutes = require("./routes/adminRoutes");
 const paymentRoutes = require("./routes/paypalconfig")
 const orderRoutes = require('./routes/orderRoutes');
 
+const Ordre = require("./Models/Orders");
+
 
 // Server variables
 const port = process.env.PORT || 3000;
@@ -51,5 +53,11 @@ app.use('/api/orders', orderRoutes);
 app.listen(port, () => {
   console.log(`Server is running on port http://localhost:${port}`);
 });
+
+
+
+
+
+
 
 

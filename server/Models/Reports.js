@@ -1,7 +1,7 @@
 const { Schema, model, default: mongoose } = require("mongoose");
 
 const reportSchema = new Schema({
-  reportMaker: { type: mongoose.Types.ObjectId, ref: "User" },
+  reportMaker: String,
   reportDetails: String,
   isResolved: { type: Boolean, default: false },
   actionDetails:String

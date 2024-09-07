@@ -465,9 +465,7 @@ const ChefProfilePage = () => {
                 Delicate pastry shells filled with fresh, seasonal fruits and
                 light custard.
               </p>
-              <button className="mt-4 bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300">
-                Learn More
-              </button>
+
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
               <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
@@ -476,9 +474,7 @@ const ChefProfilePage = () => {
               <p>
                 Warm, comforting breads infused with seasonal spices and nuts.
               </p>
-              <button className="mt-4 bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300">
-                Learn More
-              </button>
+
             </div>
             <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
               <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
@@ -488,9 +484,7 @@ const ChefProfilePage = () => {
                 Assorted festive cookies, perfect for gifting or enjoying with
                 family.
               </p>
-              <button className="mt-4 bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300">
-                Learn More
-              </button>
+
             </div>
           </div>
         </div>

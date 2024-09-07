@@ -24,4 +24,13 @@ router.put("/updateRecipie", auth, recipieController.updateRecipie);
 router.get("/category/:category", recipieController.getRecipesByCategory);
 router.get("/total", recipieController.getTotalRecipes);
 
+
+
+router.get("/comments/:id", recipieController.get_recipe_comments);
+router.post("/comments", recipieController.add_comment);
+router.post("/comments/:id/replies", recipieController.add_replie);
+router.post("/comments/:id/report", recipieController.comment_report);
+
+
+
 module.exports = router;

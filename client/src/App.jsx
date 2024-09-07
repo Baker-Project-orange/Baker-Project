@@ -18,6 +18,7 @@ import { ThemeProvider } from "@material-tailwind/react";
 import AboutUs from "./pages/aboutUs";
 import ContactUs from "./pages/contactUs";
 import RecipeDetailPage from "./pages/recipeDetailPage";
+import Orders from "./pages/chef-pages/orders";
 function App() {
   return (
     <>
@@ -40,6 +41,7 @@ function App() {
             <Route path="/AboutUs" element={<AboutUs />} />
             <Route path="/contactUs" element={<ContactUs />} />
             <Route path="/recipe/:recipeId" element={<RecipeDetailPage />} />
+            <Route path="/chefOrder" element={<Orders />} />
             
           </Routes>
           <Footer />

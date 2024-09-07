@@ -1,7 +1,10 @@
 const { default: mongoose } = require("mongoose");
 const Recipie = require("../Models/Recipies");
+const Rating = require('../Models/Ratings');
 const Dish = require("../Models/Dish");
 const Chef = require("../Models/Chef");
+const User = require("../Models/User");
+const Report = require("../Models/Reports");
 
 exports.makeRecipie = async (req, res) => {
   const recipieData = req.body;
@@ -77,9 +80,11 @@ exports.getAllRecipes = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 exports.getChefRecipeById = async (req, res) => {
   console.log(req);
   const recipeID = req.query;
+
 
   try {
     const recipe = await Recipie.findById(
@@ -130,3 +135,157 @@ exports.getTotalRecipes = async (req, res) => {
     res.status(500).json({ message: "Error fetching total recipes", error });
   }
 };
+
+
+
+
+
+exports.add_comment = async (req, res) => {
+  try {
+    const { newComment, recipe_id, chef_id, user_id } = req.body;
+    // console.log("Received comment:", newComment);
+    console.log(newComment, recipe_id, chef_id, user_id);
+
+    const user = await User.findById(user_id)
+      .catch(err => { console.log(err) });
+
+    const chef = await Chef.findById(chef_id)
+      .catch(err => { console.log(err) });
+
+    // console.log(user.name);
+    // console.log(chef.name);
+
+    const newRating = new Rating({
+      ratingComment: newComment,
+      ratingDate: Date.now(),
+      ratingAuthor: chef.name,
+      recipeRating: recipe_id,
+      userRating: user.name,
+    });
+
+    const savedRating = await newRating.save();
+
+
+    await Recipie.updateOne(
+      { _id: recipe_id },
+      { $push: { recipeRatings: savedRating._id } }
+    );
+
+    console.log("After insert");
+
+    res.status(201).json({ message: "Comment added successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+exports.add_replie = async (req, res) => {
+  try {
+    const comment_id = req.params.id;
+    const { newReply, chef_id } = req.body;
+
+    console.log("Inside reply controller");
+    console.log(comment_id);
+    console.log(newReply, chef_id);
+
+    // Find the rating document by ID
+    const rating = await Rating.findById(comment_id);
+
+    if (!rating) {
+      return res.status(404).json({ message: "Rating not found" });
+    }
+
+    const chef = await Chef.findById(chef_id);
+
+    // Create a new reply
+    const reply = {
+      replyMessage: newReply,
+      replyAuthor: chef.name,
+      replyDate: Date.now(),
+    };
+
+    // Push the new reply into the replies array
+    rating.replies.push(reply);
+
+    // Save the updated rating document
+    await rating.save();
+
+    console.log("After insert reply");
+
+    res.status(201).json({ message: "Reply added successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+
+
+
+exports.get_recipe_comments = async (req, res) => {
+  // console.log("inside get comments controller ");
+  try {
+    const recipeId = req.params.id;
+    const { chef_id } = req.query;
+
+
+    console.log(chef_id)
+
+    // const user = await User.findById(user_id);
+    const chef = await Chef.findById(chef_id);
+
+    // Find ratings that match the recipeId and chef_id
+    const ratings = await Rating.find({ recipeRating: recipeId, ratingAuthor: chef.name })
+      .populate("replies.replyMessage");
+
+    // console.log("fffffffff");
+
+    // console.log(ratings);
+
+
+    if (ratings.length === 0) {
+      return res.status(404).json({ message: "No comments found for this recipe" });
+    }
+
+    res.json(ratings);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+exports.comment_report = async (req, res) => {
+  // console.log("inside get comments controller ");
+  try {
+    const commentId = req.params.id;
+    const { reportReason, user_id } = req.body;
+
+    // console.log(commentId)
+    // console.log(reportReason);
+    // console.log(user_id);
+
+
+    const user = await User.findById(user_id)
+      .catch(err => { console.log(err) });
+
+      // console.log(user.name);
+
+
+    const new_report = new Report({
+      reportMaker: user.name,
+      reportDetails: reportReason,
+      isResolved: false,
+      actionDetails: "----"
+    });
+
+    const saved_report = await new_report.save();
+
+    res.json();
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
