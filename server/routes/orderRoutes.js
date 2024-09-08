@@ -8,7 +8,8 @@ const {
   updateOrder,
   createOrder,
   getOrderAmounts,
-  updateOrderStatus
+  updateOrderStatus,
+  totalChefAmount,
 } = require("../Controller/orderController");
 const router = express.Router();
 
@@ -18,5 +19,8 @@ router.get("/", getAllOrders);
 
 router.put("/:id", updateOrder);
 router.patch("/:id", updateOrderStatus);
+
+router.get("/totalsales", getAllOrders);
+router.get("/orders/chefamount", totalChefAmount);
 
 module.exports = router;

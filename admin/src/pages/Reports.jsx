@@ -17,47 +17,33 @@ const Reports = () => {
     fetchReports();
   }, []);
 
-  // const handleResolve = (id) => {
-  //   setReports(reports.map(report => 
-  //     report.id === id 
-  //       ? { ...report, isResolved: true, actionDetails: prompt('Enter action details:') || 'Marked as resolved' } 
-  //       : report
-  //   ));
-  // };
-
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Report Management</h2>
+    <div className="">
+    <div className="  space-y-6">
+      <h2 className="text-2xl  font-bold">Report Management</h2>
       <div className="bg-white p-4 rounded-lg shadow">
         <h3 className="font-semibold text-lg mb-4">User Reports</h3>
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Report Maker</th>
+              <th className="px-6 py-3  text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Report Maker</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Details</th>
               {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th> */}
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white  divide-y divide-gray-200">
             {reports.map((report) => (
               <tr key={report._id}>
                 <td className="px-6 py-4 whitespace-nowrap">{report._id}</td>
                 <td className="px-6 py-4">{report.reportDetails}</td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  {/* {!report.isResolved && (
-                    <button 
-                      onClick={() => handleResolve(report._id)} 
-                      className="text-blue-500 hover:underline"
-                    >
-                      Resolve
-                    </button>
-                  )} */}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+    </div>
     </div>
   );
 };

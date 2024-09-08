@@ -5,12 +5,12 @@ const Dish = require("../Models/Dish");
 const Chef = require("../Models/Chef");
 const User = require("../Models/User");
 const Report = require("../Models/Reports");
-
+// ---------------------------------
 exports.makeRecipie = async (req, res) => {
   const recipieData = req.body;
   const chefID = req.user;
   recipieData.recipeAuthor = chefID;
-  console.log(recipieData);
+  console.log(req.files);
 
   try {
     const recipie = new Recipie({
@@ -24,7 +24,7 @@ exports.makeRecipie = async (req, res) => {
     res.status(501).json({ message: "Internal server error", error: e });
   }
 };
-
+// --------------------
 exports.getChefRecipies = async (req, res) => {
   const chefID = req.user;
 
@@ -46,21 +46,19 @@ exports.getChefRecipies = async (req, res) => {
     res.status(501).json({ message: "Internal Server Error", error: e });
   }
 };
-
+// ----------------------------
 exports.deleteRecipie = async (req, res) => {
   const chefID = req.user;
-  const { recipeID, dishID } = req.query;
-  console.log(`hello ${recipeID}`);
+  const recipieID = req.recipieID;
   try {
-    await Recipie.findByIdAndUpdate(recipeID, { isDeleted: true });
-    await Dish.findByIdAndUpdate(dishID, { isDeleted: true });
+    Recipie.findByIdAndUpdate(recipieID, { isDeleted: true });
     res.status(202).json({ message: "Recipie deleted successfully" });
   } catch (e) {
     console.log(e);
     res.status(501).json({ message: "Internal Server Error", error: e });
   }
 };
-
+// ----------------------
 exports.updateRecipie = async (req, res) => {
   const dataToUpdate = req.body;
   try {
@@ -70,7 +68,7 @@ exports.updateRecipie = async (req, res) => {
     res.status(501).json({ message: "Internal Server Error", error: e });
   }
 };
-
+// ----------------------
 exports.getAllRecipes = async (req, res) => {
   try {
     const recipes = await Recipie.find({ isDeleted: false }).populate(
@@ -82,7 +80,39 @@ exports.getAllRecipes = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+// -----------------------
+exports.getChefRecipeById = async (req, res) => {
+  console.log(req);
+  const recipeID = req.query;
 
+  try {
+    const recipe = await Recipie.findById(
+      new mongoose.Types.ObjectId(recipeID)
+    ).populate("recipeAuthor");
+    res
+      .status(200)
+      .json({ message: "Fetched recipe successully", recipe: recipe });
+  } catch (e) {
+    console.log(e);
+    res.status(501).json({ message: "Internal server error", error: e });
+  }
+};
+// ---------------------------
+// exports.getRecipeById = async (req, res) => {
+//   console.log(req.params.id);
+//   try {
+//     const recipe = await Recipie.findById(req.params.id).populate(
+//       "recipeAuthor",
+//       "name businessName businessAddress"
+//     );
+//     if (!recipe) {
+//       return res.status(404).json({ message: "Recipe not found" });
+//     }
+//     res.json(recipe);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
 
 exports.getRecipeById = async (req, res) => {
   try {
@@ -104,8 +134,7 @@ exports.getRecipeById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-  
-
+// ---------------------
 exports.getRecipesByCategory = async (req, res) => {
   try {
     const recipes = await Recipie.find({
@@ -117,7 +146,7 @@ exports.getRecipesByCategory = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
+// --------------------
 // numb of recpies
 exports.getTotalRecipes = async (req, res) => {
   try {
@@ -127,7 +156,7 @@ exports.getTotalRecipes = async (req, res) => {
     res.status(500).json({ message: "Error fetching total recipes", error });
   }
 };
-
+// -------------------------
 exports.add_comment = async (req, res) => {
   try {
     const { newComment, recipe_id, chef_id, user_id } = req.body;
@@ -152,7 +181,7 @@ exports.add_comment = async (req, res) => {
       recipeRating: recipe_id,
       userRating: user.name,
     });
-
+// ----------------------------------------------
     const savedRating = await newRating.save();
 
     await Recipie.updateOne(
@@ -168,7 +197,7 @@ exports.add_comment = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
+// ----------------------------
 exports.add_replie = async (req, res) => {
   try {
     const comment_id = req.params.id;
@@ -208,7 +237,7 @@ exports.add_replie = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
-
+// ----------------------------------
 exports.get_recipe_comments = async (req, res) => {
   // console.log("inside get comments controller ");
   try {
@@ -268,6 +297,24 @@ exports.comment_report = async (req, res) => {
     const saved_report = await new_report.save();
 
     res.json();
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+// -----------------------------------------------------------------
+// recipe.controller.js
+exports.approveRecipe = async (req, res) => {
+  try {
+    const { isApproved } = req.body;
+    const recipe = await Recipie.findByIdAndUpdate(
+      req.params.id,
+      { isApproved },
+      { new: true, runValidators: true }
+    );
+    if (!recipe) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+    res.json(recipe);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

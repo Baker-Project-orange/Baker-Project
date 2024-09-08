@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Filter, User, Info, CheckCircle, Truck, Calendar } from 'lucide-react';
 import axios from 'axios';
 
-const Orders = () => {
+const Orders1 = () => {
   const [orders, setOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
@@ -186,4 +186,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default Orders1;
