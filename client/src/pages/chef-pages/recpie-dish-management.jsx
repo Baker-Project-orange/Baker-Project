@@ -13,6 +13,7 @@ import {
   Linkedin,
   MessageCircle,
 } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
 import useGetRecipes from "../../hooks/recipeHooks/getRecipeHook";
 import useGetDishes from "../../hooks/recipeHooks/getDishesHook";
 import axiosInstance from "../../utils/axios";
@@ -27,9 +28,22 @@ const Recipe_dish_management = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [recipe, setRecipe] = useState({});
   const [recipeID, setRecipeID] = useContext(Context).recipeID;
+  const [active_tab, set_active_tab] = useContext(Context).active_tab;
   console.log(recipeID);
   const [dish, setDish] = useState({});
 
+  const deleteMessage = () =>
+    toast("Recipe has been deleted successfully", {
+      position: "bottom-center",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: "Bounce",
+    });
   const handleUpdate = () => {
     setIsEditing(true);
   };
@@ -44,9 +58,20 @@ const Recipe_dish_management = () => {
     // Reset to original values if needed
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     console.log("Deleting:", activeTab === "recipe" ? "recipe" : "dish");
-    // Implement delete logic here
+    if (activeTab === "recipe") {
+      const response = await axiosInstance.put(
+        `/api/recipes/deleteRecipie?recipeID=${recipeID}`
+      );
+      console.log(response.data);
+      if (response.status == 202) {
+        deleteMessage();
+        set_active_tab("catalog");
+        sessionStorage.setItem("tab", "catalog");
+      }
+    } else {
+    }
   };
 
   const handleInputChange = (e, setter) => {
@@ -68,9 +93,10 @@ const Recipe_dish_management = () => {
       setDish(response.data.dish);
     };
     getRecipe();
-    if (recipe.isDish && recipe.isDish) {
-      console.log(recipe);
-      getDish();
+    if (recipe !== undefined) {
+      if (recipe.isDish) {
+        getDish();
+      }
     }
   }, [recipeID]);
 
@@ -307,7 +333,6 @@ const Recipe_dish_management = () => {
             ""
           )}
         </div>
-
         <div className="p-8">
           {isEditing ? (
             renderEditableContent()
@@ -410,20 +435,33 @@ const Recipe_dish_management = () => {
                   <Edit className="mr-2" size={18} />
                   Update
                 </button>
-                <button
-                  onClick={handleDelete}
-                  className="flex items-center px-6 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
-                >
-                  <Trash2 className="mr-2" size={18} />
-                  Delete
-                </button>
+                <div>
+                  <button
+                    onClick={handleDelete}
+                    className="flex items-center px-6 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                  >
+                    <Trash2 className="mr-2" size={18} />
+                    Delete
+                  </button>
+                  <ToastContainer
+                    transition={"Bounce"}
+                    position="bottom-center"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="light"
+                  />
+                </div>
               </>
             )}
           </div>
         </div>
-
         <div className="social_media bg-[#c98d83] p-4">
-
           <div className="flex justify-center items-center space-x-6">
             <a
               href="#"
@@ -452,7 +490,8 @@ const Recipe_dish_management = () => {
               <Linkedin size={24} />
             </a>
           </div>
-        </div> */}
+        </div>{" "}
+        */}
       </div>
     </div>
   );

@@ -37,7 +37,9 @@ exports.filesUpload = async (req, res, next) => {
       if (!step.stepMedia) {
         continue;
       } else {
-        req.body.steps[i] = steps[mediaCounter];
+        req.body.steps[i].stepMedia = await uploadFileToFirebase(
+          steps[mediaCounter]
+        );
         mediaCounter++;
       }
     }

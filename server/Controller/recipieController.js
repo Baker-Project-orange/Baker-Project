@@ -1,6 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const Recipie = require("../Models/Recipies");
-const Rating = require('../Models/Ratings');
+const Rating = require("../Models/Ratings");
 const Dish = require("../Models/Dish");
 const Chef = require("../Models/Chef");
 const User = require("../Models/User");
@@ -10,7 +10,7 @@ exports.makeRecipie = async (req, res) => {
   const recipieData = req.body;
   const chefID = req.user;
   recipieData.recipeAuthor = chefID;
-  console.log(req.files);
+  console.log(recipieData);
 
   try {
     const recipie = new Recipie({
@@ -49,9 +49,11 @@ exports.getChefRecipies = async (req, res) => {
 
 exports.deleteRecipie = async (req, res) => {
   const chefID = req.user;
-  const recipieID = req.recipieID;
+  const { recipeID, dishID } = req.query;
+  console.log(`hello ${recipeID}`);
   try {
-    Recipie.findByIdAndUpdate(recipieID, { isDeleted: true });
+    await Recipie.findByIdAndUpdate(recipeID, { isDeleted: true });
+    await Dish.findByIdAndUpdate(dishID, { isDeleted: true });
     res.status(202).json({ message: "Recipie deleted successfully" });
   } catch (e) {
     console.log(e);
@@ -80,39 +82,6 @@ exports.getAllRecipes = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-exports.getChefRecipeById = async (req, res) => {
-  console.log(req);
-  const recipeID = req.query;
-
-
-  try {
-    const recipe = await Recipie.findById(
-      new mongoose.Types.ObjectId(recipeID)
-    ).populate("recipeAuthor");
-    res
-      .status(200)
-      .json({ message: "Fetched recipe successully", recipe: recipe });
-  } catch (e) {
-    console.log(e);
-    res.status(501).json({ message: "Internal server error", error: e });
-  }
-};
-// exports.getRecipeById = async (req, res) => {
-//   console.log(req.params.id);
-//   try {
-//     const recipe = await Recipie.findById(req.params.id).populate(
-//       "recipeAuthor",
-//       "name businessName businessAddress"
-//     );
-//     if (!recipe) {
-//       return res.status(404).json({ message: "Recipe not found" });
-//     }
-//     res.json(recipe);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
 
 
 exports.getRecipeById = async (req, res) => {
@@ -159,21 +128,19 @@ exports.getTotalRecipes = async (req, res) => {
   }
 };
 
-
-
-
-
 exports.add_comment = async (req, res) => {
   try {
     const { newComment, recipe_id, chef_id, user_id } = req.body;
     // console.log("Received comment:", newComment);
     console.log(newComment, recipe_id, chef_id, user_id);
 
-    const user = await User.findById(user_id)
-      .catch(err => { console.log(err) });
+    const user = await User.findById(user_id).catch((err) => {
+      console.log(err);
+    });
 
-    const chef = await Chef.findById(chef_id)
-      .catch(err => { console.log(err) });
+    const chef = await Chef.findById(chef_id).catch((err) => {
+      console.log(err);
+    });
 
     // console.log(user.name);
     // console.log(chef.name);
@@ -187,7 +154,6 @@ exports.add_comment = async (req, res) => {
     });
 
     const savedRating = await newRating.save();
-
 
     await Recipie.updateOne(
       { _id: recipe_id },
@@ -243,32 +209,31 @@ exports.add_replie = async (req, res) => {
   }
 };
 
-
-
-
 exports.get_recipe_comments = async (req, res) => {
   // console.log("inside get comments controller ");
   try {
     const recipeId = req.params.id;
     const { chef_id } = req.query;
 
-
-    console.log(chef_id)
+    console.log(chef_id);
 
     // const user = await User.findById(user_id);
     const chef = await Chef.findById(chef_id);
 
     // Find ratings that match the recipeId and chef_id
-    const ratings = await Rating.find({ recipeRating: recipeId, ratingAuthor: chef.name })
-      .populate("replies.replyMessage");
+    const ratings = await Rating.find({
+      recipeRating: recipeId,
+      ratingAuthor: chef.name,
+    }).populate("replies.replyMessage");
 
     // console.log("fffffffff");
 
     // console.log(ratings);
 
-
     if (ratings.length === 0) {
-      return res.status(404).json({ message: "No comments found for this recipe" });
+      return res
+        .status(404)
+        .json({ message: "No comments found for this recipe" });
     }
 
     res.json(ratings);
@@ -276,7 +241,6 @@ exports.get_recipe_comments = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 exports.comment_report = async (req, res) => {
   // console.log("inside get comments controller ");
@@ -288,18 +252,17 @@ exports.comment_report = async (req, res) => {
     // console.log(reportReason);
     // console.log(user_id);
 
+    const user = await User.findById(user_id).catch((err) => {
+      console.log(err);
+    });
 
-    const user = await User.findById(user_id)
-      .catch(err => { console.log(err) });
-
-      // console.log(user.name);
-
+    // console.log(user.name);
 
     const new_report = new Report({
       reportMaker: user.name,
       reportDetails: reportReason,
       isResolved: false,
-      actionDetails: "----"
+      actionDetails: "----",
     });
 
     const saved_report = await new_report.save();
@@ -309,6 +272,3 @@ exports.comment_report = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
-
-

@@ -24,8 +24,10 @@ const Catalog_chef = () => {
   const [filteredItems, setFilteredItems] = useState(recipies);
   const [recipeID, setRecipeID] = useContext(Context).recipeID;
   useEffect(() => {
-    const results = recipies.filter((item) =>
-      item.dishName.toLowerCase().includes(searchTerm.toLowerCase())
+    const results = recipies.filter(
+      (item) =>
+        item.dishName.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        !item.isDeleted
     );
     setFilteredItems(results);
   }, [searchTerm, filterCategory, filterType, recipies]);
@@ -51,57 +53,63 @@ const Catalog_chef = () => {
         </div>
 
         <div className="flex flex-col gap-10">
-          {filteredItems.map((item) => (
-            <div
-              key={item._id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
-            >
-              <img
-                src={item.overviewPicture}
-                alt={item.dishName}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4 flex flex-col gap-5">
-                <div className="flex justify-between items-start mb-2">
-                  <h2 className="text-xl font-semibold text-[#c98d83]">
-                    {item.dishName}
-                  </h2>
-                </div>
-                <p className="text-gray-600 mb-4 h-12 overflow-hidden">
-                  {item.recipeOverview}
-                </p>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-500">
-                    {item.category}
-                  </span>
-                  <div className="flex gap-5">
-                    {item.isDish ? (
-                      <>
-                        <Chip className="text" value="Recipe" />
-                        <Chip className="text" value="Dish" />
-                      </>
-                    ) : (
-                      <Chip className="text" value="Recipe" />
-                    )}
-                  </div>
-                </div>
-
-                <Link className="hover:text-rose-200 transition duration-300">
-                  <button
-                    onClick={() => {
-                      sessionStorage.setItem("tab", "management");
-                      window.dispatchEvent(new Event("storage"));
-                      sessionStorage.setItem("recipeID", item._id);
-                      setRecipeID(item._id);
-                    }}
-                    className="bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300 flex items-center justify-center w-full"
-                  >
-                    View Details
-                  </button>
-                </Link>
-              </div>
+          {filteredItems == [] ? (
+            <div className="flex w-96 items-center justify-center bg-black h-72">
+              sdsdf
             </div>
-          ))}
+          ) : (
+            filteredItems.map((item) => (
+              <div
+                key={item._id}
+                className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300"
+              >
+                <img
+                  src={item.overviewPicture}
+                  alt={item.dishName}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4 flex flex-col gap-5">
+                  <div className="flex justify-between items-start mb-2">
+                    <h2 className="text-xl font-semibold text-[#c98d83]">
+                      {item.dishName}
+                    </h2>
+                  </div>
+                  <p className="text-gray-600 mb-4 h-12 overflow-hidden">
+                    {item.recipeOverview}
+                  </p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm font-medium text-gray-500">
+                      {item.category}
+                    </span>
+                    <div className="flex gap-5">
+                      {item.isDish ? (
+                        <>
+                          <Chip className="text" value="Recipe" />
+                          <Chip className="text" value="Dish" />
+                        </>
+                      ) : (
+                        <Chip className="text" value="Recipe" />
+                      )}
+                    </div>
+                  </div>
+
+                  <Link className="hover:text-rose-200 transition duration-300">
+                    <button
+                      onClick={() => {
+                        sessionStorage.setItem("tab", "management");
+                        window.dispatchEvent(new Event("storage"));
+                        sessionStorage.setItem("recipeID", item._id);
+                        setRecipeID(item._id);
+                      }}
+                      className="bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300 flex items-center justify-center w-full"
+                    >
+                      View Details
+                    </button>
+                  </Link>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

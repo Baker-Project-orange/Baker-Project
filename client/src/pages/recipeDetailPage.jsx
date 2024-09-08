@@ -281,12 +281,10 @@ import {
 import axios from "axios";
 import FavoriteButton from "../components/favoriteButton";
 import CommentsSection from "../components/commentsSection";
-import {
-  EmailShareButton,
-  FacebookShareButton,
-  LinkedinShareButton,
-  WhatsappShareButton,
-} from "react-share";
+
+import { EmailShareButton, FacebookShareButton, LinkedinShareButton, WhatsappShareButton } from "react-share";
+import { RecipeTutorial } from "../components/recipeTutorial/recipeTutorial";
+
 
 const RecipeDetailPage = () => {
   const { recipeId } = useParams();
@@ -472,6 +470,12 @@ const RecipeDetailPage = () => {
                         ({(recipe.dishRatingAvg || 0).toFixed(1)})
                       </span>
                     </div>
+
+                  )}
+                  <div className="flex items-center text-gray-600">
+                    <Clock size={20} className="mr-2 text-[#c98d83]" />
+                    <span>{recipe.duration || "N/A"} Minutes</span>
+
                   </div>
                   {isDish && (
                     <div className="mt-4 sm:mt-0">
@@ -512,7 +516,14 @@ const RecipeDetailPage = () => {
                     </button>
                   )}
                 </div>
+
+                
               </div>
+              <p className="text-gray-700 mb-6 leading-relaxed">
+                {recipe.dishDescription}
+              </p>
+              <RecipeTutorial/>
+
             </div>
           </div>
           <CommentsSection
