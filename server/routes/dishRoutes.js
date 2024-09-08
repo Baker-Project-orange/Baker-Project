@@ -15,4 +15,5 @@ router.post("/makeDishes", auth, processImages, dishController.makeDish);
 router.put("/dishes/approve/:id", dishController.approveDish);
 router.get("/total", dishController.getTotalDishes);
 router.get("/getDishByID", dishController.getDishById);
+router.put("/deleteDish", auth, dishController.deleteDish);
 module.exports = router;

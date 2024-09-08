@@ -13,17 +13,17 @@ import {
 } from "lucide-react";
 import axiosInstance from "../../utils/axios";
 import { Link } from "react-router-dom";
-import axios from "axios";
-
+import useGetDishes from "../../hooks/recipeHooks/getDishesHook";
+import useGetRecipes from "../../hooks/recipeHooks/getRecipeHook";
 const ChefProfilePage = () => {
-
   const [chefInfo, setChefInfo] = useState({
     name: "",
     email: "",
     buissnessName: "",
     buissnessLogo: "",
   });
-
+  const dishes = useGetDishes();
+  const recipes = useGetRecipes();
   useEffect(() => {
     const fetchChefData = async () => {
       try {
@@ -98,20 +98,6 @@ const ChefProfilePage = () => {
                 <Cake className="mr-2" size={20} />
                 View Recipes
               </Link>
-              <Link
-                to="/menu"
-                className="flex items-center bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300"
-              >
-                <Coffee className="mr-2" size={20} />
-                Our Menu
-              </Link>
-              <Link
-                to="/classes"
-                className="flex items-center bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300"
-              >
-                <Clipboard className="mr-2" size={20} />
-                Baking Classes
-              </Link>
             </div>
           </div>
           <div className="bg-white bg-opacity-90 p-8 rounded-lg w-full max-w-xl animate-fade-in-up">
@@ -159,46 +145,7 @@ const ChefProfilePage = () => {
                   />
                 </div>
               </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="buissnessName"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Buissness Name
-                </label>
-                <div className="flex items-center border-2 border-[#c98d83] rounded-md px-3 py-2">
-                  <Phone className="text-[#c98d83] mr-2" size={20} />
-                  <input
-                    type="tel"
-                    id="buissnessName"
-                    name="buissnessName"
-                    value={chefInfo.buissnessName}
-                    onChange={handleInputChange}
-                    className="w-full focus:outline-none border-none bg-transparent"
-                    readOnly={!isEditing}
-                  />
-                </div>
-              </div>
-              <div className="mb-4">
-                <label
-                  htmlFor="buissnessLogo"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  Buissness Logo
-                </label>
-                <div className="flex items-start border-2 border-[#c98d83] rounded-md px-3 py-2">
-                  <Info className="text-[#c98d83] mr-2 mt-1" size={20} />
-                  <textarea
-                    id="buissnessLogo"
-                    name="buissnessLogo"
-                    rows="3"
-                    value={chefInfo.buissnessLogo}
-                    onChange={handleInputChange}
-                    className="w-full focus:outline-none border-none bg-transparent"
-                    readOnly={!isEditing}
-                  ></textarea>
-                </div>
-              </div>
+
               <button
                 type="button"
                 onClick={handleUpdate}
@@ -222,85 +169,49 @@ const ChefProfilePage = () => {
           <h2 className="text-4xl font-bold mb-8 text-center text-[#c98d83]">
             {chefInfo.name}'s Recipes
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            {/* Recipe cards */}
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <img
-                src="https://i.pinimg.com/236x/57/79/64/577964bf52039b836f54702c2f446a76.jpg"
-                alt="Sourdough Bread"
-                className="w-full h-48 object-cover mb-4 rounded"
-              />
-              <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
-                Artisan Sourdough Bread
-              </h3>
-              <p className="mb-4 text-gray-600">
-                A crusty, tangy sourdough with a perfect crumb. Crafted with
-                care over 24 hours.
-              </p>
+          {recipes.length != 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+              {/* Recipe cards */}
+              {recipes.map((recipe, index) => (
+                <>
+                  {index <= 3 && !recipe.isApproved && !recipe.isDeleted ? (
+                    <div
+                      key={index}
+                      className="bg-white p-6 rounded-lg shadow-md"
+                    >
+                      <img
+                        src={recipe.overviewPicture}
+                        alt="Sourdough Bread"
+                        className="w-full h-48 object-cover mb-4 rounded"
+                      />
+                      <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
+                        {recipe.dishName}
+                      </h3>
+                      <p className="mb-4 text-gray-600">
+                        {recipe.recipeOverview}
+                      </p>
 
-              <Link className="hover:text-rose-200 transition duration-300">
-                <button
-                  onClick={() => {
-                    sessionStorage.setItem("tab", "management");
-                    window.dispatchEvent(new Event("storage"));
-                  }}
-                  className="bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300"
-                >
-                  View Recipe
-                </button>
-              </Link>
+                      <Link className="hover:text-rose-200 transition duration-300">
+                        <button
+                          onClick={() => {
+                            sessionStorage.setItem("tab", "management");
+                            window.dispatchEvent(new Event("storage"));
+                          }}
+                          className="bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300"
+                        >
+                          View Recipe
+                        </button>
+                      </Link>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </>
+              ))}
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <img
-                src="https://i.pinimg.com/736x/0d/77/0f/0d770f26a7e5bd07b70526cdaa888f9d.jpg"
-                alt="Croissants"
-                className="w-full h-48 object-cover mb-4 rounded"
-              />
-              <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
-                Buttery Croissants
-              </h3>
-              <p className="mb-4 text-gray-600">
-                Flaky, golden croissants with a delicate texture. Perfect for
-                breakfast or brunch.
-              </p>
-              <Link className="hover:text-rose-200 transition duration-300">
-                <button
-                  onClick={() => {
-                    sessionStorage.setItem("tab", "management");
-                    window.dispatchEvent(new Event("storage"));
-                  }}
-                  className="bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300"
-                >
-                  View Recipe
-                </button>
-              </Link>{" "}
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <img
-                src="https://i.pinimg.com/564x/9d/f3/0b/9df30bcae481944aa5ce624715667497.jpg"
-                alt="Cinnamon Rolls"
-                className="w-full h-48 object-cover mb-4 rounded"
-              />
-              <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
-                Gooey Cinnamon Rolls
-              </h3>
-              <p className="mb-4 text-gray-600">
-                Soft, sweet rolls with a cinnamon sugar swirl and cream cheese
-                frosting.
-              </p>
-              <Link className="hover:text-rose-200 transition duration-300">
-                <button
-                  onClick={() => {
-                    sessionStorage.setItem("tab", "management");
-                    window.dispatchEvent(new Event("storage"));
-                  }}
-                  className="bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300"
-                >
-                  View Recipe
-                </button>
-              </Link>{" "}
-            </div>
-          </div>
+          ) : (
+            <div>Hello</div>
+          )}
           <div className="text-center">
             <Link className="hover:text-rose-200 transition duration-300">
               <button
@@ -323,88 +234,51 @@ const ChefProfilePage = () => {
           <h2 className="text-4xl font-bold mb-8 text-center text-[#c98d83]">
             {chefInfo.name}'s Dishes
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-            {/* Dish cards */}
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <img
-                src="https://i.pinimg.com/564x/3b/00/6c/3b006c67ee8011d489519971396da6dc.jpg"
-                alt="Artisan Bread Basket"
-                className="w-full h-48 object-cover mb-4 rounded"
-              />
-              <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
-                Artisan Bread Basket
-              </h3>
-              <p className="mb-4 text-gray-600">
-                Assortment of freshly baked artisan breads, including sourdough,
-                ciabatta, and whole grain.
-              </p>
+          {dishes.length != 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+              {/* Dish cards */}
+              {dishes.map((dish, index) => (
+                <>
+                  {(index <= 3) & dish.isApproved && !dish.isDeleted ? (
+                    <div
+                      key={index}
+                      className="bg-white p-6 rounded-lg shadow-md"
+                    >
+                      <img
+                        src="https://i.pinimg.com/564x/3b/00/6c/3b006c67ee8011d489519971396da6dc.jpg"
+                        alt="Artisan Bread Basket"
+                        className="w-full h-48 object-cover mb-4 rounded"
+                      />
+                      <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
+                        Artisan Bread Basket
+                      </h3>
+                      <p className="mb-4 text-gray-600">
+                        Assortment of freshly baked artisan breads, including
+                        sourdough, ciabatta, and whole grain.
+                      </p>
 
-              <Link className="hover:text-rose-200 transition duration-300">
-                <button
-                  onClick={() => {
-                    sessionStorage.setItem("tab", "management");
-                    window.dispatchEvent(new Event("storage"));
-                  }}
-                  className="bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300 flex items-center justify-center w-full"
-                >
-                  <ShoppingCart className="mr-2" />
-                  View Details
-                </button>
-              </Link>
+                      <Link className="hover:text-rose-200 transition duration-300">
+                        <button
+                          onClick={() => {
+                            sessionStorage.setItem("tab", "management");
+                            window.dispatchEvent(new Event("storage"));
+                          }}
+                          className="bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300 flex items-center justify-center w-full"
+                        >
+                          <ShoppingCart className="mr-2" />
+                          View Details
+                        </button>
+                      </Link>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </>
+              ))}
             </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <img
-                src="https://i.pinimg.com/564x/31/53/39/315339551683fe82e933a3cf58a6fdb8.jpg"
-                alt="Pastry Platter"
-                className="w-full h-48 object-cover mb-4 rounded"
-              />
-              <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
-                Gourmet Pastry Platter
-              </h3>
-              <p className="mb-4 text-gray-600">
-                Selection of finest pastries and viennoiseries, including
-                croissants, danishes, and pain au chocolat.
-              </p>
-              <Link className="hover:text-rose-200 transition duration-300">
-                <button
-                  onClick={() => {
-                    sessionStorage.setItem("tab", "management");
-                    window.dispatchEvent(new Event("storage"));
-                  }}
-                  className="bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300 flex items-center justify-center w-full"
-                >
-                  <ShoppingCart className="mr-2" />
-                  View Details
-                </button>
-              </Link>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md">
-              <img
-                src="https://i.pinimg.com/564x/ec/46/f2/ec46f23740e2cef9db88b8e346548fc6.jpg"
-                alt="Dessert Tray"
-                className="w-full h-48 object-cover mb-4 rounded"
-              />
-              <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
-                Dessert Tray Deluxe
-              </h3>
-              <p className="mb-4 text-gray-600">
-                Assorted gourmet desserts and sweet treats, including tarts,
-                éclairs, and macarons.
-              </p>
-              <Link className="hover:text-rose-200 transition duration-300">
-                <button
-                  onClick={() => {
-                    sessionStorage.setItem("tab", "management");
-                    window.dispatchEvent(new Event("storage"));
-                  }}
-                  className="bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300 flex items-center justify-center w-full"
-                >
-                  <ShoppingCart className="mr-2" />
-                  View Details
-                </button>
-              </Link>
-            </div>
-          </div>
+          ) : (
+            <div className=""></div>
+          )}
           <div className="text-center">
             <Link className="hover:text-rose-200 transition duration-300">
               <button
@@ -445,46 +319,6 @@ const ChefProfilePage = () => {
                 Tips and tricks for creating beautiful and delicious French
                 macarons.
               </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* New Section (Replacing Baking Classes) */}
-      <section className="bg-[#f0d8d3] py-16 animate-fade-in">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold mb-8 text-center text-[#c98d83]">
-            Seasonal Specialties
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
-              <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
-                Summer Fruit Tarts
-              </h3>
-              <p>
-                Delicate pastry shells filled with fresh, seasonal fruits and
-                light custard.
-              </p>
-
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
-              <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
-                Autumn Spice Breads
-              </h3>
-              <p>
-                Warm, comforting breads infused with seasonal spices and nuts.
-              </p>
-
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
-              <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
-                Holiday Cookie Boxes
-              </h3>
-              <p>
-                Assorted festive cookies, perfect for gifting or enjoying with
-                family.
-              </p>
-
             </div>
           </div>
         </div>

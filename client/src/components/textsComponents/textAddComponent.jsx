@@ -28,7 +28,7 @@ const TextAdd = (props) => {
           Add
         </Button>
       </div>
-      <div className="grid grid-cols-3 gap-2 w-full">
+      <div className="flex flex-col gap-5 w-full">
         {ingrediants.map((ingrediant, index) => (
           <Chip className="w-fit" key={index} value={ingrediant} color="pink" />
         ))}

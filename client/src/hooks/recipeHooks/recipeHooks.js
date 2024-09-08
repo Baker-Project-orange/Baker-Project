@@ -15,6 +15,7 @@ const useRecipeHooks = () => {
   const [ingrediants, setIngrediants] = useContext(Context).ingrediants;
   const [steps, setSteps] = useContext(Context).steps;
   const [includesDish, setIncludesDish] = useContext(Context).includesDish;
+  const [active_tab, set_active_tab] = useContext(Context).active_tab;
 
   const handleCreateRecipe = async (e) => {
     e.preventDefault();
@@ -76,7 +77,7 @@ const useRecipeHooks = () => {
       setIngrediants([]);
       setSteps([]);
       setIncludesDish(false);
-
+      set_active_tab("home");
       console.log(response.data);
     } catch (e) {
       console.log(e);

@@ -10,7 +10,6 @@ const {
 router.get("/getChefRecipies", auth, recipieController.getChefRecipies);
 router.get("/getrecipes", recipieController.getAllRecipes);
 router.get("/:id", recipieController.getRecipeById);
-router.get("/getRecipeById", auth, recipieController.getChefRecipeById);
 router.post(
   "/makeRecipie",
   auth,

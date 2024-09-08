@@ -6,6 +6,7 @@ import axios from "axios";
 import FavoriteButton from "../components/favoriteButton";
 import CommentsSection from "../components/commentsSection";
 import { EmailShareButton, FacebookShareButton, LinkedinShareButton, WhatsappShareButton } from "react-share";
+import { RecipeTutorial } from "../components/recipeTutorial/recipeTutorial";
 
 
 const RecipeDetailPage = () => {
@@ -142,30 +143,15 @@ const RecipeDetailPage = () => {
                   )}
                   <div className="flex items-center text-gray-600">
                     <Clock size={20} className="mr-2 text-[#c98d83]" />
-                    <span>{recipe.duration || "N/A"}</span>
+                    <span>{recipe.duration || "N/A"} Minutes</span>
                   </div>
                 </div>
-                {recipe.recipeAuthor && (
-                  <div className="mt-4 sm:mt-0">
-                    <p className="text-gray-600 font-medium">
-                      {recipe.recipeAuthor.businessName}
-                    </p>
-                    <p className="text-gray-500 text-sm">
-                      {recipe.recipeAuthor.businessAddress}
-                    </p>
-                  </div>
-                )}
+                
               </div>
               <p className="text-gray-700 mb-6 leading-relaxed">
                 {recipe.dishDescription}
               </p>
-              <Link
-                to={`/recipe/${recipe._id}/instructions`}
-                className="inline-flex items-center bg-[#c98d83] text-white py-2 px-4 rounded-full hover:bg-[#b67c73] transition-colors duration-300"
-              >
-                <BookOpen size={20} className="mr-2" />
-                View Instructions
-              </Link>
+              <RecipeTutorial/>
             </div>
           </div>
         </div>

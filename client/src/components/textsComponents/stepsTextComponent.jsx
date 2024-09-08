@@ -22,7 +22,7 @@ const StepsTextAdd = () => {
     const step = {
       stepTitle: title,
       stepDescription: text,
-      stepMedia: picture ,
+      stepMedia: picture,
       note: note || "",
     };
     setSteps([...steps, step]);
@@ -81,7 +81,7 @@ const StepsTextAdd = () => {
         </Button>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 w-full">
+      <div className="flex flex-col gap-4 w-full">
         {steps.map((step, index) => (
           <Chip
             className="w-fit"

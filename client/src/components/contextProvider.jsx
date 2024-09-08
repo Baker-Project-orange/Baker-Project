@@ -1,3 +1,4 @@
+import { setActive } from "@material-tailwind/react/components/Tabs/TabsContext";
 import React, { useState, createContext } from "react";
 
 export const Context = createContext();
@@ -28,6 +29,9 @@ export const ContextProvider = ({ children }) => {
   const [recipeID, setRecipeID] = useState(
     sessionStorage.getItem("recipeID") || ""
   );
+  const [active_tab, set_active_tab] = useState(
+    sessionStorage.getItem("tab") || "home"
+  );
   return (
     <Context.Provider
       value={{
@@ -53,6 +57,7 @@ export const ContextProvider = ({ children }) => {
         price: [price, setPrice],
         includesDish: [includesDish, setIncludesDish],
         recipeID: [recipeID, setRecipeID],
+        active_tab: [active_tab, set_active_tab],
       }}
     >
       {children}
