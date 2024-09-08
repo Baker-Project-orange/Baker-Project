@@ -83,21 +83,28 @@ exports.getAllRecipes = async (req, res) => {
   }
 };
 
+
 exports.getRecipeById = async (req, res) => {
-  console.log(req.params.id);
   try {
-    const recipe = await Recipie.findById(req.params.id).populate(
-      "recipeAuthor",
-      "name businessName businessAddress"
-    );
+    const recipe = await Recipie.findById(req.params.id)
+      .populate("recipeAuthor", "name businessName businessAddress")
+      .populate({
+        path: "dish",
+        select: "dishRatingAvg price",
+      })
+      .exec();
+
     if (!recipe) {
       return res.status(404).json({ message: "Recipe not found" });
     }
+
     res.json(recipe);
   } catch (error) {
+    console.error("Error fetching recipe:", error);
     res.status(500).json({ message: error.message });
   }
 };
+  
 
 exports.getRecipesByCategory = async (req, res) => {
   try {
