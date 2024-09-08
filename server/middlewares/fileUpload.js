@@ -6,52 +6,64 @@ const {
 } = require("firebase/storage");
 const app = require("../config/firebaseConfig");
 const dayjs = require("dayjs");
-exports.filesUpload = async (req, res, next) => {
-  const steps = req.body.steps;
-  req.urls = [];
-  try {
-    if (steps !== undefined) {
-      for (let i = 0; i < steps.length; i++) {
-        const storage = getStorage(app);
-        const file = steps[i].stepMedia;
-        if (file !== undefined) {
-          const imagesRef = ref(
-            storage,
-            `/images/${req.user}-${dayjs.unix()}-${i}.jpg`
-          );
 
-          await uploadBytes(imagesRef, file);
-          const url = await getDownloadURL(imagesRef);
-          req.body.steps[i].stepMedia = url;
-        }
+const uploadFileToFirebase = async (file, user, index = null) => {
+  const storage = getStorage(app);
+  const timestamp = Date.now();
+  console.log(file);
+  const filePath =
+    index !== null
+      ? `/images/${user}-${timestamp}-${index}-${file.originalname}`
+      : `/images/${user}-${timestamp}-${file.originalname}`;
+
+  const metatype = { contentType: file.mimetype, name: file.originalname };
+
+  const imagesRef = ref(storage, filePath);
+  await uploadBytes(imagesRef, file.buffer, metatype);
+  return await getDownloadURL(imagesRef);
+};
+
+// Middleware to upload files for each step in a recipe
+exports.filesUpload = async (req, res, next) => {
+  const steps = req.files;
+  const chefID = req.user;
+  req.body.steps = JSON.parse(req.body.steps);
+  req.body.ingredients = JSON.parse(req.body.ingredients);
+  req.body.overviewPicture = await uploadFileToFirebase(steps[0], chefID, 0);
+  let mediaCounter = 1;
+  try {
+    for (let i = 0; i < req.body.steps.length; i++) {
+      const step = req.body.steps[i];
+      if (!step.stepMedia) {
+        continue;
+      } else {
+        req.body.steps[i].stepMedia = await uploadFileToFirebase(
+          steps[mediaCounter]
+        );
+        mediaCounter++;
       }
-      next();
-    } else {
-      next();
     }
+
+    next();
   } catch (e) {
-    console.log(e);
-    res.status(500).json({ message: "Internal server error", error: e });
+    console.error(e);
+    res
+      .status(500)
+      .json({ message: "Error uploading files", error: e.message });
   }
 };
 
 exports.fileUpload = async (req, res, next) => {
-  const file = req.body.file;
-  console.log(file);
-  try {
-    if (file !== undefined) {
-      const storage = getStorage(app);
-      const imagesRef = ref(storage, `/images/${req.user}-${dayjs.unix()}.jpg`);
-      await uploadBytes(imagesRef, file);
-      const url = await getDownloadURL(imagesRef);
-      req.url = url;
+  const file = req.file;
 
-      next();
-    } else {
-      next();
+  try {
+    if (file) {
+      const url = await uploadFileToFirebase(file, req.user);
+      req.url = url;
     }
+    next();
   } catch (e) {
-    console.log(e);
-    res.status(501).json({ message: "Internal server error", error: e });
+    console.error(e);
+    res.status(500).json({ message: "Error uploading file", error: e.message });
   }
 };

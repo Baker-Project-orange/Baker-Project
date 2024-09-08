@@ -62,7 +62,6 @@ exports.loginChef = async (req, res) => {
 exports.get_chef = async (req, res) => {
   const chefID = req.user;
   // console.log(chef_id);
-
   try {
     const chefData = await Chef.findById(chefID);
     if (chefData) {
@@ -81,9 +80,6 @@ exports.get_chef = async (req, res) => {
 exports.update_chef = async (req, res) => {
   const chef_id=req.user;
   const chefInfo = req.body;
-
-  
-
   try {
     const updatedChef = await Chef.findByIdAndUpdate(
       chef_id,
@@ -105,7 +101,7 @@ exports.update_chef = async (req, res) => {
 };
 
 
-
+// ----------------------
 // getchefs
 exports.getAllChefs = async (req, res) => {
   try {
@@ -119,3 +115,20 @@ exports.getAllChefs = async (req, res) => {
     res.status(500).json({ message: "Internal server error", error });
   }
 };
+// ----------------------------
+
+// Assuming you have a Chef model imported
+exports.chefToggleActive = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const chef = await Chef.findById(id);
+    if (!chef) return res.status(404).json({ message: "Chef not found." });
+    chef.isActive = !chef.isActive;
+    await chef.save();
+    res.status(200).json({ message: "Chef status updated successfully." });
+  } catch (error) {
+    console.error("Error in chef controller:", error);
+    res.status(500).json({ message: "Internal server error." });
+  }
+};
+// --------------------------

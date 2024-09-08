@@ -1,10 +1,14 @@
 import { Input, Button, Chip } from "@material-tailwind/react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Context } from "../contextProvider";
 
 const TextAdd = (props) => {
   const [ingrediants, setIngrediants] = useContext(Context).ingrediants;
   const [text, setText] = useState("");
+
+  useEffect(() => {
+    console.log(ingrediants);
+  }, [ingrediants]);
 
   const handleAddText = () => {
     setIngrediants([...ingrediants, text]);
@@ -24,7 +28,7 @@ const TextAdd = (props) => {
           Add
         </Button>
       </div>
-      <div className="grid grid-cols-3 gap-2 w-full">
+      <div className="flex flex-col gap-5 w-full">
         {ingrediants.map((ingrediant, index) => (
           <Chip className="w-fit" key={index} value={ingrediant} color="pink" />
         ))}

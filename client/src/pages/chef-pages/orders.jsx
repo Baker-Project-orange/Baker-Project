@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Filter, User, Info, CheckCircle, Truck, Calendar } from 'lucide-react';
 import axios from 'axios';
 
-const Orders = () => {
+const Orders1 = () => {
   const [orders, setOrders] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('All');
@@ -75,8 +75,8 @@ const Orders = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'Pending': return 'bg-yellow-100 text-yellow-800';
-      case 'Completed': return 'bg-green-100 text-green-800';
+      case 'Pending': return 'bg-[#f8e5e1] text-[#8b4513]';
+      case 'Completed': return 'bg-[#f0d0c9] text-[#8b4513]';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -166,13 +166,13 @@ const Orders = () => {
                 {order.status !== 'Completed' ? (
                   <button
                     onClick={() => handleDoneClick(order._id)}
-                    className="mt-4 bg-[#4caf50] text-white px-6 py-2 rounded-md hover:bg-[#45a049] transition-colors duration-300 flex items-center justify-center w-full shadow-md hover:shadow-lg"
+                    className="mt-4 bg-[#c98d83] text-white px-6 py-2 rounded-md hover:bg-[#b17a71] transition-colors duration-300 flex items-center justify-center w-full shadow-md hover:shadow-lg"
                   >
                     <CheckCircle size={18} className="mr-2" />
                     Mark as Done
                   </button>
                 ) : (
-                  <div className="mt-4 bg-[#e8f5e9] text-[#2e7d32] text-sm px-4 py-3 rounded-lg flex items-center justify-center shadow-inner">
+                  <div className="mt-4 bg-[#f8e5e1] text-[#8b4513] text-sm px-4 py-3 rounded-lg flex items-center justify-center shadow-inner">
                     <Truck size={18} className="mr-2" />
                     Driver on the way to pick up the order
                   </div>
@@ -186,4 +186,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default Orders1;
