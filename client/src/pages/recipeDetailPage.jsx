@@ -264,7 +264,6 @@
 
 // export default RecipeDetailPage;
 
-
 import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import {
@@ -281,10 +280,12 @@ import {
 import axios from "axios";
 import FavoriteButton from "../components/favoriteButton";
 import CommentsSection from "../components/commentsSection";
-
-import { EmailShareButton, FacebookShareButton, LinkedinShareButton, WhatsappShareButton } from "react-share";
-import { RecipeTutorial } from "../components/recipeTutorial/recipeTutorial";
-
+import {
+  EmailShareButton,
+  FacebookShareButton,
+  LinkedinShareButton,
+  WhatsappShareButton,
+} from "react-share";
 
 const RecipeDetailPage = () => {
   const { recipeId } = useParams();
@@ -388,6 +389,23 @@ const RecipeDetailPage = () => {
     );
   };
 
+  // -----------------
+const addToCart = (item) => {
+  const currentCart = JSON.parse(localStorage.getItem("cart") || "[]");
+  const existingItemIndex = currentCart.findIndex(
+    (cartItem) => cartItem.id === item.id
+  );
+
+  if (existingItemIndex > -1) {
+    currentCart[existingItemIndex].quantity += 1;
+  } else {
+    currentCart.push({ ...item, quantity: 1 });
+  }
+
+  localStorage.setItem("cart", JSON.stringify(currentCart));
+};
+  // ----------------
+
   return (
     <div className="font-serif">
       <div className="min-h-screen bg-gradient-to-b from-[#f8e5e1] to-[#fdf2f0] py-12 px-4 sm:px-6 lg:px-8">
@@ -470,12 +488,6 @@ const RecipeDetailPage = () => {
                         ({(recipe.dishRatingAvg || 0).toFixed(1)})
                       </span>
                     </div>
-
-                  )}
-                  <div className="flex items-center text-gray-600">
-                    <Clock size={20} className="mr-2 text-[#c98d83]" />
-                    <span>{recipe.duration || "N/A"} Minutes</span>
-
                   </div>
                   {isDish && (
                     <div className="mt-4 sm:mt-0">
@@ -508,7 +520,7 @@ const RecipeDetailPage = () => {
                   </Link>
                   {isDish && (
                     <button
-                      onClick={handleAddToCart}
+                      onClick={() => addToCart(recipe)}
                       className="inline-flex items-center bg-[#c98d83] text-white py-2 px-4 rounded-full hover:bg-[#b67c73] transition-colors duration-300"
                     >
                       <ShoppingCart size={20} className="mr-2" />
@@ -516,14 +528,7 @@ const RecipeDetailPage = () => {
                     </button>
                   )}
                 </div>
-
-                
               </div>
-              <p className="text-gray-700 mb-6 leading-relaxed">
-                {recipe.dishDescription}
-              </p>
-              <RecipeTutorial/>
-
             </div>
           </div>
           <CommentsSection

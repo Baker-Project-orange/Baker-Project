@@ -12,7 +12,8 @@ const contactRoutes = require("./routes/contactRoutes");
 const reportRoutes = require("./routes/reportRoutes");
 const recipiesRoutes = require("./routes/recipieRoutes");
 const adminRoutes = require("./routes/adminRoutes"); 
-const paymentRoutes = require("./routes/paypalconfig")
+const paymentRoutes = require("./routes/paypalconfig");
+const checkout = require("./routes/cartrouter");
 const orderRoutes = require('./routes/orderRoutes');
 
 const Order = require("./Models/Orders");
@@ -43,7 +44,8 @@ app.use("/api/recipes", recipiesRoutes);
 //admin routes
 app.use("/api/admins",adminRoutes);
 //payment routes
-app.use('/api', paymentRoutes);
+app.use("/api", paymentRoutes);
+app.use("/api", checkout);
 //Order Routes
 app.use('/api/orders', orderRoutes);
 

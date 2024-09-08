@@ -22,7 +22,7 @@ router.put("/deleteRecipie", auth, recipieController.deleteRecipie);
 router.put("/updateRecipie", auth, recipieController.updateRecipie);
 router.get("/category/:category", recipieController.getRecipesByCategory);
 router.get("/total", recipieController.getTotalRecipes);
-
+router.put("/approve/:id", recipieController.approveRecipe);
 
 
 router.get("/comments/:id", recipieController.get_recipe_comments);

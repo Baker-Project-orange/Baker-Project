@@ -14,7 +14,6 @@ const RecipesComponent = () => {
 
   const fetchRecipes = async () => {
     try {
-      setLoading(true);
       const response = await axios.get('http://localhost:3000/api/recipes/getrecipes');
       if (Array.isArray(response.data)) {
         setRecipes(response.data);
@@ -28,12 +27,21 @@ const RecipesComponent = () => {
     }
   };
 
-  // Add additional functions to handle recipe-related actions (e.g., approve, delete)
+  const handleApprove = async (recipe) => {
+    try {
+      await axios.put(`http://localhost:3000/api/recipes/approve/${recipe._id}`, {
+        isApproved: !recipe.isApproved,
+      });
+      fetchRecipes();
+    } catch (error) {
+      setError('Failed to approve/unapprove recipe');
+    }
+  };
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+      <div className="flex justify-center items-center h-screen bg-[#c98d83]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
       </div>
     );
   }
@@ -48,70 +56,71 @@ const RecipesComponent = () => {
   }
 
   return (
-    <div className="space-y-6 p-6 bg-gray-50 rounded-lg shadow-lg">
-      <h2 className="text-3xl font-bold text-gray-800">Recipes Management</h2>
-      <div className="bg-white p-6 rounded-lg shadow overflow-x-auto">
-        <h3 className="font-semibold text-xl mb-4 text-gray-700">Recipes</h3>
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+    <div className="space-y-6 p-6 bg-[#ffffff] min-h-screen">
+      <h2 className="text-3xl font-bold text-black">Recipes Management</h2>
+      <div className="bg-[#ffffff] p-6 rounded-lg shadow-lg overflow-x-auto">
+        <h3 className="font-semibold text-xl mb-4 text-white">Recipes</h3>
+        <table className="min-w-full divide-y divide-white/20">
+          <thead className="bg-[#ffffff]">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Dish Name
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Description
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Rating
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Difficulty
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Duration
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Category
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Overview Picture
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Dish Name</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Description</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Rating</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Difficulty</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Duration</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Category</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Overview Picture</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="divide-y divide-white/20">
             {recipes.length > 0 ? (
               recipes.map((recipe) => (
-                <tr key={recipe._id}>
-                  <td className="px-6 py-4 whitespace-nowrap">{recipe.dishName || 'Unknown Recipe'}</td>
-                  <td className="px-6 py-4">{recipe.dishDescription || 'No description'}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{recipe.difficultyAvg?.toFixed(1) || 'N/A'}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{recipe.difficultyRating[0]?.ratingNumber || 'N/A'}</td>
-                  <td className="px-6 py-4  whitespace-nowrap">{recipe.duration || 'N/A'}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{recipe.category || 'Uncategorized'}</td>
+                <tr key={recipe._id} className="hover:bg-[#c98d83] transition-colors duration-150">
+                  <td className="px-6 py-4 whitespace-nowrap text-black">{recipe.dishName || 'Unknown Recipe'}</td>
+                  <td className="px-6 py-4 text-black">{recipe.dishDescription || 'No description'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-black">{recipe.difficultyAvg?.toFixed(1) || 'N/A'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-black">{recipe.difficultyRating[0]?.ratingNumber || 'N/A'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-black">{recipe.duration || 'N/A'}</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-black">{recipe.category || 'Uncategorized'}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {recipe.overviewPicture ? (
                       <button
                         onClick={() => setSelectedImage(recipe.overviewPicture)}
-                        className="text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                        className="text-black hover:text-rose-200 transition-colors duration-150"
                       >
                         <ImageIcon className="w-5 h-5 inline-block mr-1" />
                         View
                       </button>
                     ) : (
-                      'No picture'
+                      <span className="text-black">No picture</span>
                     )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {/* Add recipe-related actions here, such as approve, delete, etc. */}
+                    <button
+                      onClick={() => handleApprove(recipe)}
+                      className={`text-black hover:text-rose-200 transition-colors duration-150 ${
+                        recipe.isApproved ? "bg-red-500" : "bg-green-500"
+                      } px-3 py-1 rounded-full`}
+                    >
+                      {recipe.isApproved ? (
+                        <>
+                          <XCircle className="w-5 h-5 inline-block mr-1" />
+                          Unapprove
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle className="w-5 h-5 inline-block mr-1" />
+                          Approve
+                        </>
+                      )}
+                    </button>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan={8} className="px-6 py-4 text-center text-gray-500">
+                <td colSpan={8} className="px-6 py-4 text-center text-white">
                   No recipes available
                 </td>
               </tr>
@@ -121,11 +130,11 @@ const RecipesComponent = () => {
       </div>
       {selectedImage && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-4 rounded-lg max-w-3xl max-h-3xl">
-            <img src={selectedImage} alt="Recipe" className="max-w-full max-h-full object-contain" />
+          <div className="bg-[#b67c73] p-4 rounded-lg max-w-3xl max-h-3xl">
+            <img src={selectedImage} alt="Recipe" className="w-96 h-96 object-contain" />
             <button
               onClick={() => setSelectedImage(null)}
-              className="mt-4 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              className="mt-4 bg-[#c98d83] hover:bg-[#b67c73] text-white font-bold py-2 px-4 rounded transition-colors duration-150"
             >
               Close
             </button>

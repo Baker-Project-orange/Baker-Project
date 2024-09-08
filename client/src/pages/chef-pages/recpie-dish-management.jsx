@@ -491,7 +491,6 @@ const Recipe_dish_management = () => {
             </a>
           </div>
         </div>{" "}
-        */}
       </div>
     </div>
   );

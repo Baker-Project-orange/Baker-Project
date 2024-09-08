@@ -1,6 +1,3 @@
-
-
-
 const Report = require('../Models/Reports');
 
 exports.getAllReports = async (req, res) => {

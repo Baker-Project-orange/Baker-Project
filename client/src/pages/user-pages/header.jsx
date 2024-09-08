@@ -1,10 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { Home, ShoppingBag, User, PhoneCall } from 'lucide-react';
-import UserProfilePage from '../user-pages/home'; // تأكد من صحة مسار الاستيراد
-import Orders from '../user-pages/Orders'; // تأكد من صحة مسار الاستيراد
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { Home, ShoppingBag, PhoneCall, LogOut } from "lucide-react";
+import UserProfilePage from "../user-pages/home";
+import Orders from "../user-pages/Orders";
+import Favourit from "./Favourit";
+import Register from "../Register";
 const Header_user = () => {
-  const [active_tab, set_active_tab] = useState(sessionStorage.getItem("tab") || "home");
+  const [active_tab, set_active_tab] = useState(
+    sessionStorage.getItem("tab") || "home"
+  );
+  const [userInfo, setUserInfo] = useState({});
+  const userId = localStorage.getItem("userId");
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      if (userId) {
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/api/users/users/${userId}`
+          );
+          setUserInfo({ name: response.data.name });
+        } catch (error) {
+          console.error("Error fetching user info:", error);
+        }
+      }
+    };
+    fetchUserInfo();
+  }, [userId]);
 
   useEffect(() => {
     const handleStorageChange = () => {
@@ -14,11 +36,9 @@ const Header_user = () => {
       }
     };
 
-    // إضافة مستمعين لتغييرات الجلسة
-    window.addEventListener('storage', handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
 
-    // إزالة مستمعين عند فك التثبيت
-    return () => window.removeEventListener('storage', handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
   const handleTabChange = (tab) => {
@@ -26,16 +46,21 @@ const Header_user = () => {
     sessionStorage.setItem("tab", tab);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("userId");
+    window.location.href = "/";
+  };
+
   const renderContent = () => {
     switch (active_tab) {
       case "home":
         return <UserProfilePage />;
+      case "main":
+        return <Register />;
       case "Orders":
-        return <Orders />; // أضف المكون المناسب هنا
-      case "profile":
-        return <div>Profile Content</div>; // أضف المكون المناسب هنا
-      case "contact":
-        return <div>Contact Content</div>; // أضف المكون المناسب هنا
+        return <Orders />;
+      case "Favourit":
+        return <Favourit />;
       default:
         return <UserProfilePage />;
     }
@@ -47,46 +72,63 @@ const Header_user = () => {
         <div className="h-full flex items-center max-sm:justify-center sm:flex-col mt-4 p-4">
           <div className="flex sm:flex-col items-center justify-center mb-6">
             <Home className="text-white mr-2 sm:mr-0 sm:mb-2" size={24} />
-            <h1 className="text-2xl font-bold text-white lg:block hidden">USER</h1>
-            <span className="text-xs text-white block text-center mt-2 lg:block hidden">Welcome</span>
+            <span className="text-xs text-white block text-center mt-2 lg:block hidden">
+              Welcome
+            </span>
+
+            <h1 className="text-2xl font-bold text-white lg:block hidden">
+              {userInfo.name}
+            </h1>
           </div>
           <nav className="flex sm:flex-col w-full">
             <button
-              onClick={() => handleTabChange("home")}
-              className={`text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9 ${active_tab === "home" ? "bg-[#b67c73]" : ""}`}
+              onClick={() => handleTabChange("main")}
+              className={`text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9 ${
+                active_tab === "home" ? "bg-[#b67c73]" : ""
+              }`}
             >
               <Home size={24} />
               <span className="ml-2">Home</span>
             </button>
             <button
+              onClick={() => handleTabChange("home")}
+              className={`text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9 ${
+                active_tab === "home" ? "bg-[#b67c73]" : ""
+              }`}
+            >
+              <Home size={24} />
+              <span className="ml-2">Profile</span>
+            </button>
+            <button
               onClick={() => handleTabChange("Orders")}
-              className={`text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9 ${active_tab === "catalog" ? "bg-[#b67c73]" : ""}`}
+              className={`text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9 ${
+                active_tab === "Orders" ? "bg-[#b67c73]" : ""
+              }`}
             >
               <ShoppingBag size={24} />
               <span className="ml-2">Orders</span>
             </button>
             <button
-              onClick={() => handleTabChange("profile")}
-              className={`text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9 ${active_tab === "profile" ? "bg-[#b67c73]" : ""}`}
+              onClick={() => handleTabChange("Favourit")}
+              className={`text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9 ${
+                active_tab === "Favourit" ? "bg-[#b67c73]" : ""
+              }`}
             >
-              <User size={24} />
-              <span className="ml-2">Profile</span>
+              <span className="ml-2">Favorites</span>
             </button>
             <button
-              onClick={() => handleTabChange("contact")}
-              className={`text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9 ${active_tab === "contact" ? "bg-[#b67c73]" : ""}`}
+              onClick={handleLogout}
+              className="text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9"
             >
-              <PhoneCall size={24} />
-              <span className="ml-2">Contact</span>
+              <LogOut size={24} />
+              <span className="ml-2">Logout</span>
             </button>
           </nav>
         </div>
       </header>
 
       <main className="shadow-md w-full sm:w-[calc(100%-80px)] lg:w-[1200px] h-[calc(100vh-64px)] sm:h-[85vh] sm:ml-20 lg:ml-[270px] mt-16 sm:mt-0 sm:fixed sm:left-4 sm:top-1/2 sm:-translate-y-1/2 rounded-lg overflow-hidden z-10">
-        <div className="h-full overflow-auto p-6">
-          {renderContent()}
-        </div>
+        <div className="h-full overflow-auto p-6">{renderContent()}</div>
       </main>
     </div>
   );

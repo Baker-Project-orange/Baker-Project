@@ -58,7 +58,7 @@ exports.getChefDishes = async (req, res) => {
     res.status(501).json({ message: "Internal server error", error: e });
   }
 };
-
+// -----------------------
 // nubmofdithes
 exports.getTotalDishes = async (req, res) => {
   try {
@@ -69,6 +69,7 @@ exports.getTotalDishes = async (req, res) => {
   }
 };
 
+// -----------------------------------
 // Get a dish by ID
 exports.getDishById = async (req, res) => {
   console.log(req.query.id);
@@ -86,7 +87,7 @@ exports.getDishById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
+// --------
 exports.getDishByRecipeID = async (req, res) => {
   const { recipeID } = req.query;
   try {
@@ -100,6 +101,7 @@ exports.getDishByRecipeID = async (req, res) => {
   }
 };
 
+// ------------------------------------
 // dish.controller.js aprove
 exports.approveDish = async (req, res) => {
   try {
@@ -117,3 +119,4 @@ exports.approveDish = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+// ---------------------------------
