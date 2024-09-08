@@ -5,7 +5,7 @@ import {
   DialogFooter,
   Button,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+
 import { BookOpen } from "lucide-react";
 import { useState } from "react";
 export const RecipeTutorial = () => {
@@ -24,7 +24,14 @@ export const RecipeTutorial = () => {
         View Instructions
       </button>
       <Dialog handler={handleOpen} open={open}>
-        <DialogHeader></DialogHeader>
+        <DialogHeader>
+          <ul className="steps">
+            <li className="step step-primary">Register</li>
+            <li className="step step-primary">Choose plan</li>
+            <li className="step">Purchase</li>
+            <li className="step">Receive Product</li>
+          </ul>
+        </DialogHeader>
         <DialogBody></DialogBody>
         <DialogFooter></DialogFooter>
       </Dialog>
