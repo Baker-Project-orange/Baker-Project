@@ -178,6 +178,7 @@ const CommentsSection = () => {
                 </div>
               </div>
               <button
+
                 onClick={() =>
                   setReportingCommentId(
                     comment._id === reportingCommentId ? null : comment._id
@@ -186,6 +187,7 @@ const CommentsSection = () => {
                 className="text-gray-400 hover:text-[#c98d83] transition-colors duration-300"
               >
                 <Flag size={18} />
+
               </button>
             </div>
             <p className="text-sm ml-0 mb-4 text-gray-700">
