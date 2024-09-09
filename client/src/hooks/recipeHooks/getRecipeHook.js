@@ -9,7 +9,7 @@ const useGetRecipes = () => {
         const response = await axiosInstance.get(
           "/api/recipes/getChefRecipies"
         );
-        console.log(response);
+
         setRecipies(response.data.recipies);
       } catch (e) {
         console.log(e);
@@ -17,7 +17,7 @@ const useGetRecipes = () => {
     };
     getRecipies();
   }, []);
-  console.log(recipies);
+
   return recipies;
 };
 

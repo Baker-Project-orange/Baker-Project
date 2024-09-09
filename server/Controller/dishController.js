@@ -42,11 +42,16 @@ exports.getAllDishes = async (req, res) => {
 //get Chef Dishes
 exports.getChefDishes = async (req, res) => {
   const chefID = req.user;
+
+  // console.log("inside get dishes controller");
   try {
     const dishes = await Dish.find({ authorID: chefID }).populate([
       "authorID",
-      "recipeID",
-    ]);
+      "recipieID",
+    ])
+    .catch(err => {console.log(err)});
+    // console.log(dishes);
+
     if (!dishes) {
       res.status(204).json({ message: "No dishes found", dishes: [] });
     } else {

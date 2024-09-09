@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   ShoppingCart,
   Cake,
@@ -10,11 +10,17 @@ import {
   Info,
   Save,
   Edit,
+  Clock,
+  Users,
 } from "lucide-react";
 import axiosInstance from "../../utils/axios";
 import { Link } from "react-router-dom";
 import useGetDishes from "../../hooks/recipeHooks/getDishesHook";
 import useGetRecipes from "../../hooks/recipeHooks/getRecipeHook";
+
+import { Context } from "../../components/contextProvider";
+
+
 const ChefProfilePage = () => {
   const [chefInfo, setChefInfo] = useState({
     name: "",
@@ -24,6 +30,12 @@ const ChefProfilePage = () => {
   });
   const dishes = useGetDishes();
   const recipes = useGetRecipes();
+
+  const [, setRecipeID] = useContext(Context).recipeID;
+
+  const [isEditing, setIsEditing] = useState(false);
+
+
   useEffect(() => {
     const fetchChefData = async () => {
       try {
@@ -43,8 +55,6 @@ const ChefProfilePage = () => {
     fetchChefData();
   }, []);
 
-  const [isEditing, setIsEditing] = useState(false);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setChefInfo((prevInfo) => ({
@@ -61,7 +71,7 @@ const ChefProfilePage = () => {
 
     try {
       const response = axiosInstance
-        .patch("/chef/update-chef", chefInfo)
+        .patch("/api/chefs/update-chef", chefInfo)
         .catch((err) => {
           console.log(err);
         });
@@ -75,7 +85,7 @@ const ChefProfilePage = () => {
     <div className="min-h-screen bg-[#f8e5e1] rounded-lg overflow-hidden">
       {/* Hero Section */}
       <section
-        className="min-h-[60vh] bg-cover bg-center flex items-center overflow-hidden py-8 sm:py-16"
+        className="min-h-[85vh] bg-cover bg-center flex items-center overflow-hidden py-8 sm:py-16"
         style={{
           backgroundImage:
             "url('https://images.unsplash.com/photo-1555507036-ab1f4038808a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1920&q=80')",
@@ -92,7 +102,11 @@ const ChefProfilePage = () => {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
-                to="/recipes"
+                
+                onClick={() => {
+                  sessionStorage.setItem("tab", "catalog");
+                  window.dispatchEvent(new Event("storage"));
+                }}
                 className="flex items-center bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300"
               >
                 <Cake className="mr-2" size={20} />
@@ -169,51 +183,73 @@ const ChefProfilePage = () => {
           <h2 className="text-4xl font-bold mb-8 text-center text-[#c98d83]">
             {chefInfo.name}'s Recipes
           </h2>
-          {recipes.length != 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-              {/* Recipe cards */}
+
+          {recipes.length !== 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+
               {recipes.map((recipe, index) => (
                 <>
                   {index <= 3 && !recipe.isApproved && !recipe.isDeleted ? (
                     <div
-                      key={index}
-                      className="bg-white p-6 rounded-lg shadow-md"
+
+                      key={recipe._id}
+                      className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 flex flex-col h-full"
                     >
-                      <img
-                        src={recipe.overviewPicture}
-                        alt="Sourdough Bread"
-                        className="w-full h-48 object-cover mb-4 rounded"
-                      />
+                      <div className="relative mb-4">
+                        <img
+                          src={recipe.overviewPicture}
+                          alt={recipe.dishName}
+                          className="w-full h-48 object-cover rounded-lg"
+                        />
+                        <div className="absolute top-2 right-2 bg-[#c98d83] text-white px-2 py-1 rounded-full text-sm">
+                          New
+                        </div>
+                      </div>
                       <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
                         {recipe.dishName}
                       </h3>
-                      <p className="mb-4 text-gray-600">
+                      <div className="flex items-center mb-2 text-gray-600">
+                        <Clock size={16} className="mr-1" />
+                        <span className="text-sm">{recipe.duration} mins</span>
+                        <Users size={16} className="ml-4 mr-1" />
+                        <span className="text-sm">Serves {recipe.servings}</span>
+                      </div>
+                      <p className="mb-4 text-gray-600 flex-grow">
                         {recipe.recipeOverview}
                       </p>
+                      <Link
+                        
+                        onClick={() => {
+                          sessionStorage.setItem("tab", "management");
+                          window.dispatchEvent(new Event("storage"));
+                          sessionStorage.setItem("recipeID", recipe._id);
+                          setRecipeID(recipe._id);
+                        }}
+                        className="mt-auto"
+                      >
+                        <button className="w-full bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300 flex items-center justify-center">
+                          <Cake className="mr-2" size={18} />
 
-                      <Link className="hover:text-rose-200 transition duration-300">
-                        <button
-                          onClick={() => {
-                            sessionStorage.setItem("tab", "management");
-                            window.dispatchEvent(new Event("storage"));
-                          }}
-                          className="bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300"
-                        >
                           View Recipe
                         </button>
                       </Link>
                     </div>
-                  ) : (
-                    ""
-                  )}
+
+                  ) : null}
                 </>
               ))}
             </div>
           ) : (
-            <div>Hello</div>
+            <div className="text-center text-gray-600">
+              No recipes available at the moment.
+            </div>
+
           )}
           <div className="text-center">
-            <Link className="hover:text-rose-200 transition duration-300">
+            <Link
+              
+              className="hover:text-rose-200 transition duration-300"
+            >
               <button
                 onClick={() => {
                   sessionStorage.setItem("tab", "catalog");
@@ -234,53 +270,60 @@ const ChefProfilePage = () => {
           <h2 className="text-4xl font-bold mb-8 text-center text-[#c98d83]">
             {chefInfo.name}'s Dishes
           </h2>
-          {dishes.length != 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-              {/* Dish cards */}
-              {dishes.map((dish, index) => (
-                <>
-                  {(index <= 3) & dish.isApproved && !dish.isDeleted ? (
-                    <div
-                      key={index}
-                      className="bg-white p-6 rounded-lg shadow-md"
-                    >
-                      <img
-                        src="https://i.pinimg.com/564x/3b/00/6c/3b006c67ee8011d489519971396da6dc.jpg"
-                        alt="Artisan Bread Basket"
-                        className="w-full h-48 object-cover mb-4 rounded"
-                      />
-                      <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
-                        Artisan Bread Basket
-                      </h3>
-                      <p className="mb-4 text-gray-600">
-                        Assortment of freshly baked artisan breads, including
-                        sourdough, ciabatta, and whole grain.
-                      </p>
 
-                      <Link className="hover:text-rose-200 transition duration-300">
-                        <button
-                          onClick={() => {
-                            sessionStorage.setItem("tab", "management");
-                            window.dispatchEvent(new Event("storage"));
-                          }}
-                          className="bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300 flex items-center justify-center w-full"
-                        >
-                          <ShoppingCart className="mr-2" />
-                          View Details
-                        </button>
-                      </Link>
-                    </div>
-                  ) : (
-                    ""
-                  )}
-                </>
+          {dishes.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+              {dishes.map((dish) => (
+                <div key={dish._id} className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 flex flex-col h-full">
+                  <img
+                    src={dish.recipieID.overviewPicture}
+                    alt={dish.recipieID.dishName}
+                    className="w-full h-48 object-cover mb-4 rounded"
+                  />
+                  <h3 className="text-xl font-semibold mb-2 text-[#c98d83]">
+                    {dish.recipieID.dishName}
+                  </h3>
+                  <p className="mb-4 text-gray-600 flex-grow">
+                    {dish.dishDescription}
+                  </p>
+                  <div className="flex items-center mb-2 text-gray-600">
+                    <Clock size={16} className="mr-1" />
+                    <span className="text-sm">{dish.recipieID.duration} mins</span>
+                    <Users size={16} className="ml-4 mr-1" />
+                    <span className="text-sm">Serves {dish.recipieID.servings}</span>
+                  </div>
+                  <div className="mb-4 text-gray-600">
+                    <span className="font-semibold">Price:</span> ${dish.price.toFixed(2)}
+                  </div>
+                  <Link
+                    
+                    onClick={() => {
+                      sessionStorage.setItem("tab", "management");
+                      window.dispatchEvent(new Event("storage"));
+                      sessionStorage.setItem("recipeID", dish.recipieID._id);
+                      setRecipeID(dish.recipieID._id);
+                    }}
+                    className="mt-auto"
+                  >
+                    <button className="w-full bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300 flex items-center justify-center">
+                      <ShoppingCart className="mr-2" />
+                      View Details
+                    </button>
+                  </Link>
+                </div>
               ))}
             </div>
           ) : (
-            <div className=""></div>
+            <div className="text-center text-gray-600">
+              No dishes available at the moment.
+            </div>
+
           )}
           <div className="text-center">
-            <Link className="hover:text-rose-200 transition duration-300">
+            <Link
+              
+              className="hover:text-rose-200 transition duration-300"
+            >
               <button
                 onClick={() => {
                   sessionStorage.setItem("tab", "catalog");
@@ -288,12 +331,13 @@ const ChefProfilePage = () => {
                 }}
                 className="bg-[#c98d83] text-white px-6 py-2 rounded-full hover:bg-[#b17c73] transition duration-300"
               >
-                View All Recipes
+                View All Dishes
               </button>
             </Link>
           </div>
         </div>
       </section>
+
 
       {/* Baking Tips Section */}
       <section className="py-16 animate-fade-in">

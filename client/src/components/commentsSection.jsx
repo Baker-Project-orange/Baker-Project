@@ -147,9 +147,10 @@ const CommentsSection = () => {
               </div>
               <button
                 onClick={() => setReportingCommentId(comment._id === reportingCommentId ? null : comment._id)}
-                className="bg-red-500 text-white px-2 py-1 rounded-md hover:bg-red-700 transition-colors text-xs flex items-center"
+                className="text-gray-500 hover:text-red-500 transition-colors"
+                title="Report comment"
               >
-                <Flag size={12} className="mr-1" /> Report
+                <Flag size={16} />
               </button>
             </div>
             <p className="text-sm ml-6">{comment.ratingComment}</p>

@@ -27,6 +27,7 @@ function App() {
     <>
       <ThemeProvider>
         <ContextProvider>
+
           <Header />
 <CartSidebar/>
           <Routes>
@@ -48,7 +49,7 @@ function App() {
             <Route path="/checkout" element={<CheckoutComponent />} />
             <Route path="/cart" element={<CartSidebar />} />
           </Routes>
-          <Footer />
+          {/* <Footer /> */}
         </ContextProvider>
       </ThemeProvider>
     </>

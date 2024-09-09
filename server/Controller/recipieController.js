@@ -36,7 +36,7 @@ exports.getChefRecipies = async (req, res) => {
         recipies: [],
       });
     } else {
-      console.log(recipies);
+
       res
         .status(200)
         .json({ message: "Recipies fetched successfully", recipies: recipies });
@@ -49,15 +49,21 @@ exports.getChefRecipies = async (req, res) => {
 // ----------------------------
 exports.deleteRecipie = async (req, res) => {
   const chefID = req.user;
-  const recipieID = req.recipieID;
+  const { recipeID } = req.query;  // Ensure you're reading from req.query
+
+  console.log("inside delete recipe controller");
+  console.log("chef id:", chefID);
+  console.log("recipe id:", recipeID);
+
   try {
-    Recipie.findByIdAndUpdate(recipieID, { isDeleted: true });
-    res.status(202).json({ message: "Recipie deleted successfully" });
+    await Recipie.findByIdAndUpdate(recipeID, { isDeleted: true });
+    res.status(202).json({ message: "Recipe deleted successfully" });
   } catch (e) {
     console.log(e);
     res.status(501).json({ message: "Internal Server Error", error: e });
   }
 };
+
 // ----------------------
 exports.updateRecipie = async (req, res) => {
   const dataToUpdate = req.body;
@@ -181,7 +187,7 @@ exports.add_comment = async (req, res) => {
       recipeRating: recipe_id,
       userRating: user.name,
     });
-// ----------------------------------------------
+
     const savedRating = await newRating.save();
 
     await Recipie.updateOne(
@@ -244,20 +250,24 @@ exports.get_recipe_comments = async (req, res) => {
     const recipeId = req.params.id;
     const { chef_id } = req.query;
 
-    console.log(chef_id);
+
 
     // const user = await User.findById(user_id);
     const chef = await Chef.findById(chef_id);
+    console.log(recipeId);
+    console.log(chef.name);
 
     // Find ratings that match the recipeId and chef_id
     const ratings = await Rating.find({
       recipeRating: recipeId,
       ratingAuthor: chef.name,
-    }).populate("replies.replyMessage");
 
-    // console.log("fffffffff");
+    }).populate("replies.replyMessage")
+      .catch(err => { console.log(err) });
 
-    // console.log(ratings);
+
+    console.log("fffffffff");
+
 
     if (ratings.length === 0) {
       return res
