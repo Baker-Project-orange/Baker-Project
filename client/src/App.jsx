@@ -2,7 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import "./pages/chef-pages/animations.css";
 // import DishCard from "./pages/distCard";
 import RecipeDishList from "./pages/recipeList";
-import Home from "./pages/Home";
+import Home1 from "./pages/Home";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import Chef_Manager from "./pages/chef-pages/ChefMain";
@@ -21,6 +21,7 @@ import RecipeDetailPage from "./pages/recipeDetailPage";
 import Orders1 from "./pages/chef-pages/orders";
 import Orders from "./pages/user-pages/Orders";
 import CartSidebar from "./components/sidebarcart";
+import Favourit from './pages/user-pages/Favourit'
 
 function App() {
   return (
@@ -28,9 +29,9 @@ function App() {
       <ThemeProvider>
         <ContextProvider>
           <Header />
-<CartSidebar/>
+{/* <CartSidebar/> */}
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<Home1 />} />
             <Route path="/Register" element={<Register />} />
             <Route path="/Login" element={<Login />} />
             <Route path="/AdminLogin" element={<AdminLogin />} />
@@ -45,10 +46,12 @@ function App() {
             <Route path="/recipe/:recipeId" element={<RecipeDetailPage />} />
             <Route path="/chefOrder" element={<Orders1 />} />
             <Route path="/Orders" element={<Orders />} />
+            <Route path="/Favourit" element={<Favourit />} />
+
             <Route path="/checkout" element={<CheckoutComponent />} />
             <Route path="/cart" element={<CartSidebar />} />
           </Routes>
-          <Footer />
+          {/* <Footer /> */}
         </ContextProvider>
       </ThemeProvider>
     </>

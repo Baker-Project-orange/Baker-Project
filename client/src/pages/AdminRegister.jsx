@@ -8,6 +8,7 @@ import {
 } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import chefHat from "../assets/chefHat.png"; // استخدم نفس الصورة لجعل النمط مشابهًا
+import AdminLogin from "./AdminLogin";
 
 const AdminRegister = () => {
   const [open, setOpen] = useState(false);
@@ -106,6 +107,9 @@ const AdminRegister = () => {
             </form>
 
             {message && <p className="mt-4 text-green-600">{message}</p>}
+            <p className="mt-4 text-center">
+              Already have an account? <AdminLogin />
+            </p>
           </div>
         </DialogBody>
         <DialogFooter>

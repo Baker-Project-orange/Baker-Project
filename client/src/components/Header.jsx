@@ -13,6 +13,9 @@ import { Context } from "./contextProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Signup } from "./LoginSignupComponents/SignupChef";
 import Register from "../pages/Register";
+import additionalImage from '../assets/8dcd2937317f1f248e3c9e4975c96c2b-removebg-preview.png'
+import  CartSidebar from '../components/sidebarcart'
+import AdminRegister from "../pages/AdminRegister";
 function Header() {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useContext(Context).isLoggedIn;
@@ -31,7 +34,9 @@ function Header() {
   return (
     <div className="relative min-h-screen bg-[#c98d83] text-black">
       <div className="absolute bottom-0 left-0 w-full overflow-hidden  leading-[0]">
+      
         <header className="text-white p-6 text-center">
+          
           <nav>
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto my-40 p-4">
               <a
@@ -80,10 +85,10 @@ function Header() {
                   </li>
                   <li>
                     <Link
-                      to="#"
+                      to="/user-profile"
                       className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                     >
-                      Products
+                      profile
                     </Link>
                   </li>
                   <li>
@@ -134,14 +139,10 @@ function Header() {
                           </li>{" "}
                           <li>
                             {" "}
-                            <a
-                              href="AdminRegister"
-                              className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                            >
-                              {" "}
-                              Admin{" "}
-                            </a>{" "}
+                            <AdminRegister />{" "}
                           </li>{" "}
+
+                         
                           <li>
                             {" "}
                             <Register />{" "}
@@ -202,6 +203,12 @@ function Header() {
           ></path>
         </svg>
       </div>
+      {/* <img
+          src={additionalImage} // Replace with your image path
+          alt="Additional"
+          className="w-4/4 h-auto object-cover mx-auto -mt-[460px]" // Adjust width as needed
+          style={{ maxWidth: "900px" }} // Optional: Set a max-width for better control
+        /> */}
     </div>
   );
 }

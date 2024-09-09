@@ -43,7 +43,7 @@ const Login = () => {
       localStorage.setItem("token", response.data.token);
 
       // Redirect to the Home page after successful login
-      navigate("/Home"); // Replace '/Home' with the path you want to navigate to
+      navigate("/"); // Replace '/Home' with the path you want to navigate to
       handleOpen(); // Close the dialog
     } catch (err) {
       setError(err.response?.data.message || "Login failed");

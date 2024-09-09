@@ -6,7 +6,10 @@ import h1 from "../assets/h1.jpg";
 import h2 from "../assets/h2.jpg";
 import h3 from "../assets/h3.jpg";
 import h4 from "../assets/h4.jpg";
+import { useNavigate } from "react-router-dom";
+
 import Slider from "../components/Slider"; // Import the slider component
+import chefHat from"../assets/chefHat.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCookieBite,
@@ -16,7 +19,12 @@ import {
 } from "@fortawesome/free-solid-svg-icons"; // استخدام أيقونة الخبز faBreadSlice
 import { Link } from "react-router-dom";
 
-function Home() {
+function Home1() {
+  const navigate = useNavigate();
+
+const handleClick = () => {
+  navigate('/contactUs');
+};
   return (
     <div className="containerr">
       {/* Navbar should be here */}
@@ -36,40 +44,7 @@ function Home() {
         Crafted with care and premium ingredients,each loaf delivers unmatched
         quality and flavor. Enjoy freshly baked excellence in every slice.
       </p>
-      <div className="flex justify-center gap-10 mb-10">
-        <div className="flex flex-col items-center">
-          <FontAwesomeIcon
-            icon={faCookieBite}
-            size="3x"
-            className="text-[#E07A5F]"
-          />{" "}
-          {/* لون بني يناسب الكوكيز */}
-          <p className="text-[#E07A5F] mt-2">Cookies</p>
-        </div>
-        <div className="flex flex-col items-center">
-          <FontAwesomeIcon
-            icon={faBreadSlice}
-            size="3x"
-            className="text-[#81B29A]"
-          />{" "}
-          {/* لون أخضر يناسب الخبز */}
-          <p className="text-[#81B29A] mt-2">Bread</p>
-        </div>
-        <div className="flex flex-col items-center">
-          <FontAwesomeIcon
-            icon={faCandyCane}
-            size="3x"
-            className="text-[#F2CC8F]"
-          />{" "}
-          {/* لون أصفر يناسب الحلوى */}
-          <p className="text-[#F2CC8F] mt-2">Candies</p>
-        </div>
-        <div className="flex flex-col items-center">
-          <FontAwesomeIcon icon={faCake} size="3x" className="text-[#F4A261]" />{" "}
-          {/* لون برتقالي يناسب الكيك */}
-          <p className="text-[#F4A261] mt-2">Cakes</p>
-        </div>
-      </div>
+      
       <section>
         <div
           className="relative w-screen h-screen bg-cover bg-center"
@@ -158,17 +133,25 @@ function Home() {
       </section>
       2
       <section className="mt-[200px] ">
-        <div>
-          <p className="text-center text-[#FFC4C4] text-5xl font-serif italic font-semibold max-w-lg mx-auto leading-relaxed">
-            Comming Soon!
-          </p>
-          <p className="text-center text-amber-900 text-2xl max-w-lg mx-auto leading-relaxed font-serif font-bold">
-            Meet our original products<p>made</p>
-            <p>with love</p>
-          </p>
-        </div>
-        <Slider />
-      </section>
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto px-4">
+    {/* Text Column */}
+    <div className="flex flex-col justify-center items-center text-center">
+      <p className="text-[#FFC4C4] text-5xl font-serif italic font-semibold mb-4">
+        Coming Soon!
+      </p>
+      <p className="text-amber-900 text-2xl leading-relaxed font-serif font-bold">
+        Meet our original products
+        <span className="block">made with love</span>
+        {/* <span className="block">with love</span> */}
+      </p>
+    </div>
+    {/* Slider Column */}
+    <div className="flex justify-center items-center">
+      <Slider />
+    </div>
+  </div>
+</section>
+
       <section className="relative mt-32 w-screen h-[110vh]">
         <div className="relative w-full h-full">
           <img
@@ -192,10 +175,17 @@ function Home() {
               suscipit ligula volutpat, a feugiat urna maximus. Cras massa nibh,
               tincidunt ut eros a, vulputate consequat odio.
             </p>
-            <button className="bg-amber-900 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-full mt-8 w-32">
-              <Link to="../pages/contactUs.jsx" />
+            {/* <button className="bg-amber-900 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-full mt-8 w-32">
+              <Link to="/contactUs" />
               Contact us
-            </button>
+            </button> */}
+            <button 
+  onClick={handleClick}
+  className="bg-amber-900 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-full mt-8 w-32"
+>
+  Contact us
+</button>
+
           </div>
         </div>
       </section>
@@ -203,4 +193,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Home1;

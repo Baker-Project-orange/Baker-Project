@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import chefHat from "../assets/chefHat.png";
 import Login from "../components/Login";
 import Cookies from "js-cookie";
-
+import CartSidebar from "../components/sidebarcart"
 const Register = () => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
@@ -49,7 +49,9 @@ const Register = () => {
       localStorage.setItem("token", token);
       console.log(token);
       // Redirect to the desired page after successful registration
-      navigate("/Home", token);
+
+      navigate("/", { state: { token } });
+
     } catch (err) {
       setError(err.response?.data.message || "Registration failed");
       setSuccess("");

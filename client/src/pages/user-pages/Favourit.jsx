@@ -29,39 +29,37 @@ const Favourit = () => {
   }, [userId]);
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Favorite Recipes</h1>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-      <ul className="list-disc pl-5 space-y-4">
-        {recipes.length > 0 ? (
-          recipes.map((recipe) => (
-            <li
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold mb-6 text-center">Favorite Recipes</h1>
+      {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
+      {recipes.length > 0 ? (
+        <div className="flex flex-wrap gap-6 justify-center">
+          {recipes.map((recipe) => (
+            <div
               key={recipe._id}
-              className="border p-4 rounded shadow-sm max-w-sm mx-auto"
+              className="border border-gray-200 p-6 rounded-lg shadow-lg max-w-sm bg-white transform transition-transform hover:scale-105"
             >
-              {" "}
-              {/* تعديل العرض هنا */}
-              <h2 className="text-xl font-semibold mb-2">{recipe.dishName}</h2>
+              <h2 className="text-2xl font-semibold mb-4 text-gray-800">{recipe.dishName}</h2>
               {recipe.overviewPicture && (
                 <img
                   src={recipe.overviewPicture}
                   alt={recipe.dishName}
-                  className="w-full h-32 object-cover rounded mb-2" // يمكن تعديل ارتفاع الصورة إذا لزم الأمر
+                  className="w-full h-48 object-cover rounded-lg mb-4"
                 />
               )}
-              <p className="text-gray-700 mb-2">{recipe.recipeOverview}</p>
-              <p className="text-sm text-gray-600">
+              <p className="text-gray-600 mb-2">{recipe.recipeOverview}</p>
+              <p className="text-sm text-gray-500 font-bold mb-1">
                 Duration: {recipe.duration}
               </p>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-gray-500 font-bold">
                 Category: {recipe.category}
               </p>
-            </li>
-          ))
-        ) : (
-          <p>No favorite recipes found.</p>
-        )}
-      </ul>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <p className="text-center text-gray-500">No favorite recipes found.</p>
+      )}
     </div>
   );
 };
