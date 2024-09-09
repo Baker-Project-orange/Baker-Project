@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
   Search,
   Filter,
@@ -113,12 +114,14 @@ const Catalog_chef = () => {
     );
   };
 
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#f8e5e1] to-[#fdf2f0] rounded-lg overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-center text-[#c98d83] mb-12 animate-fade-in">
           Recipe and Dish Catalog
         </h1>
+
 
         {/* Search and filter section */}
         <div className="mb-12 bg-white rounded-xl shadow-md p-6">
@@ -179,6 +182,7 @@ const Catalog_chef = () => {
             </div>
           ) : (
             filteredItems.map((item) => renderCard(item))
+
           )}
         </div>
       </div>

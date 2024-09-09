@@ -27,8 +27,9 @@ function App() {
     <>
       <ThemeProvider>
         <ContextProvider>
-          {/* <Header /> */}
-          <CartSidebar />
+
+          <Header />
+<CartSidebar/>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/Register" element={<Register />} />

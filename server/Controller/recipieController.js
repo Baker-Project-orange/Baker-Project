@@ -36,7 +36,7 @@ exports.getChefRecipies = async (req, res) => {
         recipies: [],
       });
     } else {
-      // console.log(recipies);
+
       res
         .status(200)
         .json({ message: "Recipies fetched successfully", recipies: recipies });
@@ -187,7 +187,7 @@ exports.add_comment = async (req, res) => {
       recipeRating: recipe_id,
       userRating: user.name,
     });
-    // ----------------------------------------------
+
     const savedRating = await newRating.save();
 
     await Recipie.updateOne(
@@ -250,8 +250,7 @@ exports.get_recipe_comments = async (req, res) => {
     const recipeId = req.params.id;
     const { chef_id } = req.query;
 
-    // console.log(chef_id);
-    // console.log(recipeId);
+
 
     // const user = await User.findById(user_id);
     const chef = await Chef.findById(chef_id);
@@ -262,12 +261,13 @@ exports.get_recipe_comments = async (req, res) => {
     const ratings = await Rating.find({
       recipeRating: recipeId,
       ratingAuthor: chef.name,
+
     }).populate("replies.replyMessage")
       .catch(err => { console.log(err) });
 
+
     console.log("fffffffff");
 
-    console.log(ratings);
 
     if (ratings.length === 0) {
       return res

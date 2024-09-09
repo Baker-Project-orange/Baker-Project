@@ -24,7 +24,9 @@ import Recipe_dish_management from "./recpie-dish-management";
 
 import Orders from "./orders";
 import { Context } from "../../components/contextProvider";
+
 import logo from "../../assets/image.png"
+
 
 const Chef_Manager = () => {
   const navigate = useNavigate();
@@ -109,8 +111,13 @@ const Chef_Manager = () => {
             >
               <Menu size={24} />
             </button>
+
             <div className="flex sm:flex-col items-center mt-3 h-18 justify-center">
               {/* <Croissant
+
+            <div className="flex sm:flex-col items-center mb-6 justify-center">
+              <Croissant
+
                 className="text-white mr-2 sm:mr-0 sm:mb-2"
                 size={24}
               />
@@ -119,10 +126,12 @@ const Chef_Manager = () => {
               </h1>
               <span className="text-xs text-white text-center mt-2 md:block hidden">
                 EST. 1892
+
               </span> */}
               <div className="w-24 h-24  max-md:w-14 max-md:h-14  max-sm:w-20 max-sm:h-20">
                 <img src={logo} alt="" />
               </div>
+
             </div>
             <div className="w-6 sm:hidden"></div>{" "}
             {/* Placeholder for alignment */}
@@ -132,6 +141,7 @@ const Chef_Manager = () => {
             <nav
               className={`flex h-[50%] flex-col w-full justify-center sm:justify-start mt-4 sm:mt-0 ${isMenuOpen ? "block" : "hidden sm:flex"
                 }`}
+
             >
               <NavButton
                 onClick={() => handleTabChange("home")}
@@ -155,8 +165,10 @@ const Chef_Manager = () => {
               />
             </nav>
             <div
+
               className={`w-full h-[50%] flex flex-col justify-end mt-4 sm:mt-0 ${isMenuOpen ? "block" : "hidden sm:flex"
                 }`}
+
             >
               <NavButton
                 onClick={() => backHomeHandle()}

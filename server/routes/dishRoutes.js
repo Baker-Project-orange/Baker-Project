@@ -6,6 +6,7 @@ const dishController = require("../Controller/dishController");
 const { fileUpload } = require("../middlewares/fileUpload");
 const auth = require("../middlewares/auth");
 const { processImages } = require("../middlewares/imageProccessor");
+
 // Route to get all dishes
 router.get("/getDishes", dishController.getAllDishes);
 router.get("/getChefDishes", auth, dishController.getChefDishes);

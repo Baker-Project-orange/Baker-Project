@@ -17,7 +17,9 @@ import axiosInstance from "../../utils/axios";
 import { Link } from "react-router-dom";
 import useGetDishes from "../../hooks/recipeHooks/getDishesHook";
 import useGetRecipes from "../../hooks/recipeHooks/getRecipeHook";
+
 import { Context } from "../../components/contextProvider";
+
 
 const ChefProfilePage = () => {
   const [chefInfo, setChefInfo] = useState({
@@ -28,9 +30,11 @@ const ChefProfilePage = () => {
   });
   const dishes = useGetDishes();
   const recipes = useGetRecipes();
+
   const [, setRecipeID] = useContext(Context).recipeID;
 
   const [isEditing, setIsEditing] = useState(false);
+
 
   useEffect(() => {
     const fetchChefData = async () => {
@@ -179,12 +183,15 @@ const ChefProfilePage = () => {
           <h2 className="text-4xl font-bold mb-8 text-center text-[#c98d83]">
             {chefInfo.name}'s Recipes
           </h2>
+
           {recipes.length !== 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
+
               {recipes.map((recipe, index) => (
                 <>
                   {index <= 3 && !recipe.isApproved && !recipe.isDeleted ? (
                     <div
+
                       key={recipe._id}
                       className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 flex flex-col h-full"
                     >
@@ -222,10 +229,12 @@ const ChefProfilePage = () => {
                       >
                         <button className="w-full bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300 flex items-center justify-center">
                           <Cake className="mr-2" size={18} />
+
                           View Recipe
                         </button>
                       </Link>
                     </div>
+
                   ) : null}
                 </>
               ))}
@@ -234,6 +243,7 @@ const ChefProfilePage = () => {
             <div className="text-center text-gray-600">
               No recipes available at the moment.
             </div>
+
           )}
           <div className="text-center">
             <Link
@@ -260,6 +270,7 @@ const ChefProfilePage = () => {
           <h2 className="text-4xl font-bold mb-8 text-center text-[#c98d83]">
             {chefInfo.name}'s Dishes
           </h2>
+
           {dishes.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
               {dishes.map((dish) => (
@@ -306,6 +317,7 @@ const ChefProfilePage = () => {
             <div className="text-center text-gray-600">
               No dishes available at the moment.
             </div>
+
           )}
           <div className="text-center">
             <Link
