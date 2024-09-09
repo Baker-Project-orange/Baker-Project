@@ -256,6 +256,18 @@ const UserProfile = () => {
           <h2 className="text-4xl font-bold mb-8 text-center text-[#c98d83]">
             {userInfo.name}'s Orders
           </h2>
+          <div className="bg-white border border-[#c98d83] rounded-lg p-4 shadow-md">
+            <h4 className="text-xl font-semibold mb-2">Order Summary</h4>
+            <p className="text-gray-700 mb-2">Order ID: #123456789</p>
+            <p className="text-gray-700 mb-2">Date: September 1, 2024</p>
+            <p className="text-gray-700 mb-2">Total: $99.99</p>
+            <Link
+              to="/order-details"
+              className="text-[#c98d83] hover:text-[#b17c73] transition duration-300"
+            >
+              View Details
+            </Link>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
             {orders.length > 0 ? (
               orders.map((order) => (

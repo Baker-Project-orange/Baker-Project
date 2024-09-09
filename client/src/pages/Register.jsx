@@ -10,7 +10,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import Login from "../components/Login";
 import Cookies from "js-cookie";
-
+import CartSidebar from "../components/sidebarcart"
 const Register = () => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
@@ -45,7 +45,11 @@ const Register = () => {
       handleOpen();
       localStorage.setItem("token", token);
       console.log(token);
-      navigate("/Home", token);
+
+
+      navigate("/", { state: { token } });
+
+
     } catch (err) {
       setError(err.response?.data.message || "Registration failed");
       setSuccess("");

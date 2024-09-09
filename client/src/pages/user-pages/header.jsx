@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Home, ShoppingBag, PhoneCall, LogOut } from "lucide-react";
+import { Home as HomeIcon, ShoppingBag, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom"; // استيراد useNavigate
 import UserProfilePage from "../user-pages/home";
 import Orders from "../user-pages/Orders";
 import Favourit from "./Favourit";
 import Register from "../Register";
+import Home1 from "../Home";
+
 const Header_user = () => {
   const [active_tab, set_active_tab] = useState(
-    sessionStorage.getItem("tab") || "home"
+    sessionStorage.getItem("tab") || "Home"
   );
   const [userInfo, setUserInfo] = useState({});
   const userId = localStorage.getItem("userId");
+  const navigate = useNavigate(); // استخدام useNavigate للتوجيه
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -41,93 +45,87 @@ const Header_user = () => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  const handleTabChange = (tab) => {
-    set_active_tab(tab);
-    sessionStorage.setItem("tab", tab);
+  const handleTabChange = (path) => {
+    set_active_tab(path);
+    sessionStorage.setItem("tab", path);
+    navigate(path); // توجيه المستخدم إلى المسار المحدد
   };
 
   const handleLogout = () => {
     localStorage.removeItem("userId");
-    window.location.href = "/";
+    navigate("/"); // توجيه المستخدم إلى الصفحة الرئيسية بعد تسجيل الخروج
   };
 
   const renderContent = () => {
     switch (active_tab) {
-      case "home":
+      case "/home":
+        return <Home1 />; // تأكد من أن Home1 هو المكون الذي تريد عرضه
+      case "/profile":
         return <UserProfilePage />;
-      case "main":
-        return <Register />;
-      case "Orders":
+      case "/orders":
         return <Orders />;
-      case "Favourit":
+      case "/favourit":
         return <Favourit />;
       default:
         return <UserProfilePage />;
     }
   };
 
+  const NavButton = ({ onClick, icon: Icon, text }) => (
+    <button
+      onClick={onClick}
+      className="text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center justify-center sm:justify-start mb-4 sm:mb-6"
+    >
+      <Icon size={24} />
+      <span className="ml-2 sm:hidden md:inline">{text}</span>
+    </button>
+  );
+
   return (
     <div className="flex flex-col sm:flex-row h-screen">
-      <header className="bg-[#c98d83] shadow-md w-full sm:w-16 lg:w-64 h-auto sm:h-[85vh] fixed sm:left-4 sm:top-1/2 sm:-translate-y-1/2 rounded-lg overflow-hidden z-20">
-        <div className="h-full flex items-center max-sm:justify-center sm:flex-col mt-4 p-4">
-          <div className="flex sm:flex-col items-center justify-center mb-6">
-            <Home className="text-white mr-2 sm:mr-0 sm:mb-2" size={24} />
-            <span className="text-xs text-white block text-center mt-2 lg:block hidden">
-              Welcome
-            </span>
-
+      <header className="bg-[#c98d83] shadow-md w-full sm:w-16 md:w-64 h-auto sm:h-[85vh] fixed sm:left-4 sm:top-1/2 sm:-translate-y-1/2 rounded-lg overflow-hidden z-20">
+        <div className="h-full flex flex-col items-center justify-between p-4">
+          <div className="flex sm:flex-col items-center mt-3 h-18 justify-center">
+            <HomeIcon className="text-white mr-2 sm:mr-0 sm:mb-2" size={24} />
             <h1 className="text-2xl font-bold text-white lg:block hidden">
               {userInfo.name}
             </h1>
           </div>
-          <nav className="flex sm:flex-col w-full">
-            <button
-              onClick={() => handleTabChange("main")}
-              className={`text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9 ${
-                active_tab === "home" ? "bg-[#b67c73]" : ""
-              }`}
-            >
-              <Home size={24} />
-              <span className="ml-2">Home</span>
-            </button>
-            <button
-              onClick={() => handleTabChange("home")}
-              className={`text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9 ${
-                active_tab === "home" ? "bg-[#b67c73]" : ""
-              }`}
-            >
-              <Home size={24} />
-              <span className="ml-2">Profile</span>
-            </button>
-            <button
-              onClick={() => handleTabChange("Orders")}
-              className={`text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9 ${
-                active_tab === "Orders" ? "bg-[#b67c73]" : ""
-              }`}
-            >
-              <ShoppingBag size={24} />
-              <span className="ml-2">Orders</span>
-            </button>
-            <button
-              onClick={() => handleTabChange("Favourit")}
-              className={`text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9 ${
-                active_tab === "Favourit" ? "bg-[#b67c73]" : ""
-              }`}
-            >
-              <span className="ml-2">Favorites</span>
-            </button>
-            <button
-              onClick={handleLogout}
-              className="text-white hover:text-rose-200 transition duration-300 text-left w-full flex items-center sm:justify-start mb-9"
-            >
-              <LogOut size={24} />
-              <span className="ml-2">Logout</span>
-            </button>
-          </nav>
+          <div className="flex-col justify-between items-start h-full w-full">
+            <nav className="flex h-[50%] flex-col w-full justify-center sm:justify-start mt-4 sm:mt-0">
+              <NavButton
+                onClick={() => handleTabChange("/")}
+                icon={HomeIcon}
+                text="Home"
+              />
+              <NavButton
+                onClick={() => handleTabChange("/user-profile")}
+                icon={HomeIcon}
+                text="Profile"
+              />
+              <NavButton
+                onClick={() => handleTabChange("/Orders")}
+                icon={ShoppingBag}
+                text="Orders"
+              />
+              <NavButton
+                onClick={() => handleTabChange("/Favourit")}
+                icon={ShoppingBag}
+                text="Favorites"
+              />
+            </nav>
+            <div className="w-full h-[50%] flex flex-col justify-end mt-4 sm:mt-0">
+              <NavButton
+                onClick={handleLogout}
+                icon={LogOut}
+                text="Logout"
+              />
+            </div>
+          </div>
         </div>
       </header>
 
-      <main className="shadow-md w-full sm:w-[calc(100%-80px)] lg:w-[1200px] h-[calc(100vh-64px)] sm:h-[85vh] sm:ml-20 lg:ml-[270px] mt-16 sm:mt-0 sm:fixed sm:left-4 sm:top-1/2 sm:-translate-y-1/2 rounded-lg overflow-hidden z-10">
+      <main className="shadow-md w-full sm:w-[calc(100%-80px)] md:w-[1200px] h-[calc(100vh-64px)] sm:h-[85vh] sm:ml-20 lg:ml-[270px] mt-16 sm:mt-0 sm:fixed sm:left-4 sm:top-1/2 sm:-translate-y-1/2 rounded-lg overflow-hidden z-10">
         <div className="h-full overflow-auto p-6">{renderContent()}</div>
       </main>
     </div>

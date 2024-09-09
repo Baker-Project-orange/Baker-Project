@@ -6,7 +6,10 @@ import h1 from "../assets/h1.jpg";
 import h2 from "../assets/h2.jpg";
 import h3 from "../assets/h3.jpg";
 import h4 from "../assets/h4.jpg";
+import { useNavigate } from "react-router-dom";
+
 import Slider from "../components/Slider"; // Import the slider component
+import chefHat from"../assets/chefHat.png"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCookieBite,
@@ -17,79 +20,44 @@ import {
 import { Link } from "react-router-dom";
 import Header from "../components/Header";
 
-function Home() {
-  return (
-    <>
-      <Header />
+function Home1() {
+  const navigate = useNavigate();
 
-      <div className="containerr">
-        {/* Navbar should be here */}
-        {/* Image below the Navbar */}
-        <div className="relative mt-[50px]">
-          {" "}
-          {/* Adjust margin to raise the image */}
-          <img
-            src={additionalImage} // Replace with your image path
-            alt="Additional"
-            className="w-4/4 h-auto object-cover mx-auto -mt-[460px]" // Adjust width as needed
-            style={{ maxWidth: "900px" }} // Optional: Set a max-width for better control
-          />
-        </div>
-        <p className="text-center text-2xl text-amber-900 max-w-3lg w-[800px] mx-auto  leading-relaxed font-serif font-bold mb-16 mt-16 tracking-tight whitespace-break-spaces">
-          Experience the art of artisanal bread with our daily handcrafted
-          loaves. Crafted with care and premium ingredients,each loaf delivers
-          unmatched quality and flavor. Enjoy freshly baked excellence in every
-          slice.
-        </p>
-        <div className="flex justify-center gap-10 mb-10">
-          <div className="flex flex-col items-center">
-            <FontAwesomeIcon
-              icon={faCookieBite}
-              size="3x"
-              className="text-[#E07A5F]"
-            />{" "}
-            {/* لون بني يناسب الكوكيز */}
-            <p className="text-[#E07A5F] mt-2">Cookies</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <FontAwesomeIcon
-              icon={faBreadSlice}
-              size="3x"
-              className="text-[#81B29A]"
-            />{" "}
-            {/* لون أخضر يناسب الخبز */}
-            <p className="text-[#81B29A] mt-2">Bread</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <FontAwesomeIcon
-              icon={faCandyCane}
-              size="3x"
-              className="text-[#F2CC8F]"
-            />{" "}
-            {/* لون أصفر يناسب الحلوى */}
-            <p className="text-[#F2CC8F] mt-2">Candies</p>
-          </div>
-          <div className="flex flex-col items-center">
-            <FontAwesomeIcon
-              icon={faCake}
-              size="3x"
-              className="text-[#F4A261]"
-            />{" "}
-            {/* لون برتقالي يناسب الكيك */}
-            <p className="text-[#F4A261] mt-2">Cakes</p>
-          </div>
-        </div>
-        <section>
-          <div
-            className="relative w-screen h-screen bg-cover bg-center"
-            style={{ backgroundImage: `url(${backgroundImage})` }}
-          >
-            <div className="flex flex-col items-center justify-center h-full">
-              <p className="text-white text-4xl text-center font-serif italic font-semibold mb-8 mt-56">
-                learn about the history{" "}
-                <p>
-                  <span className="text-[#FFC4C4]">of baking</span>
-                </p>
+const handleClick = () => {
+  navigate('/contactUs');
+};
+  return (
+
+    <div className="containerr">
+      {/* Navbar should be here */}
+      {/* Image below the Navbar */}
+      <div className="relative mt-[50px]">
+        {" "}
+        {/* Adjust margin to raise the image */}
+        <img
+          src={additionalImage} // Replace with your image path
+          alt="Additional"
+          className="w-4/4 h-auto object-cover mx-auto -mt-[460px]" // Adjust width as needed
+          style={{ maxWidth: "900px" }} // Optional: Set a max-width for better control
+        />
+      </div>
+      <p className="text-center text-2xl text-amber-900 max-w-3lg w-[800px] mx-auto  leading-relaxed font-serif font-bold mb-16 mt-16 tracking-tight whitespace-break-spaces">
+        Experience the art of artisanal bread with our daily handcrafted loaves.
+        Crafted with care and premium ingredients,each loaf delivers unmatched
+        quality and flavor. Enjoy freshly baked excellence in every slice.
+      </p>
+      
+      <section>
+        <div
+          className="relative w-screen h-screen bg-cover bg-center"
+          style={{ backgroundImage: `url(${backgroundImage})` }}
+        >
+          <div className="flex flex-col items-center justify-center h-full">
+            <p className="text-white text-4xl text-center font-serif italic font-semibold mb-8 mt-56">
+              learn about the history{" "}
+              <p>
+                <span className="text-[#FFC4C4]">of baking</span>
+
               </p>
 
               {/* Grid layout with 4 columns */}
@@ -164,6 +132,45 @@ function Home() {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+      2
+      <section className="mt-[200px] ">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto px-4">
+    {/* Text Column */}
+    <div className="flex flex-col justify-center items-center text-center">
+      <p className="text-[#FFC4C4] text-5xl font-serif italic font-semibold mb-4">
+        Coming Soon!
+      </p>
+      <p className="text-amber-900 text-2xl leading-relaxed font-serif font-bold">
+        Meet our original products
+        <span className="block">made with love</span>
+        {/* <span className="block">with love</span> */}
+      </p>
+    </div>
+    {/* Slider Column */}
+    <div className="flex justify-center items-center">
+      <Slider />
+    </div>
+  </div>
+</section>
+
+      <section className="relative mt-32 w-screen h-[110vh]">
+        <div className="relative w-full h-full">
+          <img
+            src="../src/assets/contact3.jpg" // Replace with your image path
+            alt="Decorative"
+            className="w-full h-full object-cover rounded"
+          />
+
+          {/* Overlay Text Container */}
+          <div
+            className="absolute inset-0 flex flex-col justify-center items-center text-center p-4"
+            style={{ marginLeft: "9%" }}
+          >
+            <p className="text-amber-950 text-4xl font-serif italic font-semibold">
+              Our speciality - <br />
+              <span>traditional donuts!</span>
         </section>
         2
         <section className="mt-[200px] ">
@@ -175,6 +182,18 @@ function Home() {
               Meet our original products<p>made</p>
               <p>with love</p>
             </p>
+            {/* <button className="bg-amber-900 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-full mt-8 w-32">
+              <Link to="/contactUs" />
+              Contact us
+            </button> */}
+            <button 
+  onClick={handleClick}
+  className="bg-amber-900 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-full mt-8 w-32"
+>
+  Contact us
+</button>
+
+
           </div>
           <Slider />
         </section>
@@ -213,4 +232,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default Home1;

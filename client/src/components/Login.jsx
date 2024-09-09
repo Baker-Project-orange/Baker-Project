@@ -25,8 +25,12 @@ const Login = () => {
       localStorage.setItem("userId", response.data.user.id);
       localStorage.setItem("userName", response.data.user.name);
       localStorage.setItem("token", response.data.token);
-      navigate("/Home");
-      handleOpen();
+
+
+      // Redirect to the Home page after successful login
+      navigate("/"); // Replace '/Home' with the path you want to navigate to
+      handleOpen(); // Close the dialog
+
     } catch (err) {
       setError(err.response?.data.message || "Login failed");
     }
