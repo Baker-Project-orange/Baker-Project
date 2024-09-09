@@ -1,107 +1,131 @@
-import React, { useEffect, useState } from 'react';
-import { CSSTransition } from 'react-transition-group';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-const CartSidebar = ({ isOpen, onClose, cartItems, removeItem, updateQuantity, onCheckout, onContinueShopping }) => {
-  const [isRendered, setIsRendered] = useState(false);
+function CartSidebar() {
+  const [cart, setCart] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (isOpen) {
-      setIsRendered(true);
+    const storedCart = localStorage.getItem("cart");
+    if (storedCart) {
+      setCart(JSON.parse(storedCart));
     }
-  }, [isOpen]);
+  }, []);
 
-  const handleTransitionEnd = () => {
-    if (!isOpen) {
-      setIsRendered(false);
-    }
+  const updateQuantity = (index, change) => {
+    const updatedCart = cart.map((item, i) =>
+      i === index
+        ? { ...item, quantity: Math.max(1, item.quantity + change) }
+        : item
+    );
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
   };
 
-  const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const removeFromCart = (index) => {
+    const updatedCart = cart.filter((_, i) => i !== index);
+    setCart(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
+
+  const subTotal = cart.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   return (
     <>
-      {isRendered && (
-        <>
-          <div 
-            className={`fixed inset-0 bg-black transition-opacity duration-300 ease-in-out ${isOpen ? 'opacity-50' : 'opacity-0 pointer-events-none'}`} 
-            onClick={onClose}
-          />
-          <CSSTransition
-            in={isOpen}
-            timeout={300}
-            classNames={{
-              enter: 'translate-x-full',
-              enterActive: 'translate-x-0',
-              exit: 'translate-x-0',
-              exitActive: 'translate-x-full'
-            }}
-            onExited={handleTransitionEnd}
-          >
-            <div className="fixed inset-y-0 right-0 w-80 bg-white shadow-lg z-50 overflow-y-auto transform transition-transform duration-300 ease-in-out">
-              {/* Cart content */}
-              <div className="p-4">
-                <div className="flex justify-between items-center mb-4">
-                  <h2 className="text-lg font-semibold">Your cart ({cartItems.length})</h2>
-                  <button onClick={onClose} className="text-gray-500 hover:text-gray-700 transition duration-150">
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
+      <button
+        onClick={() => setIsOpen(true)}
+        className="fixed top-4 right-4 z-50 bg-pink-500 text-white p-2 rounded-full shadow-lg"
+      >
+        🛒 {cart.length}
+      </button>
 
-                {/* Cart items */}
-                {cartItems.map((item) => (
-                  <div key={item.id} className="flex items-center mb-4">
-                    <img src={item.image} alt={item.name} className="w-16 h-16 object-cover mr-4" />
-                    <div className="flex-grow">
-                      <h3 className="text-sm font-medium">{item.name}</h3>
-                      <p className="text-sm text-gray-500">${item.price.toFixed(2)}</p>
-                      <div className="flex items-center mt-1">
-                        <button onClick={() => updateQuantity(item.id, item.quantity - 1)} className="text-gray-500 hover:text-gray-700 transition duration-150">-</button>
-                        <span className="mx-2">{item.quantity}</span>
-                        <button onClick={() => updateQuantity(item.id, item.quantity + 1)} className="text-gray-500 hover:text-gray-700 transition duration-150">+</button>
-                      </div>
-                    </div>
-                    <button onClick={() => removeItem(item.id)} className="text-red-500 hover:text-red-700 transition duration-150">
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </div>
-                ))}
+      <div
+        className={` fixed top-0 right-0 h-full w-80 bg-pink-100 shadow-lg transform transition-transform duration-300 ease-in-out ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        } overflow-y-auto z-50`}
+      >
+        <div className="p-4">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-xl font-semibold flex justify-normal gap-2">
+              Your cart <p className="text-[#F45757]">({cart.length})</p>
+            </h2>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="text-white text-2xl bg-red-400 rounded-ss-2xl"
+            >
+              &times;
+            </button>
+          </div>
 
-                {/* We Recommend section */}
-                <div className="mt-4">
-                  <h3 className="text-lg font-semibold">We Recommend</h3>
-                  {/* Add recommended items here */}
-                </div>
-
-                {/* Subtotal and action buttons */}
-                <div className="mt-6">
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="font-medium">Subtotal</span>
-                    <span>${subtotal.toFixed(2)}</span>
-                  </div>
-                  <button 
-                    onClick={onContinueShopping}
-                    className="w-full bg-gray-200 text-gray-800 py-2 rounded-md hover:bg-gray-300 transition duration-150 mb-2"
+          {cart.map((item, index) => (
+            <div key={index} className="flex items-center mb-4 pb-4 border-b">
+              <img
+                src={item.image}
+                alt={item.name}
+                className="w-20 h-20 object-cover rounded mr-4"
+              />
+              <div className="flex-grow">
+                <h3 className="font-medium text-sm">{item.dishDescription}</h3>
+                <p className="text-gray-900 font-semibold mt-1">
+                  ${item.price.toFixed(2)}
+                </p>
+                <div className="flex items-center  mt-2 bg-transparent rounded-full w-fit border border-black">
+                  <button
+                    onClick={() => updateQuantity(index, -1)}
+                    className="px-3 py-1 rounded-full"
                   >
-                    Continue Shopping
+                    -
                   </button>
-                  <button 
-                    onClick={onCheckout}
-                    className="w-full bg-red-500 text-white py-2 rounded-md hover:bg-red-600 transition duration-150"
+                  <span className="mx-2 text-sm">{item.quantity}</span>
+                  <button
+                    onClick={() => updateQuantity(index, 1)}
+                    className="px-3 py-1 rounded-full"
                   >
-                    Check Out
+                    +
                   </button>
                 </div>
               </div>
+              <button
+                onClick={() => removeFromCart(index)}
+                className="text-gray-400 ml-2"
+              >
+                🗑️
+              </button>
             </div>
-          </CSSTransition>
-        </>
-      )}
+          ))}
+
+          <div className="mt-6 bg-[#FBC5C5] p-4  border-t-2 border-black ">
+            <div className="flex justify-between mb-4">
+              <span className="font-semibold">Sub Total</span>
+              <span className="font-bold">${subTotal.toFixed(2)}</span>
+            </div>
+            <button
+              onClick={() => {
+                navigate("/");
+                setIsOpen(false);
+              }}
+              className="w-full bg-transparent text-black py-2 rounded-full mb-2 font-semibold border border-black"
+            >
+              Continue Shopping
+            </button>
+            <button
+              onClick={() => navigate("/checkout")}
+              className="w-full bg-[#F45757] text-black py-2 rounded-full font-semibold border border-black"
+            >
+              Check Out
+            </button>
+            <p className="text-xs text-center mt-2 text-gray-500">
+              By selecting Check Out you are agreeing to our Terms & Conditions
+            </p>
+          </div>
+        </div>
+      </div>
     </>
   );
-};
+}
 
 export default CartSidebar;

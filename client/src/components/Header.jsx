@@ -1,19 +1,39 @@
-import { Signup } from "./LoginSignupComponents/SignupChef";
-import { Context } from "./contextProvider";
-import { useContext } from "react";
-import { Button } from "@material-tailwind/react";
-import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import {
+  faUserPlus,
+  faUserShield,
+  faRegistered,
+  faUserCircle,
+  faSignOutAlt,
+} from "@fortawesome/free-solid-svg-icons";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@material-tailwind/react";
+import { Context } from "./contextProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Signup } from "./LoginSignupComponents/SignupChef";
+import Register from "../pages/Register";
 function Header() {
   const navigate = useNavigate();
-  const [isLoggedIn, setLoggedIn] = useContext(Context).isLoggedIn;
+  const [isLoggedIn, setIsLoggedIn] = useContext(Context).isLoggedIn;
   const [isChef, setChef] = useContext(Context).isChef;
+
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("chefLogin");
+    setIsLoggedIn(false);
+    setChef(false);
+    setIsOpen(false);
+  };
+
+  const toggleDropdown = () => setIsOpen(!isOpen);
   return (
     <div className="relative min-h-screen bg-[#c98d83] text-black">
       <div className="absolute bottom-0 left-0 w-full overflow-hidden  leading-[0]">
         <header className="text-white p-6 text-center">
           <nav>
-            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto my-80 p-4">
+            <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto my-40 p-4">
               <a
                 href="https://flowbite.com/"
                 className="flex items-center space-x-3 rtl:space-x-reverse"
@@ -68,7 +88,7 @@ function Header() {
                   </li>
                   <li>
                     <Link
-                      to="#"
+                      to="/RecipeDishList"
                       className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                     >
                       Recipes
@@ -83,7 +103,7 @@ function Header() {
                   </span>
                   <li>
                     <Link
-                      to="#"
+                      to="/contactUs"
                       className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                     >
                       Reach Out
@@ -91,70 +111,78 @@ function Header() {
                   </li>
                   <li>
                     <Link
-                      to="#"
+                      to="AboutUs"
                       className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                     >
                       Who We Are
                     </Link>
                   </li>
+
                   <li className="relative group">
-                    {/* Register with Dropdown */}
+                    {/* Register with Dropdown /*/}
                     <button className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
-                      {!isLoggedIn ? "Register" : "Profile"}
+                      {!isLoggedIn ? "Register" : "Profile"}{" "}
                     </button>
-                    {/* Dropdown List */}
-                    {!isLoggedIn ? (
-                      <ul className="absolute hidden group-hover:block bg-white shadow-lg rounded-lg mt-2 min-w-[160px]">
-                        <li>
-                          <Signup />
-                        </li>
-                        <li>
-                          <a
-                            href="#"
-                            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                          >
-                            Admin
-                          </a>
-                        </li>
-                        <li>
-                          <a
-                            href="#"
-                            className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
-                          >
-                            Profile
-                          </a>
-                        </li>
-                      </ul>
-                    ) : (
-                      <ul className="absolute hidden group-hover:block bg-white shadow-lg rounded-lg mt-2 min-w-[160px]">
-                        <li>
-                          <Button
-                            onClick={() => {
-                              navigate("/ChefProfile");
-                            }}
-                            variant="text"
-                            className="text-black w-full"
-                            color="white"
-                          >
-                            Profile
-                          </Button>
-                        </li>
-                        <li>
-                          <Button
-                            onClick={() => {
-                              sessionStorage.removeItem("chefLogin");
-                              setChef(false);
-                              setLoggedIn(false);
-                            }}
-                            variant="text"
-                            className="text-black w-full"
-                            color="white"
-                          >
-                            Logout
-                          </Button>
-                        </li>
-                      </ul>
-                    )}
+                    <ul className="absolute hidden group-hover:block bg-white shadow-lg rounded-lg mt-2 min-w-[160px] opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100">
+                      {" "}
+                      {!isLoggedIn ? (
+                        <>
+                          {" "}
+                          <li>
+                            {" "}
+                            <Signup />{" "}
+                          </li>{" "}
+                          <li>
+                            {" "}
+                            <a
+                              href="AdminRegister"
+                              className="block px-4 py-2 text-gray-800 hover:bg-gray-100"
+                            >
+                              {" "}
+                              Admin{" "}
+                            </a>{" "}
+                          </li>{" "}
+                          <li>
+                            {" "}
+                            <Register />{" "}
+                          </li>{" "}
+                        </>
+                      ) : (
+                        <>
+                          {" "}
+                          <li>
+                            {" "}
+                            <Button
+                              onClick={() => {
+                                navigate("/ChefProfile");
+                              }}
+                              variant="text"
+                              className="text-black w-full hover:bg-gray-200"
+                              color="white"
+                            >
+                              {" "}
+                              Profile{" "}
+                            </Button>{" "}
+                          </li>{" "}
+                          <li>
+                            {" "}
+                            <Button
+                              onClick={() => {
+                                sessionStorage.removeItem("chefLogin");
+                                setChef(false);
+                                setLoggedIn(false);
+                              }}
+                              variant="text"
+                              className="text-black w-full hover:bg-gray-200"
+                              color="white"
+                            >
+                              {" "}
+                              Logout{" "}
+                            </Button>{" "}
+                          </li>{" "}
+                        </>
+                      )}{" "}
+                    </ul>{" "}
                   </li>
                 </ul>
               </div>
@@ -162,14 +190,14 @@ function Header() {
           </nav>
         </header>
         <svg
-          className="relative block w-[calc(282%+1.3px)] h-[200px] "
+          className="relative block w-[calc(282%+1.3px)] h-[370px] "
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1200 120"
           preserveAspectRatio="none"
         >
           <path
-            d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
+            d="M485.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
             className="fill-white"
           ></path>
         </svg>
