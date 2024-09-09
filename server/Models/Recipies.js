@@ -51,7 +51,7 @@ const recipeSchema = new mongoose.Schema({
   dishName: String,
   dishDescription: String,
   recipeRatings: [{ type: mongoose.Schema.Types.ObjectId, ref: "Rating" }],
-  ingredients: [{ name: String }],
+  ingredients: [String],
   recipeOverview: String,
   steps: [stepsSchema],
   difficultyRating: [{ ratingNumber: Number }],
@@ -77,6 +77,7 @@ const recipeSchema = new mongoose.Schema({
   dish: { type: mongoose.Schema.Types.ObjectId, ref: "Dish" },
   price: { type: Number, default: 0 },
   dishRatingAvg: { type: Number, default: 0 },
+  isApproved: { type: Boolean, default: false },
 });
 
 const Recipe = mongoose.model("Recipe", recipeSchema);
