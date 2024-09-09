@@ -3,6 +3,8 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Send, Phone, MapPin, Mail } from "lucide-react";
+import additionalImage from "../assets/8dcd2937317f1f248e3c9e4975c96c2b-removebg-preview.png"; // Replace with your image path
+import Header from "../components/Header";
 
 // تخصيص الإشعارات باستخدام Tailwind CSS
 const customToastStyle = {
@@ -56,121 +58,135 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#c98d83] to-[#e2b5ae] py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            {/* Contact Information */}
-            <div className="bg-[#c98d83] p-10 text-white">
-              <h2 className="text-4xl font-bold mb-6">Get in Touch</h2>
-              <p className="text-lg mb-8">
-                We'd love to hear from you. Our team is always here to chat.
-              </p>
+    <>
+      <Header />
 
-              <div className="space-y-6">
-                <div className="flex items-center space-x-4">
-                  <Phone className="w-6 h-6" />
-                  <span>+1 (555) 123-4567</span>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <Mail className="w-6 h-6" />
-                  <span>contact@bakerydelight.com</span>
-                </div>
-                <div className="flex items-center space-x-4">
-                  <MapPin className="w-6 h-6" />
-                  <span>123 Bakery Street, Sweet City, 12345</span>
+      <div className="relative mt-[50px]">
+        {" "}
+        {/* Adjust margin to raise the image */}
+        <img
+          src={additionalImage} // Replace with your image path
+          alt="Additional"
+          className="w-4/4 h-auto object-cover mx-auto -mt-[460px]" // Adjust width as needed
+          style={{ maxWidth: "900px" }} // Optional: Set a max-width for better control
+        />
+      </div>
+      <div className="min-h-screen bg-gradient-to-br from-[#c98d83] to-[#e2b5ae] py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-2">
+              {/* Contact Information */}
+              <div className="bg-[#c98d83] p-10 text-white">
+                <h2 className="text-4xl font-bold mb-6">Get in Touch</h2>
+                <p className="text-lg mb-8">
+                  We'd love to hear from you. Our team is always here to chat.
+                </p>
+
+                <div className="space-y-6">
+                  <div className="flex items-center space-x-4">
+                    <Phone className="w-6 h-6" />
+                    <span>+1 (555) 123-4567</span>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <Mail className="w-6 h-6" />
+                    <span>contact@bakerydelight.com</span>
+                  </div>
+                  <div className="flex items-center space-x-4">
+                    <MapPin className="w-6 h-6" />
+                    <span>123 Bakery Street, Sweet City, 12345</span>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Contact Form */}
-            <div className="p-10">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c98d83] focus:ring focus:ring-[#c98d83] focus:ring-opacity-50"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c98d83] focus:ring focus:ring-[#c98d83] focus:ring-opacity-50"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="subject"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Subject
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    required
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c98d83] focus:ring focus:ring-[#c98d83] focus:ring-opacity-50"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    rows="4"
-                    value={formData.message}
-                    onChange={handleChange}
-                    required
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c98d83] focus:ring focus:ring-[#c98d83] focus:ring-opacity-50"
-                  ></textarea>
-                </div>
-                <div>
-                  <button
-                    type="submit"
-                    className="w-full flex justify-center items-center space-x-2 bg-[#c98d83] text-white py-3 px-6 rounded-md hover:bg-opacity-90 transition duration-300"
-                  >
-                    <span>Send Message</span>
-                    <Send className="w-5 h-5" />
-                  </button>
-                </div>
-              </form>
+              {/* Contact Form */}
+              <div className="p-10">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Name
+                    </label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c98d83] focus:ring focus:ring-[#c98d83] focus:ring-opacity-50"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      id="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c98d83] focus:ring focus:ring-[#c98d83] focus:ring-opacity-50"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="subject"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Subject
+                    </label>
+                    <input
+                      type="text"
+                      id="subject"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
+                      required
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c98d83] focus:ring focus:ring-[#c98d83] focus:ring-opacity-50"
+                    />
+                  </div>
+                  <div>
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-medium text-gray-700"
+                    >
+                      Message
+                    </label>
+                    <textarea
+                      id="message"
+                      name="message"
+                      rows="4"
+                      value={formData.message}
+                      onChange={handleChange}
+                      required
+                      className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#c98d83] focus:ring focus:ring-[#c98d83] focus:ring-opacity-50"
+                    ></textarea>
+                  </div>
+                  <div>
+                    <button
+                      type="submit"
+                      className="w-full flex justify-center items-center space-x-2 bg-[#c98d83] text-white py-3 px-6 rounded-md hover:bg-opacity-90 transition duration-300"
+                    >
+                      <span>Send Message</span>
+                      <Send className="w-5 h-5" />
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
+        {/* Toast Container */}
+        <ToastContainer />
       </div>
-      {/* Toast Container */}
-      <ToastContainer />
-    </div>
+    </>
   );
 };
 
