@@ -28,7 +28,6 @@ function App() {
       <ThemeProvider>
         <ContextProvider>
 
-          <Header />
 <CartSidebar/>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -49,7 +48,7 @@ function App() {
             <Route path="/checkout" element={<CheckoutComponent />} />
             <Route path="/cart" element={<CartSidebar />} />
           </Routes>
-          {/* <Footer /> */}
+         
         </ContextProvider>
       </ThemeProvider>
     </>

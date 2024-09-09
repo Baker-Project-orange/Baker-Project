@@ -143,10 +143,10 @@ const RecipeDetailPage = () => {
 
   return (
     <div className="font-serif">
-      <div className="min-h-screen bg-gradient-to-b from-[#f8e5e1] to-[#fdf2f0] py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+      <div className="min-h-screen bg-[#fbf6f4] py-12 px-4 sm:px-6 lg:px-8 font-serif">
+        <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
           <div className="popup-details bg-white rounded-2xl shadow-xl overflow-hidden relative">
-            <div className="relative">
+            <div className="relative font-serif">
               <img
                 src={recipe.overviewPicture || "/placeholder-image.jpg"}
                 alt={recipe.dishName}
@@ -197,7 +197,7 @@ const RecipeDetailPage = () => {
                 </div>
               </div>
             </div>
-            <div className="p-8 -mt-24 relative">
+            <div className="p-8 -mt-24 relative font-serif">
               <div className="bg-white rounded-xl shadow-lg p-6">
                 <div className="flex flex-col sm:flex-row justify-between items-start mb-6">
                   <div>
@@ -246,13 +246,14 @@ const RecipeDetailPage = () => {
                   {recipe.recipeOverview || recipe.dishDescription}
                 </p>
                 <div className="flex items-center justify-between mb-6">
+
                   <RecipeTutorial recipe={recipe} />
                   {isDish && (
                     <button
                       onClick={() => addToCart(recipe)}
                       className="inline-flex items-center bg-[#c98d83] text-white py-2 px-4 rounded-full hover:bg-[#b67c73] transition-colors duration-300"
                     >
-                      <ShoppingCart size={20} className="mr-2" />
+                      <ShoppingCart size={20} className="mr-2 font-serif" />
                       Add to Cart
                     </button>
                   )}
@@ -265,7 +266,7 @@ const RecipeDetailPage = () => {
             currentUser={currentUser}
             isChef={isChef}
           />
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center font-serif">
             <Link
               to="/RecipeDishList"
               className="inline-block bg-[#c98d83] text-white py-3 px-6 rounded-full hover:bg-[#b67c73] transition-colors duration-300 font-semibold text-lg shadow-md hover:shadow-lg transform hover:-translate-y-1"

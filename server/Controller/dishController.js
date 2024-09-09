@@ -82,7 +82,7 @@ exports.getDishById = async (req, res) => {
     const dish = await Dish.findOne({
       _id: req.query.id,
       isDeleted: false,
-    }).populate("recipieID", "dishName");
+    }).populate("recipieID", "dishName overviewPicture");
     console.log(dish);
     if (!dish) {
       return res.status(404).json({ message: "Dish not found" });
