@@ -35,9 +35,9 @@ const PaymentDetails = ({ onPaymentMethodChange = () => {} }) => {
 
   return (
     <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Payment Details</h2>
+      {/* <h2 className="text-xl font-bold mb-4">Payment Details</h2> */}
 
-      <div className="flex space-x-4 mb-4 accent-pink-600">
+      {/* <div className="flex space-x-4 mb-4 accent-pink-600">
         {["net", "cash"].map((method) => (
           <label key={method} className="flex items-center">
             <input
@@ -51,9 +51,9 @@ const PaymentDetails = ({ onPaymentMethodChange = () => {} }) => {
             {method === "net" ? "Net Banking" : "Cash on delivery"}
           </label>
         ))}
-      </div>
+      </div> */}
 
-      {paymentMethod === "net" && <PayPalButton amount={30} />}
+      {/* {paymentMethod === "net" && <PayPalButton amount={30} />} */}
 
       {showNewCardForm && (
         <form

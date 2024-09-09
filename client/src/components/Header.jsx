@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   faUserPlus,
   faUserShield,
@@ -6,22 +6,50 @@ import {
   faUserCircle,
   faSignOutAlt,
 } from "@fortawesome/free-solid-svg-icons";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@material-tailwind/react";
 import { Context } from "./contextProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Signup } from "./LoginSignupComponents/SignupChef";
 import Register from "../pages/Register";
+
 import additionalImage from '../assets/8dcd2937317f1f248e3c9e4975c96c2b-removebg-preview.png'
 import  CartSidebar from '../components/sidebarcart'
 import AdminRegister from "../pages/AdminRegister";
+
+
+
 function Header() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useContext(Context).isLoggedIn;
   const [isChef, setChef] = useContext(Context).isChef;
-
   const [isOpen, setIsOpen] = useState(false);
+  const [pageTitle, setPageTitle] = useState("");
+
+  useEffect(() => {
+    // Update the page title based on the current path
+    switch (location.pathname) {
+      case "/":
+        setPageTitle("Home");
+        break;
+      case "/RecipeDishList":
+        setPageTitle("Recipes");
+        break;
+      case "/contactUs":
+        setPageTitle("Contact Us");
+        break;
+      case "/AboutUs":
+        setPageTitle("About Us");
+        break;
+      case "/ChefProfile":
+        setPageTitle("Chef Profile");
+        break;
+      default:
+        setPageTitle("");
+    }
+  }, [location]);
 
   const handleLogout = () => {
     sessionStorage.removeItem("chefLogin");
@@ -31,10 +59,12 @@ function Header() {
   };
 
   const toggleDropdown = () => setIsOpen(!isOpen);
+
   return (
     <div className="relative min-h-screen bg-[#c98d83] text-black">
-      <div className="absolute bottom-0 left-0 w-full overflow-hidden  leading-[0]">
-      
+
+      <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
+
         <header className="text-white p-6 text-center">
           
           <nav>
@@ -85,7 +115,11 @@ function Header() {
                   </li>
                   <li>
                     <Link
+
                       to="/user-profile"
+
+                      to="/RecipeDishList"
+
                       className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                     >
                       profile
@@ -116,7 +150,7 @@ function Header() {
                   </li>
                   <li>
                     <Link
-                      to="AboutUs"
+                      to="/AboutUs"
                       className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                     >
                       Who We Are
@@ -124,74 +158,71 @@ function Header() {
                   </li>
 
                   <li className="relative group">
-                    {/* Register with Dropdown /*/}
-                    <button className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">
+                    <button
+                      onClick={toggleDropdown}
+                      className="block py-2 px-3 md:p-0 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-amber-900 md:dark:hover:text-blue-500 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
+                    >
                       {!isLoggedIn ? "Register" : "Profile"}{" "}
                     </button>
-                    <ul className="absolute hidden group-hover:block bg-white shadow-lg rounded-lg mt-2 min-w-[160px] opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100">
-                      {" "}
+                    <ul
+                      className={`absolute ${
+                        isOpen ? "block" : "hidden"
+                      } bg-white shadow-lg rounded-lg mt-2 min-w-[160px] opacity-0 transition-opacity duration-300 ease-in-out group-hover:opacity-100`}
+                    >
                       {!isLoggedIn ? (
                         <>
-                          {" "}
                           <li>
-                            {" "}
-                            <Signup />{" "}
-                          </li>{" "}
+                            <Signup />
+                          </li>
                           <li>
                             {" "}
                             <AdminRegister />{" "}
                           </li>{" "}
 
-                         
+            
                           <li>
-                            {" "}
-                            <Register />{" "}
-                          </li>{" "}
+                            <Register />
+                          </li>
                         </>
                       ) : (
                         <>
-                          {" "}
                           <li>
-                            {" "}
                             <Button
-                              onClick={() => {
-                                navigate("/ChefProfile");
-                              }}
+                              onClick={() => navigate("/ChefProfile")}
                               variant="text"
                               className="text-black w-full hover:bg-gray-200"
                               color="white"
                             >
-                              {" "}
-                              Profile{" "}
-                            </Button>{" "}
-                          </li>{" "}
+                              Profile
+                            </Button>
+                          </li>
                           <li>
-                            {" "}
                             <Button
-                              onClick={() => {
-                                sessionStorage.removeItem("chefLogin");
-                                setChef(false);
-                                setLoggedIn(false);
-                              }}
+                              onClick={handleLogout}
                               variant="text"
                               className="text-black w-full hover:bg-gray-200"
                               color="white"
                             >
-                              {" "}
-                              Logout{" "}
-                            </Button>{" "}
-                          </li>{" "}
+                              Logout
+                            </Button>
+                          </li>
                         </>
-                      )}{" "}
-                    </ul>{" "}
+                      )}
+                    </ul>
                   </li>
                 </ul>
               </div>
             </div>
           </nav>
         </header>
+
+        {/* Dynamic text in the middle of the curve */}
+        <div className="absolute top-96 md:left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+          <h1 className="text-4xl font-bold text-white">{pageTitle}</h1>
+        </div>
+
         <svg
-          className="relative block w-[calc(282%+1.3px)] h-[370px] "
+          className="relative block w-[calc(282%+1.3px)] h-[370px]"
           data-name="Layer 1"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1200 120"

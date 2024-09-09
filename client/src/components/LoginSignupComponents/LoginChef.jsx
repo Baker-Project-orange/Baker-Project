@@ -82,7 +82,7 @@ export const Login = () => {
   const { handleLogin } = useLoginHooks();
 
   return (
-    <div className="flex flex-col md:flex-row h-full">
+    <div className="flex flex-col md:flex-row h-full font-serif">
       <div className="bg-gradient-to-br from-[#c98d83] to-[#fdf2f0] p-8 md:w-1/2 flex flex-col justify-center items-center text-gray-800">
         <img
           src={chefHat}
@@ -112,9 +112,9 @@ export const Login = () => {
             className="border-[#c98d83] focus:border-[#c98d83]"
           />
           <div className="flex flex-col items-end space-y-1">
-            <a href="#" className="text-sm text-[#c98d83] hover:underline">
+            {/* <a href="#" className="text-sm text-[#c98d83] hover:underline">
               Forgot password?
-            </a>
+            </a> */}
             <p className="text-sm text-gray-600">Don't have an account?</p>
             <button
               type="button"
@@ -126,7 +126,7 @@ export const Login = () => {
           </div>
           <Button
             onClick={handleLogin}
-            className="bg-gradient-to-b from-[#c98d83] to-[#fdf2f0] w-full py-3 text-gray-800 rounded-lg shadow-md hover:shadow-lg transition duration-300"
+            className="font-serif bg-gradient-to-b from-[#c98d83] to-[#fdf2f0] w-full py-3 text-gray-800 rounded-lg shadow-md hover:shadow-lg transition duration-300"
           >
             Log In
           </Button>

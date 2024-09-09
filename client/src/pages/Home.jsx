@@ -18,6 +18,7 @@ import {
   faCake,
 } from "@fortawesome/free-solid-svg-icons"; // استخدام أيقونة الخبز faBreadSlice
 import { Link } from "react-router-dom";
+import Header from "../components/Header";
 
 function Home1() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ const handleClick = () => {
   navigate('/contactUs');
 };
   return (
+
     <div className="containerr">
       {/* Navbar should be here */}
       {/* Image below the Navbar */}
@@ -55,77 +57,78 @@ const handleClick = () => {
               learn about the history{" "}
               <p>
                 <span className="text-[#FFC4C4]">of baking</span>
+
               </p>
-            </p>
 
-            {/* Grid layout with 4 columns */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-3 mx-60">
-              {/* Column 1 */}
-              <div className="text-[#FFC4C4] p-2 rounded text-center ">
-                <h3 className="text-xl font-semibold mb-7">3000 BC</h3>
-                <p className="text-gray-200 ">
-                  The Birth of Bread:
-                  <p>
-                    Ancient Egyptians bake the earliest known leavened bread,
-                    using natural fermentation.
+              {/* Grid layout with 4 columns */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 p-3 mx-60">
+                {/* Column 1 */}
+                <div className="text-[#FFC4C4] p-2 rounded text-center ">
+                  <h3 className="text-xl font-semibold mb-7">3000 BC</h3>
+                  <p className="text-gray-200 ">
+                    The Birth of Bread:
+                    <p>
+                      Ancient Egyptians bake the earliest known leavened bread,
+                      using natural fermentation.
+                    </p>
                   </p>
-                </p>
-                <img
-                  src={h1}
-                  alt="card-image"
-                  className="max-w-[280px] h-[250px] rounded mx-auto mt-32 w-[250px]"
-                />
-              </div>
+                  <img
+                    src={h1}
+                    alt="card-image"
+                    className="max-w-[280px] h-[250px] rounded mx-auto mt-32 w-[250px]"
+                  />
+                </div>
 
-              {/* Column 2 */}
-              <div className="text-[#FFC4C4] p-2 rounded text-center">
-                <h3 className="text-xl font-semibold mb-2">1800 AD</h3>
-                <p className="text-gray-200">
-                  Industrial Baking Begins:{" "}
-                  <p>
+                {/* Column 2 */}
+                <div className="text-[#FFC4C4] p-2 rounded text-center">
+                  <h3 className="text-xl font-semibold mb-2">1800 AD</h3>
+                  <p className="text-gray-200">
+                    Industrial Baking Begins:{" "}
+                    <p>
+                      The invention of commercial yeast and mechanized milling
+                      transforms bread production and accessibility.
+                    </p>
+                  </p>
+                  <img
+                    src={h2}
+                    alt="card-image"
+                    className="max-w-[280px] h-[250px] rounded mx-auto mt-32 w-[250px]"
+                  />
+                </div>
+
+                {/* Column 3 */}
+                <div className="text-[#FFC4C4] p-2 rounded text-center relative">
+                  <h3 className="text-xl font-semibold mb-2">1800 AD</h3>
+                  <p className="text-gray-200 mb-4">
+                    Industrial Baking Begins:
+                    <br />
                     The invention of commercial yeast and mechanized milling
                     transforms bread production and accessibility.
                   </p>
-                </p>
-                <img
-                  src={h2}
-                  alt="card-image"
-                  className="max-w-[280px] h-[250px] rounded mx-auto mt-32 w-[250px]"
-                />
-              </div>
+                  <img
+                    src={h3}
+                    alt="card-image"
+                    className="max-w-[280px] h-[250px] rounded mx-auto mt-32 w-[250px]"
+                  />
+                </div>
 
-              {/* Column 3 */}
-              <div className="text-[#FFC4C4] p-2 rounded text-center relative">
-                <h3 className="text-xl font-semibold mb-2">1800 AD</h3>
-                <p className="text-gray-200 mb-4">
-                  Industrial Baking Begins:
-                  <br />
-                  The invention of commercial yeast and mechanized milling
-                  transforms bread production and accessibility.
-                </p>
-                <img
-                  src={h3}
-                  alt="card-image"
-                  className="max-w-[280px] h-[250px] rounded mx-auto mt-32 w-[250px]"
-                />
-              </div>
-
-              {/* Column 4 */}
-              <div className="text-[#FFC4C4] p-2 rounded text-center">
-                <h3 className="text-xl font-semibold mb-2">2000 AD</h3>
-                <p className="text-gray-200 m-0">
-                  Artisanal Revival:{" "}
-                  <span className="m-0">
-                    A resurgence of artisanal baking celebrates traditional
-                    methods, quality ingredients, and the rich heritage of
-                    bread-making.
-                  </span>
-                </p>
-                <img
-                  src={h4}
-                  alt="card-image"
-                  className="max-w-[280px] h-[250px] rounded mx-auto mt-32 w-[250px]"
-                />
+                {/* Column 4 */}
+                <div className="text-[#FFC4C4] p-2 rounded text-center">
+                  <h3 className="text-xl font-semibold mb-2">2000 AD</h3>
+                  <p className="text-gray-200 m-0">
+                    Artisanal Revival:{" "}
+                    <span className="m-0">
+                      A resurgence of artisanal baking celebrates traditional
+                      methods, quality ingredients, and the rich heritage of
+                      bread-making.
+                    </span>
+                  </p>
+                  <img
+                    src={h4}
+                    alt="card-image"
+                    className="max-w-[280px] h-[250px] rounded mx-auto mt-32 w-[250px]"
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -168,12 +171,16 @@ const handleClick = () => {
             <p className="text-amber-950 text-4xl font-serif italic font-semibold">
               Our speciality - <br />
               <span>traditional donuts!</span>
+        </section>
+        2
+        <section className="mt-[200px] ">
+          <div>
+            <p className="text-center text-[#FFC4C4] text-5xl font-serif italic font-semibold max-w-lg mx-auto leading-relaxed">
+              Comming Soon!
             </p>
-
-            <p className="text-amber-900 max-w-lg leading-relaxed font-serif font-bold mt-6">
-              Mauris rhoncus orci in imperdiet placerat. Vestibulum euismod nisl
-              suscipit ligula volutpat, a feugiat urna maximus. Cras massa nibh,
-              tincidunt ut eros a, vulputate consequat odio.
+            <p className="text-center text-amber-900 text-2xl max-w-lg mx-auto leading-relaxed font-serif font-bold">
+              Meet our original products<p>made</p>
+              <p>with love</p>
             </p>
             {/* <button className="bg-amber-900 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-full mt-8 w-32">
               <Link to="/contactUs" />
@@ -186,10 +193,42 @@ const handleClick = () => {
   Contact us
 </button>
 
+
           </div>
-        </div>
-      </section>
-    </div>
+          <Slider />
+        </section>
+        <section className="relative mt-32 w-screen h-[110vh]">
+          <div className="relative w-full h-full">
+            <img
+              src="../src/assets/contact3.jpg" // Replace with your image path
+              alt="Decorative"
+              className="w-full h-full object-cover rounded"
+            />
+
+            {/* Overlay Text Container */}
+            <div
+              className="absolute inset-0 flex flex-col justify-center items-center text-center p-4"
+              style={{ marginLeft: "9%" }}
+            >
+              <p className="text-amber-950 text-4xl font-serif italic font-semibold">
+                Our speciality - <br />
+                <span>traditional donuts!</span>
+              </p>
+
+              <p className="text-amber-900 max-w-lg leading-relaxed font-serif font-bold mt-6">
+                Mauris rhoncus orci in imperdiet placerat. Vestibulum euismod
+                nisl suscipit ligula volutpat, a feugiat urna maximus. Cras
+                massa nibh, tincidunt ut eros a, vulputate consequat odio.
+              </p>
+              <button className="bg-amber-900 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded-full mt-8 w-32">
+                <Link to="../pages/contactUs.jsx" />
+                Contact us
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </>
   );
 }
 

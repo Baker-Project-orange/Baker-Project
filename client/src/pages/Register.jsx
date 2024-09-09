@@ -5,9 +5,9 @@ import {
   Dialog,
   DialogBody,
   DialogFooter,
+  Input,
 } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-import chefHat from "../assets/chefHat.png";
 import Login from "../components/Login";
 import Cookies from "js-cookie";
 import CartSidebar from "../components/sidebarcart"
@@ -42,15 +42,13 @@ const Register = () => {
       setSuccess(message);
       setError("");
 
-      // Close the dialog after successful registration
       handleOpen();
-
-      // Store the token in localStorage
       localStorage.setItem("token", token);
       console.log(token);
-      // Redirect to the desired page after successful registration
+
 
       navigate("/", { state: { token } });
+
 
     } catch (err) {
       setError(err.response?.data.message || "Registration failed");
@@ -60,102 +58,88 @@ const Register = () => {
 
   return (
     <>
-      <Button
-        onClick={handleOpen}
-        className="bg-white text-black px-4 py-2 rounded-md"
-      >
-        User
-      </Button>
-
-      <Dialog open={open} onClose={handleOpen} size="lg">
-        <DialogBody>
-          <div className="p-6 bg-[#c98d83] rounded-lg shadow-md">
-            <img
-              src={chefHat}
-              className="w-[3rem] rotate-12 h-[3rem] mx-auto"
-              alt="Chef Hat"
-            />
-
-            <h1 className="text-2xl font-bold mb-4 text-center">Register</h1>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
+      <div className="font-serif">
+        <Button
+          className="bg-gradient-to-b from-[#c98d83] to-[#fdf2f0] text-gray-800 font-bold py-2 px-4 rounded-full shadow-lg hover:shadow-xl transition duration-300"
+          onClick={handleOpen}
+        >
+          Sign Up as a User
+        </Button>
+        <Dialog
+          className="rounded-2xl overflow-hidden"
+          open={open}
+          handler={handleOpen}
+          size="xl"
+        >
+          <DialogBody className="p-0">
+            <div className="flex flex-col md:flex-row">
+              <div className="bg-gradient-to-br from-[#c98d83] to-[#fdf2f0] p-8 md:w-1/2 flex flex-col justify-center items-center text-gray-800">
+                <span className="text-6xl mb-6 animate-bounce">👤</span>
+                <h2 className="text-4xl font-bold mb-4 font-serif">
+                  Join Us as a User
+                </h2>
+                <p className="text-lg text-center font-serif">
+                  Discover amazing culinary experiences
+                </p>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Gender
-                </label>
-                <select
-                  value={gender}
-                  onChange={(e) => setGender(e.target.value)}
-                  required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                >
-                  <option value="">Select Gender</option>
-                  <option value="Male">Male</option>
-                  <option value="Female">Female</option>
-                </select>
+              <div className="bg-white p-8 md:w-1/2">
+                <form onSubmit={handleSubmit} className="space-y-6 font-serif">
+                  <Input
+                    size="lg"
+                    label="Full Name"
+                    color="orange"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                  <select
+                    value={gender}
+                    onChange={(e) => setGender(e.target.value)}
+                    required
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  >
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                  </select>
+                  <Input
+                    size="lg"
+                    label="Email"
+                    color="orange"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                  <Input
+                    size="lg"
+                    type="password"
+                    label="Password"
+                    color="orange"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <div className="text-right font-serif">
+                    <p className="text-sm text-gray-600">
+                      Already have an account?
+                    </p>
+                    <Login />
+                  </div>
+                  <Button
+                    type="submit"
+                    className="font-serif bg-gradient-to-b from-[#c98d83] to-[#fdf2f0] w-full"
+                  >
+                    Create Account
+                  </Button>
+                </form>
+                {error && <p className="mt-4 text-red-600">{error}</p>}
+                {success && <p className="mt-4 text-green-600">{success}</p>}
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full bg-gray-100 text-black py-2 px-4 rounded-md shadow-sm hover:bg-orange-100"
-              >
-                Register
-              </Button>
-            </form>
-
-            {error && <p className="mt-4 text-red-600">{error}</p>}
-            {success && <p className="mt-4 text-green-600">{success}</p>}
-
-            <p className="mt-4 text-center">
-              Already have an account? <Login />
-            </p>
-          </div>
-        </DialogBody>
-        <DialogFooter>
-          <Button onClick={handleOpen} color="red">
-            Close
-          </Button>
-        </DialogFooter>
-      </Dialog>
+            </div>
+          </DialogBody>
+        </Dialog>
+      </div>
     </>
   );
 };

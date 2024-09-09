@@ -18,7 +18,7 @@ router.post(
   filesUpload,
   recipieController.makeRecipie
 );
-router.put("/deleteRecipie", auth, recipieController.deleteRecipie);
+router.patch("/deleteRecipie", auth, recipieController.deleteRecipie);
 router.put("/updateRecipie", auth, recipieController.updateRecipie);
 router.get("/category/:category", recipieController.getRecipesByCategory);
 router.get("/total", recipieController.getTotalRecipes);
