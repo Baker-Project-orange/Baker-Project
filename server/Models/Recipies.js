@@ -45,6 +45,7 @@ const stepsSchema = new mongoose.Schema({
   stepDescription: String,
   stepMedia: String,
   note: String,
+  stepTitle:String
 });
 
 const recipeSchema = new mongoose.Schema({

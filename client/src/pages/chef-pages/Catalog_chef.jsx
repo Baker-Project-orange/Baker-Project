@@ -116,15 +116,14 @@ const Catalog_chef = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f8e5e1] to-[#fdf2f0] rounded-lg overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen font-serif bg-[#fbf6f4] rounded-lg overflow-hidden py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-4xl font-bold text-center text-[#c98d83] mb-12 animate-fade-in">
           Recipe and Dish Catalog
         </h1>
 
-
         {/* Search and filter section */}
-        <div className="mb-12 bg-white rounded-xl shadow-md p-6">
+        <div className="mb-12 rounded-xl shadow-md p-6">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             {/* Search input */}
             <div className="relative flex-grow">
@@ -135,7 +134,10 @@ const Catalog_chef = () => {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
-              <Search className="absolute left-4 top-3 text-[#c98d83]" size={24} />
+              <Search
+                className="absolute left-4 top-3 text-[#c98d83]"
+                size={24}
+              />
             </div>
             {/* Filter button (mobile) */}
             <button
@@ -144,10 +146,19 @@ const Catalog_chef = () => {
             >
               <Filter size={20} className="mr-2" />
               Filters
-              <ChevronDown size={20} className={`ml-2 transform transition-transform duration-300 ${isFilterOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown
+                size={20}
+                className={`ml-2 transform transition-transform duration-300 ${
+                  isFilterOpen ? "rotate-180" : ""
+                }`}
+              />
             </button>
             {/* Filter options */}
-            <div className={`flex flex-col lg:flex-row gap-4 ${isFilterOpen ? 'block' : 'hidden lg:flex'}`}>
+            <div
+              className={`flex flex-col lg:flex-row gap-4 ${
+                isFilterOpen ? "block" : "hidden lg:flex"
+              }`}
+            >
               <Select
                 label="Category"
                 value={filterCategory}
@@ -182,7 +193,6 @@ const Catalog_chef = () => {
             </div>
           ) : (
             filteredItems.map((item) => renderCard(item))
-
           )}
         </div>
       </div>

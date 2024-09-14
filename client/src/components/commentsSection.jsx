@@ -9,7 +9,7 @@ import {
   User,
 } from "lucide-react";
 
-const CommentsSection = () => {
+const CommentsSection = (recipeId) => {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [replyingToCommentId, setReplyingToCommentId] = useState(null);
@@ -19,7 +19,7 @@ const CommentsSection = () => {
   const [alertMessage, setAlertMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [user_id] = useState("66d97b52a2e9f029d88d9cce");
+  const [user_id] = useState("66de1ec3768ba1927c9f0cd8");
   const [chef_id] = useState("66d775724924397e1179e5eb");
   const [recipe_id] = useState("66d7e3a4e175ed517bc023d7");
 
@@ -178,7 +178,6 @@ const CommentsSection = () => {
                 </div>
               </div>
               <button
-
                 onClick={() =>
                   setReportingCommentId(
                     comment._id === reportingCommentId ? null : comment._id
@@ -187,7 +186,6 @@ const CommentsSection = () => {
                 className="text-gray-400 hover:text-[#c98d83] transition-colors duration-300"
               >
                 <Flag size={18} />
-
               </button>
             </div>
             <p className="text-sm ml-0 mb-4 text-gray-700">

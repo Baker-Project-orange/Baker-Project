@@ -71,7 +71,7 @@ const ContactUs = () => {
           style={{ maxWidth: "900px" }} // Optional: Set a max-width for better control
         />
       </div>
-      <div className="min-h-screen bg-gradient-to-br from-[#c98d83] to-[#e2b5ae] py-12 px-4 sm:px-6 lg:px-8">
+      <div className="min-h-screen bg-[#fbf6f4] py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2">

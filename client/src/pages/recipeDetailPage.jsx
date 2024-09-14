@@ -32,7 +32,7 @@ const RecipeDetailPage = () => {
   const [showShareIcons, setShowShareIcons] = useState(false);
   const navigate = useNavigate();
 
-  const currentUrl = `https://69e1-178-77-191-2.ngrok-free.app/recipe/${recipeId}`;
+  const currentUrl = `https://8a25-194-165-140-141.ngrok-free.app`;
 
   const currentUser = { id: 1, name: "Current User" };
   const isChef = true;

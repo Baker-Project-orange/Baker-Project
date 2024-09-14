@@ -22,7 +22,7 @@ const Recipe_dish_creation = () => {
   const handleCreateRecipe = useRecipeHooks();
 
   return (
-    <div className="min-h-screen bg-[#f8e5e1] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#fbf6f4] font-serif py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-md p-6">
         <h1 className="text-3xl font-bold text-center text-[#c98d83] mb-8">
           Create New Recipe & Dish

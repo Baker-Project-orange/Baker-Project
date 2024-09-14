@@ -204,18 +204,26 @@ const Recipe_dish_management = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8e5e1] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#fbf6f4] font-serif  py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-md overflow-hidden">
         <div className="flex">
           <button
-            className={`flex-1 py-3 px-4 text-center font-semibold ${activeTab === "recipe" ? "bg-[#c98d83] text-white" : "bg-gray-200 text-gray-700"}`}
+            className={`flex-1 py-3 px-4 text-center font-semibold ${
+              activeTab === "recipe"
+                ? "bg-[#c98d83] text-white"
+                : "bg-gray-200 text-gray-700"
+            }`}
             onClick={() => setActiveTab("recipe")}
           >
             Recipe
           </button>
           {recipe.isDish && (
             <button
-              className={`flex-1 py-3 px-4 text-center font-semibold ${activeTab === "dish" ? "bg-[#c98d83] text-white" : "bg-gray-200 text-gray-700"}`}
+              className={`flex-1 py-3 px-4 text-center font-semibold ${
+                activeTab === "dish"
+                  ? "bg-[#c98d83] text-white"
+                  : "bg-gray-200 text-gray-700"
+              }`}
               onClick={() => setActiveTab("dish")}
             >
               Dish
@@ -223,35 +231,49 @@ const Recipe_dish_management = () => {
           )}
         </div>
         <div className="p-8">
-          {isEditing ? renderEditableContent() : (
+          {isEditing ? (
+            renderEditableContent()
+          ) : (
             <div>
               {activeTab === "recipe" ? (
                 <div>
                   <div className="mb-8">
                     <div className="flex mb-6">
                       <img
-                        src={recipe.overviewPicture || '/default-image.png'}
-                        alt={recipe.dishName || 'Recipe Image'}
+                        src={recipe.overviewPicture || "/default-image.png"}
+                        alt={recipe.dishName || "Recipe Image"}
                         className="w-full h-[20rem] object-cover rounded-lg shadow-md"
                       />
                     </div>
-                    <h1 className="text-3xl font-bold text-[#c98d83] mb-3">{recipe.dishName || 'Recipe Name'}</h1>
-                    <p className="text-gray-600 mb-4">{recipe.recipeOverview || 'Recipe Overview'}</p>
+                    <h1 className="text-3xl font-bold text-[#c98d83] mb-3">
+                      {recipe.dishName || "Recipe Name"}
+                    </h1>
+                    <p className="text-gray-600 mb-4">
+                      {recipe.recipeOverview || "Recipe Overview"}
+                    </p>
                     <div className="flex items-center mb-4 bg-[#f8e5e1] p-2 rounded-md">
                       <Clock className="text-[#c98d83] mr-2" />
-                      <span className="font-medium">{recipe.duration || 'Duration'} minutes</span>
+                      <span className="font-medium">
+                        {recipe.duration || "Duration"} minutes
+                      </span>
                     </div>
                   </div>
-                  <h2 className="text-2xl font-semibold mb-3 text-[#c98d83]">Ingredients</h2>
+                  <h2 className="text-2xl font-semibold mb-3 text-[#c98d83]">
+                    Ingredients
+                  </h2>
                   <ul className="list-disc pl-5 mb-6 space-y-1">
                     {(recipe.ingredients || []).map((ingredient, index) => (
-                      <li key={index}>{ingredient.name || 'Ingredient'}</li>
+                      <li key={index}>{ingredient.name || "Ingredient"}</li>
                     ))}
                   </ul>
-                  <h2 className="text-2xl font-semibold mb-3 text-[#c98d83]">Steps</h2>
+                  <h2 className="text-2xl font-semibold mb-3 text-[#c98d83]">
+                    Steps
+                  </h2>
                   <ol className="list-decimal pl-5 mb-6 space-y-2">
                     {(recipe.steps || []).map((step, index) => (
-                      <li key={index}>{step.stepDescription || 'Step Description'}</li>
+                      <li key={index}>
+                        {step.stepDescription || "Step Description"}
+                      </li>
                     ))}
                   </ol>
                 </div>
@@ -260,16 +282,22 @@ const Recipe_dish_management = () => {
                   <div className="mb-8">
                     <div className=" mb-6">
                       <img
-                        src={recipe.overviewPicture || '/default-image.png'}
+                        src={recipe.overviewPicture || "/default-image.png"}
                         alt={`${recipe.dishName} Dish Image`}
                         className="w-full h-[20rem] object-cover rounded-lg shadow-md"
                       />
                     </div>
-                    <h1 className="text-3xl font-bold text-[#c98d83] mb-3">{recipe.dishName || 'Dish Name'}</h1>
-                    <p className="text-gray-600 mb-4">{dish.dishDescription || 'Dish Description'}</p>
+                    <h1 className="text-3xl font-bold text-[#c98d83] mb-3">
+                      {recipe.dishName || "Dish Name"}
+                    </h1>
+                    <p className="text-gray-600 mb-4">
+                      {dish.dishDescription || "Dish Description"}
+                    </p>
                     <div className="flex items-center mb-4 bg-[#f8e5e1] p-2 rounded-md">
                       <DollarSign className="text-[#c98d83] mr-2" />
-                      <span className="font-medium">{dish.price || 'Price'}</span>
+                      <span className="font-medium">
+                        {dish.price || "Price"}
+                      </span>
                     </div>
                   </div>
                 </div>
