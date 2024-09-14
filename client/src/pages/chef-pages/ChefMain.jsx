@@ -102,7 +102,7 @@ const Chef_Manager = () => {
 
   return (
     <div className="flex flex-col sm:flex-row h-screen">
-      <header className="bg-[#c98d83] shadow-md w-full sm:w-16 md:w-64 h-auto sm:h-[85vh] fixed sm:left-4 sm:top-1/2 sm:-translate-y-1/2 rounded-lg overflow-hidden z-20">
+      <header className="bg-[#c98d83] font-serif shadow-md w-full sm:w-16 md:w-64 h-auto sm:h-[85vh] fixed sm:left-4 sm:top-1/2 sm:-translate-y-1/2 rounded-lg overflow-hidden z-20">
         <div className="h-full flex flex-col items-center justify-between p-4">
           <div className="w-full flex items-center justify-between sm:justify-center">
             <button
@@ -111,7 +111,6 @@ const Chef_Manager = () => {
             >
               <Menu size={24} />
             </button>
-
             <div className="flex sm:flex-col items-center mt-3 h-18 justify-center">
               {/* <Croissant
 
@@ -131,7 +130,6 @@ const Chef_Manager = () => {
               <div className="w-24 h-24  max-md:w-14 max-md:h-14  max-sm:w-20 max-sm:h-20">
                 <img src={logo} alt="" />
               </div>
-
             </div>
             <div className="w-6 sm:hidden"></div>{" "}
             {/* Placeholder for alignment */}
@@ -139,9 +137,9 @@ const Chef_Manager = () => {
 
           <div className="flex-col justify-between items-start h-full w-full">
             <nav
-              className={`flex h-[50%] flex-col w-full justify-center sm:justify-start mt-4 sm:mt-0 ${isMenuOpen ? "block" : "hidden sm:flex"
-                }`}
-
+              className={`flex h-[50%] flex-col w-full justify-center sm:justify-start mt-4 sm:mt-0 ${
+                isMenuOpen ? "block" : "hidden sm:flex"
+              }`}
             >
               <NavButton
                 onClick={() => handleTabChange("home")}
@@ -165,10 +163,9 @@ const Chef_Manager = () => {
               />
             </nav>
             <div
-
-              className={`w-full h-[50%] flex flex-col justify-end mt-4 sm:mt-0 ${isMenuOpen ? "block" : "hidden sm:flex"
-                }`}
-
+              className={`w-full h-[50%] flex flex-col justify-end mt-4 sm:mt-0 ${
+                isMenuOpen ? "block" : "hidden sm:flex"
+              }`}
             >
               <NavButton
                 onClick={() => backHomeHandle()}

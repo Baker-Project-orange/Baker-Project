@@ -20,7 +20,6 @@ import useGetRecipes from "../../hooks/recipeHooks/getRecipeHook";
 
 import { Context } from "../../components/contextProvider";
 
-
 const ChefProfilePage = () => {
   const [chefInfo, setChefInfo] = useState({
     name: "",
@@ -34,7 +33,6 @@ const ChefProfilePage = () => {
   const [, setRecipeID] = useContext(Context).recipeID;
 
   const [isEditing, setIsEditing] = useState(false);
-
 
   useEffect(() => {
     const fetchChefData = async () => {
@@ -54,7 +52,7 @@ const ChefProfilePage = () => {
 
     fetchChefData();
   }, []);
-
+  console.log(dishes);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setChefInfo((prevInfo) => ({
@@ -82,7 +80,7 @@ const ChefProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8e5e1] rounded-lg overflow-hidden">
+    <div className="min-h-screen bg-[#fbf6f4] rounded-lg overflow-hidden">
       {/* Hero Section */}
       <section
         className="min-h-[85vh] bg-cover bg-center flex items-center overflow-hidden py-8 sm:py-16"
@@ -102,7 +100,6 @@ const ChefProfilePage = () => {
             </p>
             <div className="flex flex-wrap gap-4">
               <Link
-                
                 onClick={() => {
                   sessionStorage.setItem("tab", "catalog");
                   window.dispatchEvent(new Event("storage"));
@@ -186,12 +183,10 @@ const ChefProfilePage = () => {
 
           {recipes.length !== 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-
               {recipes.map((recipe, index) => (
                 <>
                   {index <= 3 && !recipe.isApproved && !recipe.isDeleted ? (
                     <div
-
                       key={recipe._id}
                       className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 flex flex-col h-full"
                     >
@@ -212,13 +207,14 @@ const ChefProfilePage = () => {
                         <Clock size={16} className="mr-1" />
                         <span className="text-sm">{recipe.duration} mins</span>
                         <Users size={16} className="ml-4 mr-1" />
-                        <span className="text-sm">Serves {recipe.servings}</span>
+                        <span className="text-sm">
+                          Serves {recipe.servings}
+                        </span>
                       </div>
                       <p className="mb-4 text-gray-600 flex-grow">
                         {recipe.recipeOverview}
                       </p>
                       <Link
-                        
                         onClick={() => {
                           sessionStorage.setItem("tab", "management");
                           window.dispatchEvent(new Event("storage"));
@@ -229,12 +225,10 @@ const ChefProfilePage = () => {
                       >
                         <button className="w-full bg-[#c98d83] text-white px-4 py-2 rounded hover:bg-[#b17c73] transition duration-300 flex items-center justify-center">
                           <Cake className="mr-2" size={18} />
-
                           View Recipe
                         </button>
                       </Link>
                     </div>
-
                   ) : null}
                 </>
               ))}
@@ -243,13 +237,9 @@ const ChefProfilePage = () => {
             <div className="text-center text-gray-600">
               No recipes available at the moment.
             </div>
-
           )}
           <div className="text-center">
-            <Link
-              
-              className="hover:text-rose-200 transition duration-300"
-            >
+            <Link className="hover:text-rose-200 transition duration-300">
               <button
                 onClick={() => {
                   sessionStorage.setItem("tab", "catalog");
@@ -265,7 +255,7 @@ const ChefProfilePage = () => {
       </section>
 
       {/* Chef's Dishes Section */}
-      <section className="bg-[#f0d8d3] py-16">
+      <section className="bg-[#f6eeec] py-16">
         <div className="container mx-auto px-4">
           <h2 className="text-4xl font-bold mb-8 text-center text-[#c98d83]">
             {chefInfo.name}'s Dishes
@@ -274,7 +264,10 @@ const ChefProfilePage = () => {
           {dishes.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
               {dishes.map((dish) => (
-                <div key={dish._id} className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 flex flex-col h-full">
+                <div
+                  key={dish._id}
+                  className="bg-white p-6 rounded-lg shadow-md hover:shadow-xl transition duration-300 flex flex-col h-full"
+                >
                   <img
                     src={dish.recipieID.overviewPicture}
                     alt={dish.recipieID.dishName}
@@ -288,15 +281,19 @@ const ChefProfilePage = () => {
                   </p>
                   <div className="flex items-center mb-2 text-gray-600">
                     <Clock size={16} className="mr-1" />
-                    <span className="text-sm">{dish.recipieID.duration} mins</span>
+                    <span className="text-sm">
+                      {dish.recipieID.duration} mins
+                    </span>
                     <Users size={16} className="ml-4 mr-1" />
-                    <span className="text-sm">Serves {dish.recipieID.servings}</span>
+                    <span className="text-sm">
+                      Serves {dish.recipieID.servings}
+                    </span>
                   </div>
                   <div className="mb-4 text-gray-600">
-                    <span className="font-semibold">Price:</span> ${dish.price.toFixed(2)}
+                    <span className="font-semibold">Price:</span> $
+                    {dish.price.toFixed(2)}
                   </div>
                   <Link
-                    
                     onClick={() => {
                       sessionStorage.setItem("tab", "management");
                       window.dispatchEvent(new Event("storage"));
@@ -317,13 +314,9 @@ const ChefProfilePage = () => {
             <div className="text-center text-gray-600">
               No dishes available at the moment.
             </div>
-
           )}
           <div className="text-center">
-            <Link
-              
-              className="hover:text-rose-200 transition duration-300"
-            >
+            <Link className="hover:text-rose-200 transition duration-300">
               <button
                 onClick={() => {
                   sessionStorage.setItem("tab", "catalog");
@@ -337,7 +330,6 @@ const ChefProfilePage = () => {
           </div>
         </div>
       </section>
-
 
       {/* Baking Tips Section */}
       <section className="py-16 animate-fade-in">

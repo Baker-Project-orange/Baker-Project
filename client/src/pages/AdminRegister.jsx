@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Button, Dialog, DialogBody, Input } from "@material-tailwind/react";
+import {
+  Button,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  Input,
+} from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
-
-import chefHat from "../assets/chefHat.png"; // استخدم نفس الصورة لجعل النمط مشابهًا
 import AdminLogin from "./AdminLogin";
-
 
 const AdminRegister = () => {
   const [open, setOpen] = useState(false);
@@ -96,43 +99,22 @@ const AdminRegister = () => {
                   </Button>
                 </form>
                 {message && <p className="mt-4 text-green-600">{message}</p>}
+                <p className="mt-4 text-center">
+                  Already have an account?{" "}
+                  <a href="/adminlogin" className="text-blue-500">
+                    Login
+                  </a>
+                </p>
               </div>
-
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700">
-                  Password
-                </label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-
-              <Button
-                type="submit"
-                className="w-full bg-gray-100 text-black py-2 px-4 rounded-md shadow-sm hover:bg-orange-100"
-              >
-                Register
-              </Button>
-            </form>
-
-            {message && <p className="mt-4 text-green-600">{message}</p>}
-            <p className="mt-4 text-center">
-              Already have an account? <AdminLogin />
-            </p>
-          </div>
-        </DialogBody>
-        <DialogFooter>
-          <Button onClick={handleOpen} color="red">
-            Close
-          </Button>
-        </DialogFooter>
-      </Dialog>
-
+            </div>
+          </DialogBody>
+          <DialogFooter>
+            <Button onClick={handleOpen} color="red">
+              Close
+            </Button>
+          </DialogFooter>
+        </Dialog>
+      </div>
     </>
   );
 };

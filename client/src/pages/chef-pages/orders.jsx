@@ -82,11 +82,13 @@ const Orders1 = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#f8e5e1] to-[#f0d0c9] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#fbf6f4] py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold text-center text-[#8b4513] mb-8">Orders Dashboard</h1>
+        <h1 className="text-4xl font-bold text-center text-[#8b4513] mb-8">
+          Orders Dashboard
+        </h1>
 
-        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between bg-white p-6 rounded-lg shadow-md">
+        <div className="mb-8 flex flex-col md:flex-row md:items-center md:justify-between p-6 rounded-lg shadow-md">
           <div className="relative mb-4 md:mb-0 md:w-1/2">
             <input
               type="text"
@@ -95,7 +97,10 @@ const Orders1 = () => {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-            <Search className="absolute left-3 top-2 text-[#c98d83]" size={20} />
+            <Search
+              className="absolute left-3 top-2 text-[#c98d83]"
+              size={20}
+            />
           </div>
 
           <div className="relative w-full md:w-auto">
@@ -104,21 +109,38 @@ const Orders1 = () => {
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
             >
-              {statuses.map(status => (
-                <option key={status} value={status}>{status}</option>
+              {statuses.map((status) => (
+                <option key={status} value={status}>
+                  {status}
+                </option>
               ))}
             </select>
-            <Filter className="absolute right-2 top-2 text-[#c98d83]" size={20} />
+            <Filter
+              className="absolute right-2 top-2 text-[#c98d83]"
+              size={20}
+            />
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredOrders.map(order => (
-            <div key={order._id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-[#e0c0b0] flex flex-col">
+          {filteredOrders.map((order) => (
+            <div
+              key={order._id}
+              className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 border border-[#e0c0b0] flex flex-col"
+            >
               <div className="p-4 border-b border-[#e0c0b0] bg-[#fff5f0]">
                 <div className="flex justify-between items-center mb-2">
-                  <h2 className="text-xl font-semibold text-[#8b4513]">Order #{typeof order._id === 'string' ? order._id.slice(-6) : 'N/A'}</h2>
-                  <span className={`font-semibold px-3 py-1 rounded-full text-sm ${getStatusColor(order.status)}`}>
+                  <h2 className="text-xl font-semibold text-[#8b4513]">
+                    Order #
+                    {typeof order._id === "string"
+                      ? order._id.slice(-6)
+                      : "N/A"}
+                  </h2>
+                  <span
+                    className={`font-semibold px-3 py-1 rounded-full text-sm ${getStatusColor(
+                      order.status
+                    )}`}
+                  >
                     {order.status}
                   </span>
                 </div>
@@ -126,16 +148,23 @@ const Orders1 = () => {
               <div className="p-4 bg-white flex-grow">
                 <div className="space-y-2">
                   {order.orderItems.map((item, index) => (
-                    <div key={item._id || index} className="text-[#5d4037] flex-col justify-between">
+                    <div
+                      key={item._id || index}
+                      className="text-[#5d4037] flex-col justify-between"
+                    >
                       <div className="flex justify-between items-center">
                         <span className="font-medium">{item.dishName}</span>
                         <span>x{item.quantity}</span>
                       </div>
                       <div className="flex justify-between items-center text-sm text-[#8d6e63]">
                         <span>Price per item: ${item.price.toFixed(2)}</span>
-                        <span>Subtotal: ${(item.price * item.quantity).toFixed(2)}</span>
+                        <span>
+                          Subtotal: ${(item.price * item.quantity).toFixed(2)}
+                        </span>
                       </div>
-                      {index < order.orderItems.length - 1 && <hr className="my-2 border-[#e0c0b0]" />}
+                      {index < order.orderItems.length - 1 && (
+                        <hr className="my-2 border-[#e0c0b0]" />
+                      )}
                     </div>
                   ))}
                 </div>
@@ -154,16 +183,21 @@ const Orders1 = () => {
                   <span>{order.orderDetails}</span>
                 </div>
                 <div className="flex justify-between items-center text-sm text-[#8d6e63]">
-                  <span>Admin Amount: ${order.totalAdminAmount.toFixed(2)}</span>
+                  <span>
+                    Admin Amount: ${order.totalAdminAmount.toFixed(2)}
+                  </span>
                   <span>Chef Amount: ${order.totalChefAmount.toFixed(2)}</span>
                 </div>
                 <div className="text-sm text-[#8d6e63] mt-2 flex items-center">
                   <Calendar size={14} className="mr-2 text-[#8b4513]" />
                   <span>
-                    Created: {order.createdAt ? new Date(order.createdAt).toLocaleString() : 'Unknown'}
+                    Created:{" "}
+                    {order.createdAt
+                      ? new Date(order.createdAt).toLocaleString()
+                      : "Unknown"}
                   </span>
                 </div>
-                {order.status !== 'Completed' ? (
+                {order.status !== "Completed" ? (
                   <button
                     onClick={() => handleDoneClick(order._id)}
                     className="mt-4 bg-[#c98d83] text-white px-6 py-2 rounded-md hover:bg-[#b17a71] transition-colors duration-300 flex items-center justify-center w-full shadow-md hover:shadow-lg"

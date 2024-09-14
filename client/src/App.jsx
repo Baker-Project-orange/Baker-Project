@@ -21,16 +21,14 @@ import RecipeDetailPage from "./pages/recipeDetailPage";
 import Orders1 from "./pages/chef-pages/orders";
 import Orders from "./pages/user-pages/Orders";
 import CartSidebar from "./components/sidebarcart";
-import Favourit from './pages/user-pages/Favourit'
+import Favourit from "./pages/user-pages/Favourit";
 
 function App() {
   return (
     <>
       <ThemeProvider>
         <ContextProvider>
-
-
-<CartSidebar/>
+          <CartSidebar />
 
           <Routes>
             <Route path="/" element={<Home1 />} />
@@ -49,11 +47,9 @@ function App() {
             <Route path="/chefOrder" element={<Orders1 />} />
             <Route path="/Orders" element={<Orders />} />
             <Route path="/Favourit" element={<Favourit />} />
-
             <Route path="/checkout" element={<CheckoutComponent />} />
             <Route path="/cart" element={<CartSidebar />} />
           </Routes>
-
         </ContextProvider>
       </ThemeProvider>
     </>
