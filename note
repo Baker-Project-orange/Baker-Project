@@ -1,0 +1,42 @@
+/project-root
+│
+├──chefAdmin/                
+│   ├── src/               
+│   │   ├── components/     
+│   │   ├── pages/          
+│   │   ├── assets/        
+│   │   └── hooks/          
+│   ├── public/             
+│   ├── config/             
+│   └── package.json       
+│
+├── admin/                
+│   ├── src/               
+│   │   ├── components/     
+│   │   ├── pages/          
+│   │   ├── assets/        
+│   │   └── hooks/          
+│   ├── public/             
+│   ├── config/             
+│   └── package.json 
+│
+├── client/               
+│   ├── src/                
+│   │   ├── components/     
+│   │   ├── pages/          
+│   │   ├── assets/         
+│   │   └── hooks/          
+│   ├── public/             
+│   ├── config/             
+│   └── package.json       
+│
+└── server/                
+    ├── config/            
+    ├── controllers/       
+    ├── middleware/        
+    ├── models/            
+    ├── routes/            
+    ├── public/            
+    └── package.json      
+│
+├── README.md              
